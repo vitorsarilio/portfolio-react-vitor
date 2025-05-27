@@ -1,5 +1,15 @@
+// CERTIFIQUE-SE DE QUE O PACOTE 'react-ga4' ESTÁ INSTALADO NO SEU PROJETO:
+// No seu terminal, na pasta do projeto, execute:
+// npm install react-ga4
+// ou se usar Yarn:
+// yarn add react-ga4
+
 import { useState, useEffect } from 'react';
 import { Briefcase, User, Code, Mail, Linkedin, Github, ExternalLink, ChevronDown, ChevronUp, Award, LayoutDashboard, Phone, Building, School, Users, Sun, Moon } from 'lucide-react';
+import ReactGA from 'react-ga4'; // Importa o ReactGA
+
+// SEU ID DE MÉTRICA DO GOOGLE ANALYTICS 4 AQUI
+const GA_MEASUREMENT_ID = 'G-Z1643DT14D'; // <<=== SUBSTITUA PELO SEU ID REAL (já está o seu, mas confirme)
 
 // Dados do Portfolio (com suas últimas atualizações)
 const portfolioData = {
@@ -169,7 +179,7 @@ Idiomas: Português (Nativo), Inglês (B2 Upper Intermediate), Espanhol (Básico
 };
 
 // Componente de Navegação
-const Navbar = ({ setActiveSection, theme, toggleTheme }) => {
+const Navbar = ({ setActiveSection, theme, toggleTheme, trackEvent }) => { // Adicionado trackEvent
   const navItems = [
     { label: "Sobre Mim", section: "about", icon: <User size={18} /> },
     { label: "Projetos", section: "projects", icon: <Code size={18} /> },
@@ -178,6 +188,11 @@ const Navbar = ({ setActiveSection, theme, toggleTheme }) => {
     { label: "Contato", section: "contact", icon: <Mail size={18} /> }
   ];
 
+  const handleNavClick = (section) => {
+    trackEvent('Navegação', 'Clique Menu', section);
+    setActiveSection(section);
+  };
+
   return (
     <nav className="bg-gray-100 dark:bg-gray-900 bg-opacity-80 dark:bg-opacity-80 backdrop-blur-md p-4 fixed top-0 left-0 right-0 z-50 shadow-lg">
       <div className="container mx-auto flex justify-between items-center">
@@ -185,7 +200,7 @@ const Navbar = ({ setActiveSection, theme, toggleTheme }) => {
           {navItems.map(item => (
             <li key={item.section}>
               <button
-                onClick={() => setActiveSection(item.section)}
+                onClick={() => handleNavClick(item.section)}
                 className="flex items-center space-x-2 text-purple-600 dark:text-purple-300 hover:text-purple-800 dark:hover:text-white transition-colors duration-300 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-medium"
               >
                 {item.icon}
@@ -195,7 +210,10 @@ const Navbar = ({ setActiveSection, theme, toggleTheme }) => {
           ))}
         </ul>
         <button
-          onClick={toggleTheme}
+          onClick={() => {
+            trackEvent('Interação Tema', 'Alternar Tema', theme === 'light' ? 'Para Escuro' : 'Para Claro');
+            toggleTheme();
+          }}
           className="p-2 rounded-full text-purple-600 dark:text-yellow-400 hover:bg-purple-200 dark:hover:bg-gray-700 transition-colors duration-300"
           aria-label="Toggle theme"
         >
@@ -207,7 +225,7 @@ const Navbar = ({ setActiveSection, theme, toggleTheme }) => {
 };
 
 // Componente Cartão de Projeto
-const ProjectCard = ({ project }) => {
+const ProjectCard = ({ project, trackEvent }) => { // Adicionado trackEvent
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition-transform duration-300 flex flex-col">
       <img src={project.imageUrl} alt={`[Imagem de ${project.title}]`} className="w-full h-48 object-cover" onError={(e) => e.target.src='https://placehold.co/600x400/DDD/333?text=Imagem+Indisponivel'} />
@@ -224,12 +242,22 @@ const ProjectCard = ({ project }) => {
         </div>
         <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
           {project.liveUrl && project.liveUrl !== "#" && (
-            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 font-medium inline-flex items-center text-sm">
+            <a 
+              href={project.liveUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              onClick={() => trackEvent('Projeto', 'Clique Ver Projeto', project.title)}
+              className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 font-medium inline-flex items-center text-sm">
               Ver Projeto <ExternalLink size={16} className="ml-1" />
             </a>
           )}
           {project.repoUrl && project.repoUrl !== "#" && (
-            <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 inline-flex items-center text-sm">
+            <a 
+              href={project.repoUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              onClick={() => trackEvent('Projeto', 'Clique Repositório', project.title)}
+              className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 inline-flex items-center text-sm">
               Repositório <Github size={16} className="ml-1" />
             </a>
           )}
@@ -240,15 +268,27 @@ const ProjectCard = ({ project }) => {
 };
 
 // Componente Item de Currículo
-const ResumeItem = ({ item }) => {
+const ResumeItem = ({ item, trackEvent }) => { // Adicionado trackEvent
   const [isOpen, setIsOpen] = useState(false);
   const isExperience = !!item.company;
+
+  const handleToggleOpen = () => {
+    const newIsOpenState = !isOpen;
+    setIsOpen(newIsOpenState);
+    if (newIsOpenState) { // Só rastreia quando abre
+      trackEvent(
+        'Interação Currículo', 
+        `Abrir Detalhe ${isExperience ? 'Experiência' : 'Educação'}`,
+        item.title || item.degree
+      );
+    }
+  };
 
   return (
     <div className="mb-6 p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm bg-gray-50 dark:bg-gray-800 hover:shadow-md transition-shadow">
       <button
         className="flex justify-between items-start w-full text-left"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggleOpen} // Usando a nova função
       >
         <div className="flex items-start space-x-4 flex-grow">
           {item.logoUrl ? (
@@ -342,6 +382,53 @@ function App() {
     return 'light';
   });
 
+  // Função auxiliar para enviar eventos GA4
+  const trackEvent = (category, action, label) => {
+    if (GA_MEASUREMENT_ID && GA_MEASUREMENT_ID !== 'G-SEU_ID_DE_METRICA_AQUI' && ReactGA.isInitialized) {
+      ReactGA.event({ category, action, label });
+      console.log(`GA Event: Category='${category}', Action='${action}', Label='${label}'`);
+    }
+  };
+
+  // Inicializa o Google Analytics
+  useEffect(() => {
+    if (GA_MEASUREMENT_ID && GA_MEASUREMENT_ID !== 'G-SEU_ID_DE_METRICA_AQUI') {
+      ReactGA.initialize(GA_MEASUREMENT_ID);
+      console.log("Google Analytics Inicializado com ID:", GA_MEASUREMENT_ID);
+      // Envia o primeiro pageview para a seção inicial
+      const initialPagePath = `/${activeSection}`;
+      let initialPageTitle = portfolioData.user.name + " Portfólio";
+      if (activeSection !== 'about') {
+          const sectionLabel = activeSection.charAt(0).toUpperCase() + activeSection.slice(1).replace(/([A-Z])/g, ' $1').trim();
+          initialPageTitle = `${sectionLabel} | ${portfolioData.user.name}`;
+      }
+      ReactGA.send({ hitType: "pageview", page: initialPagePath, title: initialPageTitle });
+      console.log(`GA Pageview Inicial: ${initialPagePath} (Título: ${initialPageTitle})`);
+    } else {
+      console.warn("ID de Métrica do Google Analytics não configurado ou é placeholder. Acompanhamento desativado.");
+    }
+  }, []); // Array de dependências vazio para rodar apenas uma vez na montagem
+
+  // Envia pageviews quando a seção ativa muda (APÓS a montagem inicial)
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
+  useEffect(() => {
+    if (initialLoadDone) {
+        if (GA_MEASUREMENT_ID && GA_MEASUREMENT_ID !== 'G-SEU_ID_DE_METRICA_AQUI' && ReactGA.isInitialized) {
+            const pagePath = `/${activeSection}`;
+            let pageTitle = portfolioData.user.name + " Portfólio";
+            if (activeSection !== 'about') {
+                const sectionLabel = activeSection.charAt(0).toUpperCase() + activeSection.slice(1).replace(/([A-Z])/g, ' $1').trim();
+                pageTitle = `${sectionLabel} | ${portfolioData.user.name}`;
+            }
+            ReactGA.send({ hitType: "pageview", page: pagePath, title: pageTitle });
+            console.log(`GA Pageview (mudança de seção): ${pagePath} (Título: ${pageTitle})`);
+        }
+    } else {
+        setInitialLoadDone(true);
+    }
+  }, [activeSection, portfolioData.user.name, initialLoadDone]);
+
+  // Lógica do Tema
   useEffect(() => {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -367,34 +454,42 @@ function App() {
     return phone;
   };
 
-  // Define classes de padding padrão para as seções
   const sectionBasePaddingX = "px-4 sm:px-6 lg:px-8";
-  const sectionBasePaddingY = "py-16 sm:py-20";
+  const sectionContentPaddingY = "py-12 sm:py-16"; 
+  const sectionFullHeightPaddingY = "py-10 sm:py-12"; 
 
   const renderSection = () => {
     switch (activeSection) {
       case 'about':
         return (
-          <section id="about" className={`${sectionBasePaddingX} ${sectionBasePaddingY} flex flex-grow items-center justify-center bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-purple-900 dark:via-indigo-900 dark:to-blue-900`}>
+          <section id="about" className={`${sectionBasePaddingX} ${sectionFullHeightPaddingY} flex flex-grow items-center justify-center bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-purple-900 dark:via-indigo-900 dark:to-blue-900`}>
             <div className="text-center max-w-3xl bg-white dark:bg-gray-800 p-8 sm:p-12 rounded-xl shadow-2xl">
               <img src={user.avatar} alt={`[Avatar de ${user.name}]`} className="w-32 h-32 sm:w-36 sm:h-36 rounded-full mx-auto mb-6 shadow-lg border-4 border-purple-300 dark:border-purple-600" onError={(e) => e.target.src='https://placehold.co/150x150/7E3AF2/FFFFFF?text=VS'} />
               <h1 className="text-4xl sm:text-5xl font-bold mb-2 text-purple-800 dark:text-purple-300">{user.name}</h1>
               <p className="text-xl sm:text-2xl text-purple-600 dark:text-purple-400 mb-6">{user.title}</p>
               <p className="text-md sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">{user.bio}</p>
               {user.phone && (
-                <a href={`tel:${user.phone}`} className="text-md sm:text-lg text-purple-600 dark:text-purple-400 hover:underline inline-flex items-center my-4">
+                <a href={`tel:${user.phone}`} 
+                   onClick={() => trackEvent('Contato', 'Clique Telefone', 'Seção Sobre Mim')}
+                   className="text-md sm:text-lg text-purple-600 dark:text-purple-400 hover:underline inline-flex items-center my-4">
                   <Phone size={18} className="mr-2"/> {formatPhoneNumber(user.phone)}
                 </a>
               )}
               <div className="mt-4 flex justify-center space-x-6">
-                <a href={`mailto:${user.email}`} className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors duration-300 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-gray-700">
+                <a href={`mailto:${user.email}`} 
+                   onClick={() => trackEvent('Contato', 'Clique Email', 'Seção Sobre Mim')}
+                   className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors duration-300 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-gray-700">
                   <Mail size={28} />
                 </a>
-                <a href={user.linkedin} target="_blank" rel="noopener noreferrer" className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors duration-300 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-gray-700">
+                <a href={user.linkedin} target="_blank" rel="noopener noreferrer" 
+                   onClick={() => trackEvent('Navegação Externa', 'Clique LinkedIn', 'Seção Sobre Mim')}
+                   className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors duration-300 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-gray-700">
                   <Linkedin size={28} />
                 </a>
                 {user.github && user.github !== "#" && (
-                  <a href={user.github} target="_blank" rel="noopener noreferrer" className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors duration-300 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-gray-700">
+                  <a href={user.github} target="_blank" rel="noopener noreferrer" 
+                     onClick={() => trackEvent('Navegação Externa', 'Clique GitHub', 'Seção Sobre Mim')}
+                     className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors duration-300 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-gray-700">
                     <Github size={28} />
                   </a>
                 )}
@@ -404,12 +499,12 @@ function App() {
         );
       case 'projects':
         return (
-          <section id="projects" className={`${sectionBasePaddingX} ${sectionBasePaddingY} bg-purple-50 dark:bg-gray-900`}>
+          <section id="projects" className={`${sectionBasePaddingX} ${sectionContentPaddingY} bg-purple-50 dark:bg-gray-900`}>
             <div className="container mx-auto">
               <h2 className="text-4xl font-bold text-center mb-16 text-purple-800 dark:text-purple-300">Meus Projetos Profissionais</h2>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
                 {projects.map(project => (
-                  <ProjectCard key={project.id} project={project} />
+                  <ProjectCard key={project.id} project={project} trackEvent={trackEvent} />
                 ))}
               </div>
                {projects.length === 0 && <p className="text-center text-gray-600 dark:text-gray-400">Nenhum projeto profissional para exibir no momento.</p>}
@@ -418,11 +513,10 @@ function App() {
         );
       case 'personalProjects':
         return (
-          // Aplicando o mesmo fundo gradiente e flex-grow para preenchimento
-          <section id="personalProjects" className={`${sectionBasePaddingX} ${sectionBasePaddingY} flex flex-grow items-center justify-center bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-purple-900 dark:via-indigo-900 dark:to-blue-900`}>
-            <div className="container mx-auto"> {/* Container para centralizar o conteúdo interno */}
-              <h2 className="text-4xl font-bold text-center mb-10 text-gray-800 dark:text-white">Projetos Pessoais</h2> {/* Ajuste de cor de texto para contraste com gradiente */}
-              <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-xl shadow-2xl max-w-4xl mx-auto"> {/* Card interno com fundo sólido */}
+          <section id="personalProjects" className={`${sectionBasePaddingX} ${sectionFullHeightPaddingY} flex flex-grow items-center justify-center bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-purple-900 dark:via-indigo-900 dark:to-blue-900`}>
+            <div className="container mx-auto">
+              <h2 className="text-4xl font-bold text-center mb-10 text-gray-800 dark:text-white">Projetos Pessoais</h2>
+              <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-xl shadow-2xl max-w-4xl mx-auto">
                 <h3 className="text-2xl font-semibold mb-6 text-purple-700 dark:text-purple-400 text-center">Dashboard Interativo: Análise de Filmes</h3>
                 <div className="aspect-w-16 aspect-h-9 h-[60vh] sm:h-[70vh] lg:h-[calc(100vh-400px)] max-h-[650px] bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden mx-auto" style={{maxWidth: '1200px'}}>
                   <iframe
@@ -445,24 +539,21 @@ function App() {
         );
       case 'resume':
         return (
-          <section id="resume" className={`${sectionBasePaddingX} ${sectionBasePaddingY} bg-gray-50 dark:bg-gray-900`}>
+          <section id="resume" className={`${sectionBasePaddingX} ${sectionContentPaddingY} bg-gray-50 dark:bg-gray-900`}>
             <div className="container mx-auto max-w-4xl">
               <h2 className="text-4xl font-bold text-center mb-16 text-purple-800 dark:text-purple-300">Currículo Profissional</h2>
-
               <div className="mb-12">
                 <h3 className="text-3xl font-semibold mb-8 text-purple-700 dark:text-purple-400 border-b-2 border-purple-200 dark:border-purple-700 pb-2">Experiência Profissional</h3>
                 {resume.experience.map(exp => (
-                  <ResumeItem key={exp.id} item={exp} />
+                  <ResumeItem key={exp.id} item={exp} trackEvent={trackEvent} />
                 ))}
               </div>
-
               <div className="mb-12">
                 <h3 className="text-3xl font-semibold mb-8 text-purple-700 dark:text-purple-400 border-b-2 border-purple-200 dark:border-purple-700 pb-2">Formação Acadêmica</h3>
                 {resume.education.map(edu => (
-                  <ResumeItem key={edu.id} item={edu} />
+                  <ResumeItem key={edu.id} item={edu} trackEvent={trackEvent} />
                 ))}
               </div>
-
               {resume.certifications && resume.certifications.length > 0 && (
                 <div className="mb-12">
                   <h3 className="text-3xl font-semibold mb-8 text-purple-700 dark:text-purple-400 border-b-2 border-purple-200 dark:border-purple-700 pb-2">Certificações</h3>
@@ -471,7 +562,6 @@ function App() {
                   ))}
                 </div>
               )}
-
               <div>
                 <h3 className="text-3xl font-semibold mb-8 text-purple-700 dark:text-purple-400 border-b-2 border-purple-200 dark:border-purple-700 pb-2">Habilidades</h3>
                 <div className="flex flex-wrap gap-3 justify-center">
@@ -487,7 +577,7 @@ function App() {
         );
       case 'contact':
         return (
-          <section id="contact" className={`${sectionBasePaddingX} ${sectionBasePaddingY} flex flex-grow items-center justify-center bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-purple-900 dark:via-indigo-900 dark:to-blue-900`}>
+          <section id="contact" className={`${sectionBasePaddingX} ${sectionFullHeightPaddingY} flex flex-grow items-center justify-center bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-purple-900 dark:via-indigo-900 dark:to-blue-900`}>
             <div className="text-center max-w-xl w-full">
               <h2 className="text-4xl font-bold mb-8 text-purple-800 dark:text-purple-300">Entre em Contato</h2>
               <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
@@ -495,20 +585,28 @@ function App() {
               </p>
               <div className="bg-white dark:bg-gray-800 p-8 sm:p-10 rounded-lg shadow-xl">
                 <p className="text-xl text-purple-700 dark:text-purple-400 font-semibold mb-1">{user.name}</p>
-                <a href={`mailto:${user.email}`} className="text-lg text-purple-600 dark:text-purple-400 hover:underline inline-flex items-center mb-2">
+                <a href={`mailto:${user.email}`} 
+                   onClick={() => trackEvent('Contato', 'Clique Email', 'Seção Contato')}
+                   className="text-lg text-purple-600 dark:text-purple-400 hover:underline inline-flex items-center mb-2">
                   <Mail size={20} className="mr-2"/> {user.email}
                 </a>
                 {user.phone && (
-                  <a href={`tel:${user.phone}`} className="text-lg text-purple-600 dark:text-purple-400 hover:underline inline-flex items-center">
+                  <a href={`tel:${user.phone}`} 
+                     onClick={() => trackEvent('Contato', 'Clique Telefone', 'Seção Contato')}
+                     className="text-lg text-purple-600 dark:text-purple-400 hover:underline inline-flex items-center">
                     <Phone size={20} className="mr-2"/> {formatPhoneNumber(user.phone)}
                   </a>
                 )}
                 <div className="mt-8 flex justify-center space-x-6">
-                  <a href={user.linkedin} target="_blank" rel="noopener noreferrer" className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors duration-300 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-gray-700">
+                  <a href={user.linkedin} target="_blank" rel="noopener noreferrer" 
+                     onClick={() => trackEvent('Navegação Externa', 'Clique LinkedIn', 'Seção Contato')}
+                     className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors duration-300 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-gray-700">
                     <Linkedin size={32} />
                   </a>
                   {user.github && user.github !== "#" && (
-                     <a href={user.github} target="_blank" rel="noopener noreferrer" className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors duration-300 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-gray-700">
+                     <a href={user.github} target="_blank" rel="noopener noreferrer" 
+                        onClick={() => trackEvent('Navegação Externa', 'Clique GitHub', 'Seção Contato')}
+                        className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors duration-300 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-gray-700">
                        <Github size={32} />
                      </a>
                   )}
@@ -524,8 +622,8 @@ function App() {
 
   return (
     <div className="flex flex-col min-h-screen font-sans bg-gray-100 dark:bg-black text-gray-800 dark:text-gray-200 selection:bg-purple-500 selection:text-white">
-      <Navbar setActiveSection={setActiveSection} theme={theme} toggleTheme={toggleTheme} />
-      <main className="pt-[74px] sm:pt-[70px] flex-grow flex flex-col"> {/* Adicionado flex flex-col aqui */}
+      <Navbar setActiveSection={setActiveSection} theme={theme} toggleTheme={toggleTheme} trackEvent={trackEvent} />
+      <main className="pt-[74px] sm:pt-[70px] flex-grow flex flex-col">
         {renderSection()}
       </main>
       <footer className="bg-gray-900 dark:bg-black text-purple-300 dark:text-purple-500 text-center p-6 border-t border-gray-700 dark:border-gray-800">
