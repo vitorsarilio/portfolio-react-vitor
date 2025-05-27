@@ -1,34 +1,27 @@
-// CERTIFIQUE-SE DE QUE O PACOTE 'react-ga4' ESTÁ INSTALADO NO SEU PROJETO:
-// No seu terminal, na pasta do projeto, execute:
-// npm install react-ga4
-// ou se usar Yarn:
-// yarn add react-ga4
-
 import { useState, useEffect } from 'react';
-import { Briefcase, User, Code, Mail, Linkedin, Github, ExternalLink, ChevronDown, ChevronUp, Award, LayoutDashboard, Phone, Building, School, Users, Sun, Moon } from 'lucide-react';
-import ReactGA from 'react-ga4'; // Importa o ReactGA
+import { Briefcase, User, Code, Mail, Linkedin, Github, ExternalLink, ChevronDown, ChevronUp, Award, LayoutDashboard, Phone, Building, School, Users, Sun, Moon, Eye, EyeOff, MessageCircle } from 'lucide-react';
+import ReactGA from 'react-ga4'; 
 
-// SEU ID DE MÉTRICA DO GOOGLE ANALYTICS 4 AQUI
-const GA_MEASUREMENT_ID = 'G-Z1643DT14D'; // <<=== SUBSTITUA PELO SEU ID REAL (já está o seu, mas confirme)
+const GA_MEASUREMENT_ID = 'G-Z1643DT14D'; 
 
-// Dados do Portfolio (com suas últimas atualizações)
+// Dados do Portfolio
 const portfolioData = {
   user: {
     name: "Vitor Hugo Sarilio",
     title: "Data Analyst | BI | SQL | Python | Power BI Specialist | BigQuery | Data Automation | Apache Airflow",
-    bio: `Sou um profissional orientado a dados com experiência em Business Intelligence, Análise de Dados e automação de ETL. Minha especialidade inclui SQL para consulta de dados, Python para processamento de dados e Power BI para visualização. Atualmente, trabalho na construção de pipelines de dados escaláveis com Apache Airflow e na análise de grandes conjuntos de dados no Google BigQuery.
+    bio: `Sou um profissional orientado a dados com experiência em Business Intelligence, análise de dados, automação e ETL. Minha especialidade inclui SQL para consulta de dados, Python para processamento de dados e Power BI para visualização. Atualmente, trabalho na construção de pipelines de dados escaláveis com Apache Airflow e na análise de grandes conjuntos de dados no Google BigQuery.
 
 Minhas Habilidades & Ferramentas:
 Análise de Dados: SQL, Python
 BI & Visualização: Power BI, Looker, Streamlit
-Engenharia de Dados: Pipelines ETL, Apache Airflow, BigQuery, GCS, Docker
+Engenharia de Dados: Pipelines (ETL, ELT), Apache Airflow, BigQuery, GCS, Docker, APIs
 
 Idiomas: Português (Nativo), Inglês (B2 Upper Intermediate), Espanhol (Básico).`,
     email: "vitorsarilio@hotmail.com",
-    phone: "11987191928",
+    phone: "5511987191928", 
     linkedin: "https://www.linkedin.com/in/vitorsarilio",
     github: "https://github.com/vitorsarilio",
-    avatar: "https://media.licdn.com/dms/image/v2/C4D03AQG_dknztqv3pA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1553357605523?e=1753920000&v=beta&t=vxL6zdjHgfQH57DbmV4NbKWcAMxJOXE6l9p9qcHbZp4"
+    avatar: "/vitor.jpg"
   },
   projects: [ 
     {
@@ -61,7 +54,7 @@ Idiomas: Português (Nativo), Inglês (B2 Upper Intermediate), Espanhol (Básico
     {
       id: 4,
       title: "Desenvolvimento de Dashboards Executivos e Operacionais",
-      description: "Criação e manutenção de mais de 15 dashboards em Power BI para equipas operacionais e executivas, rastreando KPIs alinhados aos OKRs da organização. Automação de relatórios mensais de KPIs.",
+      description: "Criação e manutenção de dashboards em Power BI para equipes operacionais e executivas, rastreando KPIs alinhados aos OKRs da organização. Automação de relatórios mensais de KPIs.",
       technologies: ["Power BI", "DAX", "Data Modeling", "SQL", "Excel (Power Query)"],
       imageUrl: "https://placehold.co/600x400/4c1d95/FFFFFF?text=Dashboards+KPIs",
       liveUrl: "#",
@@ -79,7 +72,7 @@ Idiomas: Português (Nativo), Inglês (B2 Upper Intermediate), Espanhol (Básico
         description: "Refatoração de dashboards: Atualização de dashboards legados do Power BI com UX/UI aprimorados, permitindo uma tomada de decisão mais rápida para as partes interessadas.\nPipeline de Monitoramento do Microsoft Admin Center: Desenvolvimento de Pipeline de Ponta a Ponta: Projetou e implantou um pipeline de monitoramento automatizado ingerindo dados da API Microsoft Graph para rastrear. Ingestão de Dados: Python (Requests, Pandas). Orquestração: Apache Airflow DAGs. Visualização: Power BI com DAX personalizado.",
         partners: [{ name: "CIMED", logoUrl: "https://logodownload.org/wp-content/uploads/2020/02/cimed-logo.png" }]
       },
-      {
+       {
         id: 2,
         title: "Data Engineer (Mid-Level)",
         company: "Uello",
@@ -105,7 +98,7 @@ Idiomas: Português (Nativo), Inglês (B2 Upper Intermediate), Espanhol (Básico
         company: "Tmov",
         logoUrl: "https://cdn.prod.website-files.com/6123ebeb608cc1010f8689c0/61254c42434ae07b74873c23_logo-dark.svg",
         period: "Dezembro 2021 - Março 2023 (1 ano e 4 meses)",
-        description: "Desenvolvimento de Dashboards Executivos: Projetou e manteve mais de 15 dashboards Power BI para equipes operacionais, rastreando KPIs vinculados aos OKRs organizacionais. Estratégia de KPIs e Alinhamento de Negócios: Colaborou com chefes de departamento para definir e padronizar KPIs, garantindo a consistência das métricas nas operações. Automação de relatórios mensais de KPIs, eliminando horas de trabalho manual através de fluxos de dados Power BI e medidas DAX. Stack Tecnológico: Power BI (DAX, Modelagem de Dados), SQL (Joins Avançados, CTEs), Excel (Power Query).",
+        description: "Desenvolvimento de Dashboards Executivos: Projeto e manutencao dashboards Power BI para equipes operacionais, rastreando KPIs vinculados aos OKRs organizacionais. Estratégia de KPIs e Alinhamento de Negócios: Colaboracao com chefes de departamento para definir e padronizar KPIs, garantindo a consistência das métricas nas operações. Automação de relatórios mensais de KPIs, eliminando horas de trabalho manual através de fluxos de dados Power BI e medidas DAX. Stack Tecnológico: Power BI (DAX, Modelagem de Dados), SQL (Joins Avançados, CTEs), Excel (Power Query).",
         partners: [{ name: "Sotran", logoUrl: "https://static.wixstatic.com/media/4c2984_82356c37ba4a4721994be4e6bd0f7609~mv2.png/v1/fill/w_347,h_113,al_c,lg_1,q_85/4c2984_82356c37ba4a4721994be4e6bd0f7609~mv2.png" } ]
       },
       {
@@ -114,7 +107,7 @@ Idiomas: Português (Nativo), Inglês (B2 Upper Intermediate), Espanhol (Básico
         company: "Grupo JCA",
         logoUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a3/Logo_Grupo_JCA.jpg",
         period: "Março 2017 - Novembro 2021 (4 anos e 9 meses)",
-        description: "Reporte Operacional Orientado a Dados: Desenvolveu mais de 20 dashboards interativos em Power BI para gerenciamento de frota e telemetria. Automação de Processos e Eficiência: Automatizou tarefas repetitivas usando Python (Selenium, Pandas), incluindo web scraping, geração de relatórios e alertas por e-mail (economizando mais de 25 horas/mês). Construiu e otimizou consultas SQL (SQL Server, MySQL, OracleDB). Criação de dashboards de telemetria com integração de dados GPS ao vivo. Análise Estratégica de Desempenho: Desenvolveu dashboards Power BI de nível executivo. Projetou e manteve fluxos de trabalho Pentaho Data Integration (PDI). Desenvolvimento de KPIs e Melhoria de Processos: Projetou mais de 15 novos KPIs de desempenho de frota. Melhoria de Processos de Multas de Trânsito e Programa de Recompensa de Motoristas. Ferramentas: Power BI, SQL, Excel (Fórmulas Avançadas, VBA), Python (Selenium, Pandas), Pentaho Data Integration.",
+        description: "Reporte Operacional Orientado a Dados: Desenvolvimento de dashboards interativos em Power BI para gerenciamento de frota e telemetria. Automação de Processos e Eficiência: Automatizacao de tarefas repetitivas usando Python (Selenium, Pandas), incluindo web scraping, geração de relatórios e alertas por e-mail (economizando mais de 25 horas/mês). Construcao e otimizacao de consultas SQL (SQL Server, MySQL, OracleDB). Criação de dashboards de telemetria com integração de dados GPS ao vivo. Análise Estratégica de Desempenho: Desenvolvimento de dashboards Power BI de nível executivo. Projetar e manter fluxos de trabalho Pentaho Data Integration (PDI). Desenvolvimento de KPIs e Melhoria de Processos: Projeto de mais de 15 novos KPIs de desempenho de frota. Melhoria de Processos de Multas de Trânsito e Programa de Recompensa de Motoristas. Ferramentas: Power BI, SQL, Excel (Fórmulas Avançadas, VBA), Python (Selenium, Pandas), Pentaho Data Integration.",
         partners: [
           { name: "Cometa", logoUrl: "https://upload.wikimedia.org/wikipedia/commons/1/1b/Logotipo_Cometa.png" }, 
           { name: "1001", logoUrl: "https://onibusexpresso.wordpress.com/wp-content/uploads/2014/07/logo_1001.jpg" },
@@ -172,20 +165,20 @@ Idiomas: Português (Nativo), Inglês (B2 Upper Intermediate), Espanhol (Básico
             id: 1,
             name: "EF SET English Certificate 54/100 (B2 Upper Intermediate)",
             issuer: "EF Standard English Test",
-            date: "Não especificado"
+            date: "Não especificado",
+            pdfUrl: "/EF_SET_Certificate.pdf"
         }
     ]
   }
 };
 
 // Componente de Navegação
-const Navbar = ({ setActiveSection, theme, toggleTheme, trackEvent }) => { // Adicionado trackEvent
-  const navItems = [
+const Navbar = ({ setActiveSection, theme, toggleTheme, trackEvent }) => {
+  const navItems = [ 
     { label: "Sobre Mim", section: "about", icon: <User size={18} /> },
     { label: "Projetos", section: "projects", icon: <Code size={18} /> },
     { label: "Projetos Pessoais", section: "personalProjects", icon: <LayoutDashboard size={18} /> },
     { label: "Currículo", section: "resume", icon: <Briefcase size={18} /> },
-    { label: "Contato", section: "contact", icon: <Mail size={18} /> }
   ];
 
   const handleNavClick = (section) => {
@@ -225,7 +218,7 @@ const Navbar = ({ setActiveSection, theme, toggleTheme, trackEvent }) => { // Ad
 };
 
 // Componente Cartão de Projeto
-const ProjectCard = ({ project, trackEvent }) => { // Adicionado trackEvent
+const ProjectCard = ({ project, trackEvent }) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition-transform duration-300 flex flex-col">
       <img src={project.imageUrl} alt={`[Imagem de ${project.title}]`} className="w-full h-48 object-cover" onError={(e) => e.target.src='https://placehold.co/600x400/DDD/333?text=Imagem+Indisponivel'} />
@@ -268,14 +261,14 @@ const ProjectCard = ({ project, trackEvent }) => { // Adicionado trackEvent
 };
 
 // Componente Item de Currículo
-const ResumeItem = ({ item, trackEvent }) => { // Adicionado trackEvent
+const ResumeItem = ({ item, trackEvent }) => { 
   const [isOpen, setIsOpen] = useState(false);
   const isExperience = !!item.company;
 
   const handleToggleOpen = () => {
     const newIsOpenState = !isOpen;
     setIsOpen(newIsOpenState);
-    if (newIsOpenState) { // Só rastreia quando abre
+    if (newIsOpenState) { 
       trackEvent(
         'Interação Currículo', 
         `Abrir Detalhe ${isExperience ? 'Experiência' : 'Educação'}`,
@@ -288,7 +281,7 @@ const ResumeItem = ({ item, trackEvent }) => { // Adicionado trackEvent
     <div className="mb-6 p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm bg-gray-50 dark:bg-gray-800 hover:shadow-md transition-shadow">
       <button
         className="flex justify-between items-start w-full text-left"
-        onClick={handleToggleOpen} // Usando a nova função
+        onClick={handleToggleOpen} 
       >
         <div className="flex items-start space-x-4 flex-grow">
           {item.logoUrl ? (
@@ -356,20 +349,80 @@ const ResumeItem = ({ item, trackEvent }) => { // Adicionado trackEvent
 };
 
 // Componente para exibir Certificações
-const CertificationItem = ({ cert }) => {
-    return (
-        <div className="mb-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm bg-gray-50 dark:bg-gray-800 hover:shadow-md transition-shadow">
-            <div className="flex items-center">
-                <Award size={24} className="text-purple-600 dark:text-purple-400 mr-3 flex-shrink-0" />
-                <div>
-                    <h4 className="text-lg font-semibold text-purple-700 dark:text-purple-400">{cert.name}</h4>
-                    <p className="text-sm text-purple-500 dark:text-purple-300">{cert.issuer}</p>
-                    {cert.date && cert.date !== "Não especificado" && <p className="text-xs text-gray-500 dark:text-gray-400">Data: {cert.date}</p>}
-                </div>
-            </div>
+const CertificationItem = ({ cert, trackEvent }) => {
+  const [isPdfOpen, setIsPdfOpen] = useState(false);
+
+  const handleToggleOrOpenPdf = () => {
+    if (cert.pdfUrl) {
+      const newIsOpenState = !isPdfOpen;
+      setIsPdfOpen(newIsOpenState);
+      if (newIsOpenState) {
+        trackEvent(
+          'Interação Certificado',
+          'Abrir PDF Certificado',
+          cert.name
+        );
+      }
+    }
+  };
+
+  return (
+    <div className="mb-4">
+      <div 
+        className={`p-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm bg-gray-50 dark:bg-gray-800 hover:shadow-md transition-shadow flex justify-between items-center ${cert.pdfUrl ? 'cursor-pointer' : ''}`}
+        onClick={handleToggleOrOpenPdf}
+      >
+        <div className="flex items-center">
+          <Award size={24} className="text-purple-600 dark:text-purple-400 mr-3 flex-shrink-0" />
+          <div>
+            <h4 className="text-lg font-semibold text-purple-700 dark:text-purple-400">{cert.name}</h4>
+            <p className="text-sm text-purple-500 dark:text-purple-300">{cert.issuer}</p>
+            {cert.date && cert.date !== "Não especificado" && <p className="text-xs text-gray-500 dark:text-gray-400">Data: {cert.date}</p>}
+          </div>
         </div>
-    );
+        {cert.pdfUrl && (
+          isPdfOpen ? <EyeOff size={20} className="text-purple-600 dark:text-purple-400 flex-shrink-0" /> : <Eye size={20} className="text-purple-600 dark:text-purple-400 flex-shrink-0" />
+        )}
+      </div>
+      {isPdfOpen && cert.pdfUrl && (
+        <div className="mt-2 border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden shadow-lg">
+          <iframe 
+            src={cert.pdfUrl} 
+            width="100%" 
+            height="700px"
+            title={`Certificado: ${cert.name}`}
+            className="border-none"
+          >
+            <p>O seu navegador não suporta PDFs embutidos. Por favor, 
+              <a href={cert.pdfUrl} target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:underline"> clique aqui para descarregar o PDF</a>.
+            </p>
+          </iframe>
+        </div>
+      )}
+    </div>
+  );
 };
+
+// Componente para o link de contato com expansão horizontal
+const ExpandingContactLink = ({ href, eventCategory, eventAction, eventLabel, icon: Icon, textToShow, trackEvent }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    onClick={() => trackEvent(eventCategory, eventAction, eventLabel)}
+    className="group relative flex items-center p-2 rounded-full text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 transition-all duration-300"
+    aria-label={eventLabel}
+  >
+    <Icon size={28} className="flex-shrink-0 transition-transform duration-500 group-hover:scale-110" /> 
+    <span 
+      style={{transition: 'max-width 0.5s ease-in-out, opacity 0.5s 0.1s ease-in-out, margin-left 0.5s ease-in-out, padding 0.5s ease-in-out'}} 
+      className="ml-0 max-w-0 overflow-hidden whitespace-nowrap group-hover:ml-2 group-hover:max-w-xs group-hover:px-3 group-hover:py-1 text-sm font-semibold text-purple-700 dark:text-purple-300 opacity-0 group-hover:opacity-100 pointer-events-none"
+    >
+      {textToShow}
+    </span>
+  </a>
+);
+
 
 // Componente Principal da Aplicação
 function App() {
@@ -386,7 +439,7 @@ function App() {
   const trackEvent = (category, action, label) => {
     if (GA_MEASUREMENT_ID && GA_MEASUREMENT_ID !== 'G-SEU_ID_DE_METRICA_AQUI' && ReactGA.isInitialized) {
       ReactGA.event({ category, action, label });
-      console.log(`GA Event: Category='${category}', Action='${action}', Label='${label}'`);
+      // console.log(`GA Event: Category='${category}', Action='${action}', Label='${label}'`);
     }
   };
 
@@ -394,8 +447,8 @@ function App() {
   useEffect(() => {
     if (GA_MEASUREMENT_ID && GA_MEASUREMENT_ID !== 'G-SEU_ID_DE_METRICA_AQUI') {
       ReactGA.initialize(GA_MEASUREMENT_ID);
-      console.log("Google Analytics Inicializado com ID:", GA_MEASUREMENT_ID);
-      // Envia o primeiro pageview para a seção inicial
+      // console.log("Google Analytics Inicializado com ID:", GA_MEASUREMENT_ID); 
+      
       const initialPagePath = `/${activeSection}`;
       let initialPageTitle = portfolioData.user.name + " Portfólio";
       if (activeSection !== 'about') {
@@ -403,13 +456,13 @@ function App() {
           initialPageTitle = `${sectionLabel} | ${portfolioData.user.name}`;
       }
       ReactGA.send({ hitType: "pageview", page: initialPagePath, title: initialPageTitle });
-      console.log(`GA Pageview Inicial: ${initialPagePath} (Título: ${initialPageTitle})`);
+      // console.log(`GA Pageview Inicial: ${initialPagePath} (Título: ${initialPageTitle})`);
     } else {
-      console.warn("ID de Métrica do Google Analytics não configurado ou é placeholder. Acompanhamento desativado.");
+      // console.warn("ID de Métrica do Google Analytics não configurado ou é placeholder. Acompanhamento desativado."); 
     }
-  }, []); // Array de dependências vazio para rodar apenas uma vez na montagem
+  }, []); 
 
-  // Envia pageviews quando a seção ativa muda (APÓS a montagem inicial)
+  // Envia pageviews quando a seção ativa muda
   const [initialLoadDone, setInitialLoadDone] = useState(false);
   useEffect(() => {
     if (initialLoadDone) {
@@ -421,7 +474,7 @@ function App() {
                 pageTitle = `${sectionLabel} | ${portfolioData.user.name}`;
             }
             ReactGA.send({ hitType: "pageview", page: pagePath, title: pageTitle });
-            console.log(`GA Pageview (mudança de seção): ${pagePath} (Título: ${pageTitle})`);
+            // console.log(`GA Pageview (mudança de seção): ${pagePath} (Título: ${pageTitle})`);
         }
     } else {
         setInitialLoadDone(true);
@@ -444,19 +497,70 @@ function App() {
   
   const powerBiIframeSrc = "https://app.powerbi.com/view?r=eyJrIjoiODk1MTU1MzYtMjhmNi00ZDc3LTg4M2YtYjZjZDFmMWQ2NWVmIiwidCI6ImZhNDY2OTVmLWYwMWQtNDVkMC1hOTA1LWY0NzFjMjlmNGI5OSJ9&pageName=6c91c334232d5c05e26b";
 
-  const formatPhoneNumber = (phone) => {
+  const formatPhoneNumberForWhatsApp = (phone) => {
+    if (!phone) return "";
+    return ('' + phone).replace(/\D/g, ''); 
+  };
+  
+  const displayPhoneNumber = (phone) => { 
     if (!phone) return "";
     const cleaned = ('' + phone).replace(/\D/g, '');
-    const match = cleaned.match(/^(\d{2})(\d{1})(\d{4})(\d{4})$/);
+    const match = cleaned.match(/^(\d{2})(\d{2})(\d{1})(\d{4})(\d{4})$/); 
     if (match) {
-      return `(${match[1]}) ${match[2]} ${match[3]}-${match[4]}`;
+      return `+${match[1]} (${match[2]}) ${match[3]} ${match[4]}-${match[5]}`;
     }
-    return phone;
+    return phone; 
   };
+
 
   const sectionBasePaddingX = "px-4 sm:px-6 lg:px-8";
   const sectionContentPaddingY = "py-12 sm:py-16"; 
   const sectionFullHeightPaddingY = "py-10 sm:py-12"; 
+
+  // CSS para o efeito de brilho (shimmer)
+  const shimmerEffectStyle = `
+    .avatar-shimmer-container {
+      position: relative;
+      overflow: hidden; /* Crucial para conter o brilho */
+      /* As classes de tamanho e forma (rounded-full, etc.) já estão no div */
+    }
+
+    .avatar-shimmer-container::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -150%; /* Começa mais à esquerda para um movimento completo */
+      width: 50%; /* Largura do brilho */
+      height: 100%;
+      background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.4) 50%, /* Aumentei um pouco a opacidade do brilho */
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: skewX(-25deg); /* Ângulo do brilho */
+      animation: shimmer-animation 3.5s infinite linear; /* Duração e tipo de animação */
+      z-index: 1; /* Para garantir que o brilho fique sobre a imagem */
+    }
+
+    .avatar-shimmer-container img {
+      display: block; /* Remove espaço extra abaixo da imagem */
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Garante que a imagem cubra o círculo */
+      position: relative; /* Para que o z-index do ::after funcione corretamente em alguns navegadores */
+      z-index: 0;
+    }
+
+    @keyframes shimmer-animation {
+      0% {
+        left: -150%;
+      }
+      100% {
+        left: 150%; /* Move completamente através da imagem */
+      }
+    }
+  `;
 
   const renderSection = () => {
     switch (activeSection) {
@@ -464,34 +568,58 @@ function App() {
         return (
           <section id="about" className={`${sectionBasePaddingX} ${sectionFullHeightPaddingY} flex flex-grow items-center justify-center bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-purple-900 dark:via-indigo-900 dark:to-blue-900`}>
             <div className="text-center max-w-3xl bg-white dark:bg-gray-800 p-8 sm:p-12 rounded-xl shadow-2xl">
-              <img src={user.avatar} alt={`[Avatar de ${user.name}]`} className="w-32 h-32 sm:w-36 sm:h-36 rounded-full mx-auto mb-6 shadow-lg border-4 border-purple-300 dark:border-purple-600" onError={(e) => e.target.src='https://placehold.co/150x150/7E3AF2/FFFFFF?text=VS'} />
+              {/* Container para o efeito de brilho */}
+              <div className="avatar-shimmer-container w-32 h-32 sm:w-36 sm:h-36 rounded-full mx-auto mb-6 shadow-lg border-4 border-purple-300 dark:border-purple-600">
+                <img 
+                  src={user.avatar} 
+                  alt={`[Avatar de ${user.name}]`} 
+                  onError={(e) => e.target.src='https://placehold.co/150x150/7E3AF2/FFFFFF?text=VS'} 
+                />
+              </div>
               <h1 className="text-4xl sm:text-5xl font-bold mb-2 text-purple-800 dark:text-purple-300">{user.name}</h1>
               <p className="text-xl sm:text-2xl text-purple-600 dark:text-purple-400 mb-6">{user.title}</p>
               <p className="text-md sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">{user.bio}</p>
-              {user.phone && (
-                <a href={`tel:${user.phone}`} 
-                   onClick={() => trackEvent('Contato', 'Clique Telefone', 'Seção Sobre Mim')}
-                   className="text-md sm:text-lg text-purple-600 dark:text-purple-400 hover:underline inline-flex items-center my-4">
-                  <Phone size={18} className="mr-2"/> {formatPhoneNumber(user.phone)}
-                </a>
-              )}
-              <div className="mt-4 flex justify-center space-x-6">
-                <a href={`mailto:${user.email}`} 
-                   onClick={() => trackEvent('Contato', 'Clique Email', 'Seção Sobre Mim')}
-                   className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors duration-300 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-gray-700">
-                  <Mail size={28} />
-                </a>
-                <a href={user.linkedin} target="_blank" rel="noopener noreferrer" 
-                   onClick={() => trackEvent('Navegação Externa', 'Clique LinkedIn', 'Seção Sobre Mim')}
-                   className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors duration-300 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-gray-700">
-                  <Linkedin size={28} />
-                </a>
+              
+              <div className="mt-8 flex justify-center items-center space-x-1 sm:space-x-2"> 
+                {user.phone && (
+                   <ExpandingContactLink
+                    href={`https://wa.me/${formatPhoneNumberForWhatsApp(user.phone)}`}
+                    eventCategory="Contato"
+                    eventAction="Clique WhatsApp"
+                    eventLabel="Seção Sobre Mim"
+                    icon={MessageCircle}
+                    textToShow={displayPhoneNumber(user.phone)}
+                    trackEvent={trackEvent}
+                  />
+                )}
+                <ExpandingContactLink
+                  href={`mailto:${user.email}`}
+                  eventCategory="Contato"
+                  eventAction="Clique Email"
+                  eventLabel="Seção Sobre Mim"
+                  icon={Mail}
+                  textToShow={user.email}
+                  trackEvent={trackEvent}
+                />
+                <ExpandingContactLink
+                  href={user.linkedin}
+                  eventCategory="Navegação Externa"
+                  eventAction="Clique LinkedIn"
+                  eventLabel="Seção Sobre Mim"
+                  icon={Linkedin}
+                  textToShow="LinkedIn"
+                  trackEvent={trackEvent}
+                />
                 {user.github && user.github !== "#" && (
-                  <a href={user.github} target="_blank" rel="noopener noreferrer" 
-                     onClick={() => trackEvent('Navegação Externa', 'Clique GitHub', 'Seção Sobre Mim')}
-                     className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors duration-300 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-gray-700">
-                    <Github size={28} />
-                  </a>
+                  <ExpandingContactLink
+                    href={user.github}
+                    eventCategory="Navegação Externa"
+                    eventAction="Clique GitHub"
+                    eventLabel="Seção Sobre Mim"
+                    icon={Github}
+                    textToShow="GitHub"
+                    trackEvent={trackEvent}
+                  />
                 )}
               </div>
             </div>
@@ -558,7 +686,7 @@ function App() {
                 <div className="mb-12">
                   <h3 className="text-3xl font-semibold mb-8 text-purple-700 dark:text-purple-400 border-b-2 border-purple-200 dark:border-purple-700 pb-2">Certificações</h3>
                   {resume.certifications.map(cert => (
-                    <CertificationItem key={cert.id} cert={cert} />
+                    <CertificationItem key={cert.id} cert={cert} trackEvent={trackEvent} />
                   ))}
                 </div>
               )}
@@ -575,62 +703,29 @@ function App() {
             </div>
           </section>
         );
-      case 'contact':
-        return (
-          <section id="contact" className={`${sectionBasePaddingX} ${sectionFullHeightPaddingY} flex flex-grow items-center justify-center bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-purple-900 dark:via-indigo-900 dark:to-blue-900`}>
-            <div className="text-center max-w-xl w-full">
-              <h2 className="text-4xl font-bold mb-8 text-purple-800 dark:text-purple-300">Entre em Contato</h2>
-              <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
-                Estou sempre aberto a novas oportunidades e colaborações. Sinta-se à vontade para me contatar!
-              </p>
-              <div className="bg-white dark:bg-gray-800 p-8 sm:p-10 rounded-lg shadow-xl">
-                <p className="text-xl text-purple-700 dark:text-purple-400 font-semibold mb-1">{user.name}</p>
-                <a href={`mailto:${user.email}`} 
-                   onClick={() => trackEvent('Contato', 'Clique Email', 'Seção Contato')}
-                   className="text-lg text-purple-600 dark:text-purple-400 hover:underline inline-flex items-center mb-2">
-                  <Mail size={20} className="mr-2"/> {user.email}
-                </a>
-                {user.phone && (
-                  <a href={`tel:${user.phone}`} 
-                     onClick={() => trackEvent('Contato', 'Clique Telefone', 'Seção Contato')}
-                     className="text-lg text-purple-600 dark:text-purple-400 hover:underline inline-flex items-center">
-                    <Phone size={20} className="mr-2"/> {formatPhoneNumber(user.phone)}
-                  </a>
-                )}
-                <div className="mt-8 flex justify-center space-x-6">
-                  <a href={user.linkedin} target="_blank" rel="noopener noreferrer" 
-                     onClick={() => trackEvent('Navegação Externa', 'Clique LinkedIn', 'Seção Contato')}
-                     className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors duration-300 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-gray-700">
-                    <Linkedin size={32} />
-                  </a>
-                  {user.github && user.github !== "#" && (
-                     <a href={user.github} target="_blank" rel="noopener noreferrer" 
-                        onClick={() => trackEvent('Navegação Externa', 'Clique GitHub', 'Seção Contato')}
-                        className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors duration-300 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-gray-700">
-                       <Github size={32} />
-                     </a>
-                  )}
-                </div>
-              </div>
-            </div>
-          </section>
-        );
       default:
+        if (activeSection === 'contact') { 
+            setActiveSection('about'); 
+            return null; 
+        }
         return <p className="text-center py-10 dark:text-gray-300">Seção não encontrada.</p>;
     }
   };
 
   return (
-    <div className="flex flex-col min-h-screen font-sans bg-gray-100 dark:bg-black text-gray-800 dark:text-gray-200 selection:bg-purple-500 selection:text-white">
-      <Navbar setActiveSection={setActiveSection} theme={theme} toggleTheme={toggleTheme} trackEvent={trackEvent} />
-      <main className="pt-[74px] sm:pt-[70px] flex-grow flex flex-col">
-        {renderSection()}
-      </main>
-      <footer className="bg-gray-900 dark:bg-black text-purple-300 dark:text-purple-500 text-center p-6 border-t border-gray-700 dark:border-gray-800">
-        <p>© {new Date().getFullYear()} {user.name}. Todos os direitos reservados.</p>
-        <p className="text-xs mt-1">Desenvolvido com React + Vite & Tailwind CSS.</p>
-      </footer>
-    </div>
+    <>
+      <style>{shimmerEffectStyle}</style> {/* CSS para o efeito de brilho */}
+      <div className="flex flex-col min-h-screen font-sans bg-gray-100 dark:bg-black text-gray-800 dark:text-gray-200 selection:bg-purple-500 selection:text-white">
+        <Navbar setActiveSection={setActiveSection} theme={theme} toggleTheme={toggleTheme} trackEvent={trackEvent} />
+        <main className="pt-[74px] sm:pt-[70px] flex-grow flex flex-col">
+          {renderSection()}
+        </main>
+        <footer className="bg-gray-900 dark:bg-black text-purple-300 dark:text-purple-500 text-center p-6 border-t border-gray-700 dark:border-gray-800">
+          <p>© {new Date().getFullYear()} {user.name}. Todos os direitos reservados.</p>
+          <p className="text-xs mt-1">Desenvolvido com React + Vite & Tailwind CSS.</p>
+        </footer>
+      </div>
+    </>
   );
 }
 
