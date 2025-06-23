@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const SkillLogo = ({ imageUrl, altText, label }) => {
   return (
     <div className="flex flex-col items-center justify-start gap-2 text-center w-24">

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, Award, Building, School, Users, Eye, EyeOff } from 'lucide-react';
 
-// --- 1. IMPORTAMOS TODOS OS LOGOS LOCALMENTE ---
-// Certifique-se de que os nomes dos arquivos em `src/assets/logos/` correspondem aos nomes usados aqui.
 import sauterLogo from '../assets/logos/sauter.webp';
 import uelloLogo from '../assets/logos/uello.png';
 import sinapticsLogo from '../assets/logos/sinaptics.png';
@@ -13,7 +11,6 @@ import jacosLogo from '../assets/logos/jacos.jpeg';
 import fiapLogo from '../assets/logos/fiap.png';
 import unipLogo from '../assets/logos/unip.png';
 
-// Logos de Parceiros
 import cimedLogo from '../assets/logos/cimed.png';
 import autopassLogo from '../assets/logos/autopass.png';
 import sotranLogo from '../assets/logos/sotran.png';
@@ -23,7 +20,6 @@ import catarinenseLogo from '../assets/logos/catarinense.png';
 import expressoDoSulLogo from '../assets/logos/expresso-do-sul.png';
 import rapidoRibeiraoLogo from '../assets/logos/rapido-ribeirao.png';
 
-// --- 2. MAPEAMOS OS LOGOS AOS DADOS ---
 const logoMap = {
   exp1: sauterLogo,
   exp2: uelloLogo,
@@ -47,9 +43,6 @@ const partnerLogoMap = {
   'Rápido Ribeirão': rapidoRibeiraoLogo,
 };
 
-
-// --- COMPONENTES INTERNOS ---
-
 const PartnerLogo = ({ logoSrc, partnerName }) => {
   if (!logoSrc) {
     return (
@@ -64,7 +57,6 @@ const PartnerLogo = ({ logoSrc, partnerName }) => {
     </div>
   );
 };
-
 
 const ResumeItem = ({ item, trackEvent }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -119,8 +111,6 @@ const ResumeItem = ({ item, trackEvent }) => {
   );
 };
 
-
-// ===== CÓDIGO COMPLETO DO CERTIFICATIONITEM RESTAURADO AQUI =====
 const CertificationItem = ({ cert, trackEvent }) => {
   const [isPdfOpen, setIsPdfOpen] = useState(false);
 
@@ -169,8 +159,6 @@ const CertificationItem = ({ cert, trackEvent }) => {
   );
 };
 
-
-// --- COMPONENTE PRINCIPAL DA SEÇÃO ---
 export const ResumeSection = ({ resume, trackEvent }) => {
   const experiencesWithLogos = resume.experience.map(exp => ({ ...exp, logo: logoMap[`exp${exp.id}`] }));
   const educationWithLogos = resume.education.map(edu => ({ ...edu, logo: logoMap[`edu${edu.id}`] }));

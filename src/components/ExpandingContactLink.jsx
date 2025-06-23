@@ -1,10 +1,9 @@
-// Este componente lida com os links de contato que expandem ao passar o mouse.
-export const ExpandingContactLink = ({ href, eventCategory, eventAction, eventLabel, icon: Icon, textToShow, trackEvent }) => ( //
+export const ExpandingContactLink = ({ href, eventCategory, eventAction, eventLabel, icon: Icon, textToShow, trackEvent }) => (
   <a
     href={href}
     target="_blank"
     rel="noopener noreferrer"
-    onClick={() => trackEvent(eventCategory, eventAction, eventLabel)} //
+    onClick={() => trackEvent(eventCategory, eventAction, eventLabel)}
     className="group relative flex items-center p-2 rounded-full text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 transition-all duration-300"
     aria-label={eventLabel}
   >

@@ -2,11 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import './index.css';
-
 import App from './App.jsx';
 import PortfolioPage from './pages/PortfolioPage.jsx';
+import { MovieAppLayout } from './pages/MovieAppLayout.jsx';
 import MoviesPage from './pages/MoviesPage.jsx';
+import WatchlistPage from './pages/WatchlistPage.jsx';
+import RatedMoviesPage from './pages/RatedMoviesPage.jsx'; 
+import FavoritesPage from './pages/FavoritesPage.jsx';
+
+import './index.css';
 
 const router = createBrowserRouter([
   {
@@ -17,10 +21,15 @@ const router = createBrowserRouter([
         index: true,
         element: <PortfolioPage />,
       },
-     /* {
-        path: 'filmes',
-        element: <MoviesPage />,
-      },*/
+      {
+        element: <MovieAppLayout />,
+        children: [
+          { path: 'filmes', element: <MoviesPage /> },
+          { path: 'watchlist', element: <WatchlistPage /> },
+          { path: 'avaliacoes', element: <RatedMoviesPage /> },
+          { path: 'favoritos', element: <FavoritesPage /> },
+        ]
+      }
     ],
   },
 ]);

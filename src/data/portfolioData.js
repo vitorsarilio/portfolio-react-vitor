@@ -8,7 +8,7 @@ export const portfolioData = {
     phone: "5511987191928", 
     linkedin: "https://www.linkedin.com/in/vitorsarilio",
     github: "https://github.com/vitorsarilio",
-    avatar: "/vitor.jpg"
+    avatar: "../vitor.jpg"
   },
   projects: [ 
     {
@@ -46,6 +46,26 @@ export const portfolioData = {
       imageUrl: "https://placehold.co/600x400/4c1d95/FFFFFF?text=Dashboards+KPIs",
       liveUrl: "#",
       repoUrl: "#"
+    }
+  ],
+  personalProjects: [
+    {
+      id: 101, 
+      title: "App de Filmes (React & TMDB API)",
+      description: "Uma aplicação web interativa construída com React e Vite para explorar filmes. A página consome a API do The Movie Database (TMDB) e apresenta rolagem infinita, busca de notas pessoais e modais de detalhes.",
+      technologies: ["React", "Vite", "TailwindCSS", "TMDB API", "React Router"],
+      imageUrl: "https://placehold.co/600x400/8B5CF6/FFFFFF?text=App+de+Filmes",
+      liveUrl: "/filmes", 
+      repoUrl: "https://github.com/vitorsarilio/portfolio-react-vitor" 
+    },
+    {
+      id: 102,
+      title: "Dashboard Interativo: Análise de Filmes",
+      description: "Um dashboard interativo desenvolvido no Power BI para análise de dados de filmes. Explore diferentes visualizações e insights sobre o mundo cinematográfico.",
+      technologies: ["Power BI", "DAX", "Data Analysis", "Airflow", "Python","TMDB API"],
+      imageUrl: "https://placehold.co/600x400/A78BFA/FFFFFF?text=Dashboard+Power+BI",
+      liveUrl: "https://app.powerbi.com/view?r=eyJrIjoiODk1MTU1MzYtMjhmNi00ZDc3LTg4M2YtYjZjZDFmMWQ2NWVmIiwidCI6ImZhNDY2OTVmLWYwMWQtNDVkMC1hOTA1LWY0NzFjMjlmNGI5OSJ9", 
+      repoUrl: "https://github.com/vitorsarilio/airflow_tmdb"
     }
   ],
   resume: {

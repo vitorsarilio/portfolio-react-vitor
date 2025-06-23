@@ -3,12 +3,13 @@ import { useOutletContext } from 'react-router-dom';
 import { MovieModal } from '../components/MovieModal';
 import { useMovieFetching } from '../hooks/useMovieFetching';
 import { MovieCard } from '../components/MovieCard';
-import { MovieCardSkeleton } from '../components/MovieCardSkeleton';
+import { MovieCardSkeleton } from '../components/MovieCardSkeleton'; // Importando o Skeleton
 
-const POPULAR_MOVIES_URL = 'https://api.themoviedb.org/3/movie/popular?region=BR';
+const ACCOUNT_ID = import.meta.env.VITE_TMDB_ACCOUNT_ID;
+const FAVORITES_URL = `https://api.themoviedb.org/3/account/${ACCOUNT_ID}/favorite/movies?sort_by=created_at.asc`;
 
-export default function MoviesPage() {
-  const { movies, loading, hasMore, error, lastMovieElementRef } = useMovieFetching(POPULAR_MOVIES_URL);
+export default function FavoritesPage() {
+  const { movies, loading, hasMore, error, lastMovieElementRef } = useMovieFetching(FAVORITES_URL);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const { personalRatingsMap } = useOutletContext();
 
@@ -20,12 +21,12 @@ export default function MoviesPage() {
   const handleOpenModal = (movie) => setSelectedMovie(movie);
   const handleCloseModal = () => setSelectedMovie(null);
 
+  // Lógica de Skeleton Loading para o carregamento inicial
   if (loading && movies.length === 0 && !error) {
     return (
       <div className="container mx-auto p-4 sm:p-6 lg:p-8">
-        <h1 className="text-4xl font-black text-center mb-10 text-gray-900 dark:text-white">Filmes Populares no Brasil</h1>
+        <h1 className="text-4xl font-black text-center mb-10 text-transparent bg-gray-300 dark:bg-gray-600 rounded-lg animate-pulse w-1/2 mx-auto">.</h1>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-          {/* Renderiza 12 skeletons como placeholders */}
           {Array.from({ length: 12 }).map((_, index) => (
             <MovieCardSkeleton key={index} />
           ))}
@@ -33,11 +34,13 @@ export default function MoviesPage() {
       </div>
     );
   }
+
   return (
     <>
       <div className="container mx-auto p-4 sm:p-6 lg:p-8">
-        <h1 className="text-4xl font-black text-center mb-10 text-gray-900 dark:text-white">Filmes Populares no Brasil</h1>
+        <h1 className="text-4xl font-black text-center mb-10 text-gray-900 dark:text-white">Meus Favoritos</h1>
         {error && <div className="text-center p-10 text-xl text-red-500">{`Erro: ${error}`}</div>}
+        {movies.length === 0 && !loading && <div className="text-center p-10 text-lg text-gray-500">Você ainda não favoritou nenhum filme.</div>}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
           {movies.map((movie, index) => (
             <div key={movie.id} ref={index === movies.length - 1 ? lastMovieElementRef : null}>
@@ -45,11 +48,10 @@ export default function MoviesPage() {
             </div>
           ))}
         </div>
-        {loading && <div className="text-center p-10 text-xl dark:text-gray-300">Carregando mais...</div>}
-        {!hasMore && !loading && movies.length > 0 && <div className="text-center p-10 text-lg text-gray-500">Você chegou ao fim!</div>}
+        {loading && movies.length > 0 && <div className="text-center p-10 text-xl dark:text-gray-300">Carregando mais...</div>}
+        {!hasMore && !loading && movies.length > 0 && <div className="text-center p-10 text-lg text-gray-500">Você chegou ao fim da lista!</div>}
       </div>
-      
-      {selectedMovie && <MovieModal movie={selectedMovie} onClose={handleCloseModal} personalRating={personalRatingsMap?.get(movie.id)} />}
+      {selectedMovie && <MovieModal movie={selectedMovie} onClose={handleCloseModal} personalRating={personalRatingsMap?.get(selectedMovie.id)} />}
     </>
   );
 }

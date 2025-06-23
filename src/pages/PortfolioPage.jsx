@@ -1,12 +1,10 @@
 import { useOutletContext } from 'react-router-dom';
 
-// Seções
 import { AboutSection } from '../sections/AboutSection';
 import { ProjectsSection } from '../sections/ProjectsSection';
 import { PersonalProjectsSection } from '../sections/PersonalProjectsSection';
 import { ResumeSection } from '../sections/ResumeSection';
 
-// Dados
 import { portfolioData } from '../data/portfolioData';
 
 export default function PortfolioPage() {
@@ -16,7 +14,7 @@ export default function PortfolioPage() {
     <>
       <AboutSection user={user} trackEvent={trackEvent} />
       <ProjectsSection projects={projects} trackEvent={trackEvent} />
-      <PersonalProjectsSection />
+      <PersonalProjectsSection trackEvent={trackEvent}/>
       <ResumeSection resume={resume} trackEvent={trackEvent} />
     </>
   );
