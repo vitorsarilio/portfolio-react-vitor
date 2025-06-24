@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+
+const READ_ACCESS_TOKEN = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
 
 export const useMovieFetching = (apiUrl) => {
   const [movies, setMovies] = useState([]);
@@ -8,32 +10,26 @@ export const useMovieFetching = (apiUrl) => {
   const [error, setError] = useState(null);
 
   const fetchMovies = useCallback(async (pageNum) => {
-    const READ_ACCESS_TOKEN = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
-
     setLoading(true);
     setError(null);
     const options = { headers: { accept: 'application/json', Authorization: `Bearer ${READ_ACCESS_TOKEN}`}};
-    
     try {
-      if (!READ_ACCESS_TOKEN) {
-        throw new Error("Token de Acesso (VITE_TMDB_READ_ACCESS_TOKEN) não foi encontrado no arquivo .env. Verifique o nome e reinicie o servidor.");
-      }
+      if (!READ_ACCESS_TOKEN) throw new Error("Token de Acesso não configurado.");
       
-      const url = `${apiUrl}&language=pt-BR&page=${pageNum}`;
+
+      const url = `${apiUrl}&language=pt-BR&page=${pageNum}&include_adult=false`;
+      
       const response = await fetch(url, options);
       
       if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("Erro 401: Não Autorizado. O Token de Acesso fornecido é inválido ou expirou. Verifique o valor no seu arquivo .env.");
-        }
         throw new Error(`Erro na API: ${response.statusText}`);
       }
       
       const data = await response.json();
       
       setMovies(prevMovies => {
-        const allMovies = pageNum === 1 ? data.results : [...prevMovies, ...data.results];
-        const movieMap = new Map(allMovies.map(movie => [movie.id, movie]));
+        const newMovies = pageNum === 1 ? data.results : [...prevMovies, ...data.results];
+        const movieMap = new Map(newMovies.map(movie => [movie.id, movie]));
         return Array.from(movieMap.values());
       });
       

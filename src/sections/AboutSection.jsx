@@ -1,4 +1,3 @@
-import React from 'react';
 import { Mail, Linkedin, Github, MessageCircle } from 'lucide-react';
 
 import { ExpandingContactLink } from '../components/ExpandingContactLink';

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ChevronDown, ChevronUp, Award, Building, School, Users, Eye, EyeOff } from 'lucide-react';
 
 import sauterLogo from '../assets/logos/sauter.webp';

@@ -1,13 +1,14 @@
+import { Link } from 'react-router-dom';
 import { Star } from 'lucide-react';
 import { getRatingColor } from '../utils/colorHelpers';
 
-export const MovieCard = ({ movie, onCardClick, personalRating }) => {
+export const MovieCard = ({ movie, personalRating }) => {
   const tmdbRatingColor = getRatingColor(movie.vote_average);
   const personalRatingColor = getRatingColor(personalRating);
 
   return (
-    <button 
-      onClick={() => onCardClick(movie)}
+    <Link 
+      to={`/filme/${movie.id}`}
       className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300 group text-left w-full cursor-pointer flex flex-col h-full"
     >
       <img 
@@ -22,7 +23,6 @@ export const MovieCard = ({ movie, onCardClick, personalRating }) => {
           <span className={`font-bold animate-pulse ${tmdbRatingColor}`}>
             Nota: {movie.vote_average.toFixed(1)}
           </span>
-          
           {personalRating && (
             <div className={`flex items-center gap-1 font-bold text-xs animate-pulse ${personalRatingColor}`}>
               <Star size={14} className="fill-current" />
@@ -31,6 +31,6 @@ export const MovieCard = ({ movie, onCardClick, personalRating }) => {
           )}
         </div>
       </div>
-    </button>
+    </Link>
   );
 };
