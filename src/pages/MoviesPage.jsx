@@ -1,73 +1,47 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { MovieCard } from '../components/MovieCard';
-import { MovieCardSkeleton } from '../components/MovieCardSkeleton';
+import { useMovieFetching } from '../hooks/useMovieFetching';
+import { MovieGridPage } from '../components/MovieGridPage';
+import { FilterControls } from '../components/FilterControls';
 
-
-const POPULAR_MOVIES_URL = 'https://api.themoviedb.org/3/movie/popular?language=pt-BR&region=BR&page=1';
-const READ_ACCESS_TOKEN = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
+const POPULAR_MOVIES_BASE_URL = 'https://api.themoviedb.org/3/discover/movie';
 
 export default function MoviesPage() {
-
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
   const { personalRatingsMap } = useOutletContext();
+  const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    const fetchTop20Movies = async () => {
-      setLoading(true);
-      setError(null);
-      const options = { headers: { accept: 'application/json', Authorization: `Bearer ${READ_ACCESS_TOKEN}`}};
+  const apiUrl = POPULAR_MOVIES_BASE_URL;
 
-      try {
-        if (!READ_ACCESS_TOKEN) throw new Error("Token de Acesso não configurado.");
-        
-        const response = await fetch(POPULAR_MOVIES_URL, options);
-        if (!response.ok) throw new Error(`Erro na API: ${response.statusText}`);
-        
-        const data = await response.json();
+  const { movies, loading, hasMore, error, lastMovieElementRef } = useMovieFetching(
+    apiUrl,
+    searchTerm,
+    'popularity.desc', // Default sort for popular movies
+    true // limitToFirstPage = true
+  );
 
-        setMovies(data.results);
-
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTop20Movies();
-  }, []); 
-
-  if (loading) {
-    return (
-      <div className="container mx-auto p-4 sm:p-6 lg:p-8">
-        <h1 className="text-4xl font-bold text-left mb-12 text-gray-900 dark:text-gray-100">Top 20 Filmes Populares</h1>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-          {Array.from({ length: 20 }).map((_, index) => <MovieCardSkeleton key={index} />)}
-        </div>
-      </div>
-    );
-  }
+  const handleDebouncedSearchChange = useCallback((value) => {
+    setSearchTerm(value);
+  }, []);
 
   return (
     <div className="container mx-auto p-4 sm:p-6 lg:p-8 animate-fade-in-up">
-      <h1 className="text-4xl font-bold text-left mb-12 text-gray-900 dark:text-gray-100">Top 20 Filmes Populares</h1>
-
-      {error && <div className="text-center p-10 text-xl text-red-500">{`Erro: ${error}`}</div>}
-      
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-        {movies.map((movie) => (
-          <div key={movie.id}>
-            <MovieCard 
-              movie={movie} 
-              personalRating={personalRatingsMap?.get(movie.id)}
-            />
-          </div>
-        ))}
-      </div>
+      <h1 className="text-4xl font-bold text-left mb-6 text-gray-900 dark:text-gray-100">Filmes Populares</h1>
+      <FilterControls 
+        initialSearchTerm={searchTerm}
+        onDebouncedSearchChange={handleDebouncedSearchChange}
+        sortBy={null} // No sorting for this page
+        onSortChange={null} // No sorting for this page
+        sortOptions={[]} // No sorting for this page
+      />
+      <MovieGridPage
+        emptyMessage="Nenhum filme encontrado com os filtros atuais."
+        personalRatingsMap={personalRatingsMap}
+        movies={movies}
+        loading={loading}
+        hasMore={false} // Always false for this page
+        error={error}
+        lastMovieElementRef={null} // No infinite scroll
+      />
     </div>
   );
 }

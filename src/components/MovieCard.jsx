@@ -24,7 +24,7 @@ export const MovieCard = ({ movie, personalRating }) => {
             Nota: {movie.vote_average.toFixed(1)}
           </span>
           {personalRating && (
-            <div className={`flex items-center gap-1 font-bold text-xs animate-pulse ${personalRatingColor}`}>
+            <div data-testid="personal-rating-badge" className={`flex items-center gap-1 font-bold text-xs animate-pulse ${personalRatingColor}`}>
               <Star size={14} className="fill-current" />
               <span>{personalRating.toFixed(1)}</span>
             </div>
