@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 
 const READ_ACCESS_TOKEN = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
 
-export const useMovieFetching = (apiUrl) => {
+export const useMovieFetching = (baseApiUrl, searchTerm = '', sortBy = '', limitToFirstPage = false) => {
   const [movies, setMovies] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -16,8 +16,12 @@ export const useMovieFetching = (apiUrl) => {
     try {
       if (!READ_ACCESS_TOKEN) throw new Error("Token de Acesso não configurado.");
       
-
-      const url = `${apiUrl}&language=pt-BR&page=${pageNum}&include_adult=false`;
+      let url;
+      if (searchTerm) {
+        url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(searchTerm)}&language=pt-BR&page=${pageNum}&include_adult=false`;
+      } else {
+        url = `${baseApiUrl}?language=pt-BR&page=${pageNum}&include_adult=false&sort_by=${sortBy}`;
+      }
       
       const response = await fetch(url, options);
       
@@ -33,35 +37,31 @@ export const useMovieFetching = (apiUrl) => {
         return Array.from(movieMap.values());
       });
       
-      setHasMore(data.page < data.total_pages);
+      setHasMore(data.page < data.total_pages && !limitToFirstPage);
     } catch (err) {
       setError(err.message);
+      setMovies([]); // Clear movies on error
     } finally {
       setLoading(false);
     }
-  }, [apiUrl]);
+  }, [baseApiUrl, searchTerm, sortBy, limitToFirstPage]);
 
   useEffect(() => {
     setMovies([]);
     setPage(1);
     setHasMore(true);
-  }, [apiUrl]);
-
-  useEffect(() => {
-    if (page === 1) {
-      fetchMovies(1);
-    }
-  }, [fetchMovies]);
+    fetchMovies(1);
+  }, [baseApiUrl, searchTerm, sortBy, limitToFirstPage, fetchMovies]);
   
   useEffect(() => {
-    if (page > 1) {
+    if (page > 1 && !limitToFirstPage) {
       fetchMovies(page);
     }
-  }, [page, fetchMovies]);
+  }, [page, fetchMovies, limitToFirstPage]);
 
   const observer = useRef();
   const lastMovieElementRef = useCallback(node => {
-    if (loading) return;
+    if (loading || limitToFirstPage) return;
     if (observer.current) observer.current.disconnect();
     observer.current = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting && hasMore) {
@@ -69,7 +69,7 @@ export const useMovieFetching = (apiUrl) => {
       }
     });
     if (node) observer.current.observe(node);
-  }, [loading, hasMore]);
+  }, [loading, hasMore, limitToFirstPage]);
 
   return { movies, loading, hasMore, error, lastMovieElementRef };
 };

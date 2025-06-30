@@ -105,6 +105,7 @@ export default function App() {
   const location = useLocation();
   const [theme, setTheme] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('theme')) || 'light');
   const [personalRatingsMap, setPersonalRatingsMap] = useState(new Map());
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -128,22 +129,26 @@ export default function App() {
     const options = { headers: { accept: 'application/json', Authorization: `Bearer ${READ_ACCESS_TOKEN}`}};
     
     const fetchAllPersonalRatings = async () => {
-      let allRatings = new Map();
-      let currentPage = 1;
-      let totalPages = 1;
-      do {
-        const response = await fetch(`${RATED_MOVIES_URL}?sort_by=created_at.desc&page=${currentPage}`, options);
-        if (response.ok) {
-          const data = await response.json();
-          data.results.forEach(movie => allRatings.set(movie.id, movie.rating));
-          totalPages = data.total_pages;
-          currentPage++;
-        } else {
-          console.error("Falha ao buscar página de notas pessoais:", response.statusText);
-          break;
-        }
-      } while (currentPage <= totalPages);
-      setPersonalRatingsMap(allRatings);
+      try {
+        let allRatings = new Map();
+        let currentPage = 1;
+        let totalPages = 1;
+        do {
+          const response = await fetch(`${RATED_MOVIES_URL}?sort_by=created_at.desc&page=${currentPage}`, options);
+          if (response.ok) {
+            const data = await response.json();
+            data.results.forEach(movie => allRatings.set(movie.id, movie.rating));
+            totalPages = data.total_pages;
+            currentPage++;
+          } else {
+            throw new Error(`Falha ao buscar página de notas pessoais: ${response.statusText}`);
+          }
+        } while (currentPage <= totalPages);
+        setPersonalRatingsMap(allRatings);
+      } catch (err) {
+        console.error(err);
+        setError('Não foi possível carregar suas avaliações de filmes do TMDB. Alguns recursos podem não funcionar como esperado.');
+      }
     };
     
     fetchAllPersonalRatings();
@@ -165,6 +170,14 @@ export default function App() {
       <DataMatrixBackground theme={theme} />
       <Navbar theme={theme} toggleTheme={toggleTheme} />
       <main className="pt-[76px] flex-grow flex flex-col z-10">
+        {error && (
+          <div className="container mx-auto my-4">
+            <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md" role="alert">
+              <p className="font-bold">Ocorreu um Erro</p>
+              <p>{error}</p>
+            </div>
+          </div>
+        )}
         <Outlet context={{ trackEvent, personalRatingsMap }} />
       </main>
       <Footer user={user} />
