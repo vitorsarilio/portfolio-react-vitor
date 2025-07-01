@@ -1,22 +1,25 @@
 import { useState, useCallback } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { useMovieFetching } from '../hooks/useMovieFetching';
+import { useMediaFetching } from '../hooks/useMediaFetching';
 import { MovieGridPage } from '../components/MovieGridPage';
 import { FilterControls } from '../components/FilterControls';
 
-const POPULAR_MOVIES_BASE_URL = 'https://api.themoviedb.org/3/discover/movie';
-
-export default function MoviesPage() {
+export default function MoviesPage({ mediaType }) {
   const { personalRatingsMap } = useOutletContext();
   const [searchTerm, setSearchTerm] = useState('');
 
-  const apiUrl = POPULAR_MOVIES_BASE_URL;
+  const apiUrl = mediaType === 'movie'
+    ? 'https://api.themoviedb.org/3/movie/popular'
+    : 'https://api.themoviedb.org/3/tv/popular';
 
-  const { movies, loading, hasMore, error, lastMovieElementRef } = useMovieFetching(
+  const pageTitle = mediaType === 'movie' ? 'Filmes Populares' : 'Séries Populares';
+
+  const { media, loading, error } = useMediaFetching(
+    mediaType,
     apiUrl,
     searchTerm,
-    'popularity.desc', // Default sort for popular movies
-    true // limitToFirstPage = true
+    'popularity.desc',
+    true 
   );
 
   const handleDebouncedSearchChange = useCallback((value) => {
@@ -25,23 +28,27 @@ export default function MoviesPage() {
 
   return (
     <div className="container mx-auto p-4 sm:p-6 lg:p-8 animate-fade-in-up">
-      <h1 className="text-4xl font-bold text-left mb-6 text-gray-900 dark:text-gray-100">Filmes Populares</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">{pageTitle}</h1>
+      </div>
       <FilterControls 
         initialSearchTerm={searchTerm}
         onDebouncedSearchChange={handleDebouncedSearchChange}
-        sortBy={null} // No sorting for this page
-        onSortChange={null} // No sorting for this page
-        sortOptions={[]} // No sorting for this page
+        sortBy={null}
+        onSortChange={null}
+        sortOptions={[]}
       />
       <MovieGridPage
-        emptyMessage="Nenhum filme encontrado com os filtros atuais."
+        mediaType={mediaType}
+        emptyMessage={`Nenhum(a) ${mediaType === 'movie' ? 'filme' : 'série'} encontrado(a) com os filtros atuais.`}
         personalRatingsMap={personalRatingsMap}
-        movies={movies}
+        movies={media}
         loading={loading}
-        hasMore={false} // Always false for this page
+        hasMore={false}
         error={error}
-        lastMovieElementRef={null} // No infinite scroll
+        lastMovieElementRef={null}
       />
     </div>
   );
 }
+

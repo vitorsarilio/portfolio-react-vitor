@@ -4,16 +4,14 @@ import { useDebounce } from '../hooks/useDebounce';
 
 export const FilterControls = React.memo(({ initialSearchTerm = '', onDebouncedSearchChange, sortBy, onSortChange, sortOptions }) => {
   const [localSearchTerm, setLocalSearchTerm] = useState(initialSearchTerm);
-  const debouncedLocalSearchTerm = useDebounce(localSearchTerm, 500); // Debounce for 500ms
+  const debouncedLocalSearchTerm = useDebounce(localSearchTerm, 500);
 
-  // Sync local state with initialSearchTerm prop (e.g., when page loads)
   useEffect(() => {
     setLocalSearchTerm(initialSearchTerm);
   }, [initialSearchTerm]);
 
-  // Call parent's onDebouncedSearchChange only when debounced term changes
   useEffect(() => {
-    onDebouncedSearchChange(debouncedLocalSearchTerm);
+    onDebouncedSearchChange(debouncedLocalSearchTerm.trim());
   }, [debouncedLocalSearchTerm, onDebouncedSearchChange]);
 
   const showSortControls = sortBy !== null && sortBy !== undefined && onSortChange !== null && onSortChange !== undefined && sortOptions !== null && sortOptions !== undefined && sortOptions.length > 0;
@@ -21,7 +19,6 @@ export const FilterControls = React.memo(({ initialSearchTerm = '', onDebouncedS
   return (
     <div className="mb-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md">
       <div className={`grid grid-cols-1 ${showSortControls ? 'md:grid-cols-2' : ''} gap-4`}>
-        {/* Search Input */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
           <input 
@@ -32,8 +29,6 @@ export const FilterControls = React.memo(({ initialSearchTerm = '', onDebouncedS
             className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
           />
         </div>
-
-        {/* Sort Select */}
         {showSortControls && (
           <div className="relative">
             <ArrowDownUp className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />

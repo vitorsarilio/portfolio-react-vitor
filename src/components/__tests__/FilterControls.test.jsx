@@ -3,7 +3,6 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { FilterControls } from '../FilterControls';
 import { useDebounce } from '../../hooks/useDebounce';
 
-// Mock the useDebounce hook
 vi.mock('../../hooks/useDebounce', () => ({
   useDebounce: vi.fn(),
 }));
@@ -17,9 +16,7 @@ describe('FilterControls', () => {
   ];
 
   beforeEach(() => {
-    // Reset mocks before each test
     vi.clearAllMocks();
-    // Default mock implementation for useDebounce
     useDebounce.mockImplementation((value) => value);
   });
 
@@ -34,7 +31,7 @@ describe('FilterControls', () => {
   });
 
   test('updates search term on input change and debounces', async () => {
-    useDebounce.mockImplementation((value) => value); // Ensure debounced value updates immediately for this test
+    useDebounce.mockImplementation((value) => value);
 
     render(
       <FilterControls
@@ -48,7 +45,6 @@ describe('FilterControls', () => {
 
     expect(searchInput.value).toBe('test search');
 
-    // Wait for the debounced effect to trigger
     await waitFor(() => {
       expect(mockOnDebouncedSearchChange).toHaveBeenCalledWith('test search');
     });
@@ -73,7 +69,7 @@ describe('FilterControls', () => {
       <FilterControls
         initialSearchTerm=""
         onDebouncedSearchChange={mockOnDebouncedSearchChange}
-        sortBy={null} // This should hide the sort control
+        sortBy={null}
         onSortChange={mockOnSortChange}
         sortOptions={sortOptions}
       />
@@ -96,21 +92,19 @@ describe('FilterControls', () => {
     fireEvent.change(sortSelect, { target: { value: 'title.desc' } });
 
     expect(mockOnSortChange).toHaveBeenCalledTimes(1);
-    expect(mockOnSortChange).toHaveBeenCalledWith(expect.any(Object)); // Event object
+    expect(mockOnSortChange).toHaveBeenCalledWith(expect.any(Object)); 
 
-    // Re-render the component with the updated sortBy prop to simulate parent behavior
     render(
       <FilterControls
         initialSearchTerm=""
         onDebouncedSearchChange={mockOnDebouncedSearchChange}
-        sortBy="title.desc" // Simulate parent updating the prop
+        sortBy="title.desc" 
         onSortChange={mockOnSortChange}
         sortOptions={sortOptions}
       />,
-      { container: sortSelect.parentElement.parentElement } // Render into the same container
+      { container: sortSelect.parentElement.parentElement } 
     );
 
-    // Re-query the element after re-render
     sortSelect = screen.getByRole('combobox');
     expect(sortSelect.value).toBe('title.desc');
   });

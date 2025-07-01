@@ -12,13 +12,9 @@ describe('ExpandingContactLink', () => {
       eventLabel: 'Send an email',
       trackEvent: vi.fn(),
     };
-
     render(<ExpandingContactLink {...props} />);
-
     const link = screen.getByRole('link', { name: /Send an email/i });
     expect(link).toBeInTheDocument();
-
-    // Check that the text is in the document, even if visually hidden
     expect(screen.getByText('Email')).toBeInTheDocument();
   });
 });

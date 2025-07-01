@@ -4,17 +4,21 @@ import ReactGA from 'react-ga4';
 import { portfolioData } from './data/portfolioData';
 import { Footer } from './components/Footer';
 
-import { User, Code, Briefcase, LayoutDashboard, Sun, Moon, Film, TrendingUp, ListVideo, Star, Heart, Menu, X } from 'lucide-react';
+import { User, Code, Briefcase, LayoutDashboard, Sun, Moon, Film, TrendingUp, ListVideo, Star, Heart, Menu, X, Tv } from 'lucide-react';
 
 const GA_MEASUREMENT_ID = 'G-Z1643DT14D';
+const READ_ACCESS_TOKEN = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
+const ACCOUNT_ID = import.meta.env.VITE_TMDB_ACCOUNT_ID;
 
 const Navbar = ({ theme, toggleTheme }) => {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isPortfolioPage = location.pathname === '/';
-  const movieBasePaths = ['/populares', '/watchlist', '/avaliacoes', '/favoritos'];
-  const isMovieSectionActive = movieBasePaths.some(path => location.pathname.startsWith(path)) || location.pathname.startsWith('/filme');
+  const mediaBasePaths = ['/filmes', '/series', '/filme', '/serie'];
+  const isMediaSectionActive = mediaBasePaths.some(path => location.pathname.startsWith(path));
+
+  const currentMediaType = location.pathname.startsWith('/filmes') || location.pathname.startsWith('/filme/') ? 'movie' : (location.pathname.startsWith('/series') || location.pathname.startsWith('/serie/') ? 'tv' : null);
 
   const portfolioSections = [
     { label: "Sobre Mim", section: "#about", icon: <User size={18} /> },
@@ -22,13 +26,23 @@ const Navbar = ({ theme, toggleTheme }) => {
     { label: "Projetos Pessoais", section: "#personal-projects", icon: <LayoutDashboard size={18} /> },
     { label: "Currículo", section: "#resume", icon: <Briefcase size={18} /> },
   ];
-  
-  const movieSections = [
-    { label: "Populares", path: "/populares", icon: <TrendingUp size={18} /> },
-    { label: "Minha Watchlist", path: "/watchlist", icon: <ListVideo size={18} /> },
-    { label: "Minhas Avaliações", path: "/avaliacoes", icon: <Star size={18} /> },
-    { label: "Favoritos", path: "/favoritos", icon: <Heart size={18} /> },
-  ];
+
+  const mediaSubSections = [];
+  if (currentMediaType === 'movie') {
+    mediaSubSections.push(
+      { label: "Populares", path: "/filmes", icon: <TrendingUp size={18} /> },
+      { label: "Minha Watchlist", path: "/filmes/watchlist", icon: <ListVideo size={18} /> },
+      { label: "Minhas Avaliações", path: "/filmes/avaliacoes", icon: <Star size={18} /> },
+      { label: "Favoritos", path: "/filmes/favoritos", icon: <Heart size={18} /> }
+    );
+  } else if (currentMediaType === 'tv') {
+    mediaSubSections.push(
+      { label: "Populares", path: "/series", icon: <TrendingUp size={18} /> },
+      { label: "Minha Watchlist", path: "/series/watchlist", icon: <ListVideo size={18} /> },
+      { label: "Minhas Avaliações", path: "/series/avaliacoes", icon: <Star size={18} /> },
+      { label: "Favoritos", path: "/series/favoritos", icon: <Heart size={18} /> }
+    );
+  }
 
   const baseLinkStyle = "flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-semibold transition-colors duration-300";
   const activeLinkStyle = "text-purple-600 dark:text-purple-400 font-bold";
@@ -46,15 +60,30 @@ const Navbar = ({ theme, toggleTheme }) => {
         
         <div className="hidden md:flex items-center">
            <ul className="flex items-center gap-x-1">
-              <li><NavLink to="/" className={({ isActive }) => `${baseLinkStyle} ${isActive && !isMovieSectionActive ? activeLinkStyle : inactiveLinkStyle}`}><LayoutDashboard size={18}/> <span>Portfólio</span></NavLink></li>
-              <li><NavLink to="/populares" className={`${baseLinkStyle} ${isMovieSectionActive ? activeLinkStyle : inactiveLinkStyle}`}><Film size={18}/> <span>App de Filmes</span></NavLink></li>
+              <li><NavLink to="/" className={({ isActive }) => `${baseLinkStyle} ${isActive && !isMediaSectionActive ? activeLinkStyle : inactiveLinkStyle}`}><LayoutDashboard size={18}/> <span>Portfólio</span></NavLink></li>
+              
+              {/* Botões Filmes/Séries */}
+              <li className="flex space-x-2 bg-gray-200 dark:bg-gray-800 p-1 rounded-lg ml-4">
+                <NavLink 
+                  to="/filmes"
+                  className={({ isActive }) => `${baseLinkStyle} ${isActive && location.pathname.startsWith('/filmes') ? 'bg-purple-600 text-white' : 'text-gray-700 dark:text-gray-300'} cursor-pointer`}
+                >
+                  <Film size={18}/> <span>Filmes</span>
+                </NavLink>
+                <NavLink 
+                  to="/series"
+                  className={({ isActive }) => `${baseLinkStyle} ${isActive && location.pathname.startsWith('/series') ? 'bg-purple-600 text-white' : 'text-gray-700 dark:text-gray-300'} cursor-pointer`}
+                >
+                  <Tv size={18}/> <span>Séries</span>
+                </NavLink>
+              </li>
            </ul>
             <div className="h-6 w-px bg-gray-300 dark:bg-gray-700 mx-2"></div>
             <ul className="flex items-center gap-x-1">
               {isPortfolioPage && portfolioSections.map(item => (
                   <li key={item.section}><a href={item.section} className={`${baseLinkStyle} ${inactiveSubLinkStyle}`}>{item.icon}<span>{item.label}</span></a></li>
               ))}
-              {isMovieSectionActive && movieSections.map(item => (
+              {isMediaSectionActive && mediaSubSections.map(item => (
                   <li key={item.path}><NavLink to={item.path} className={({isActive}) => `${baseLinkStyle} ${isActive ? activeSubLinkStyle : inactiveSubLinkStyle}`}>{item.icon}<span>{item.label}</span></NavLink></li>
               ))}
             </ul>
@@ -82,15 +111,32 @@ const Navbar = ({ theme, toggleTheme }) => {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-md pb-4 animate-fade-in-up">
             <ul className="flex flex-col items-center gap-2">
-                <li><NavLink to="/" onClick={handleMobileLinkClick} className={({ isActive }) => `${baseLinkStyle} ${isActive && !isMovieSectionActive ? activeLinkStyle : inactiveLinkStyle}`}><LayoutDashboard size={18}/> <span>Portfólio</span></NavLink></li>
-                <li><NavLink to="/populares" onClick={handleMobileLinkClick} className={`${baseLinkStyle} ${isMovieSectionActive ? activeLinkStyle : inactiveLinkStyle}`}><Film size={18}/> <span>App de Filmes</span></NavLink></li>
+                <li><NavLink to="/" onClick={handleMobileLinkClick} className={({ isActive }) => `${baseLinkStyle} ${isActive && !isMediaSectionActive ? activeLinkStyle : inactiveLinkStyle}`}><LayoutDashboard size={18}/> <span>Portfólio</span></NavLink></li>
                 
+                {/* Botões Filmes/Séries para Mobile */}
+                <li className="flex space-x-2 bg-gray-200 dark:bg-gray-800 p-1 rounded-lg mt-2">
+                  <NavLink 
+                    to="/filmes"
+                    onClick={handleMobileLinkClick}
+                    className={({ isActive }) => `${baseLinkStyle} ${isActive && location.pathname.startsWith('/filmes') ? 'bg-purple-600 text-white' : 'text-gray-700 dark:text-gray-300'} cursor-pointer`}
+                  >
+                    <Film size={18}/> <span>Filmes</span>
+                  </NavLink>
+                  <NavLink 
+                    to="/series"
+                    onClick={handleMobileLinkClick}
+                    className={({ isActive }) => `${baseLinkStyle} ${isActive && location.pathname.startsWith('/series') ? 'bg-purple-600 text-white' : 'text-gray-700 dark:text-gray-300'} cursor-pointer`}
+                  >
+                    <Tv size={18}/> <span>Séries</span>
+                  </NavLink>
+                </li>
+
                 <hr className="w-1/2 my-2 border-gray-200 dark:border-gray-700"/>
 
                 {isPortfolioPage && portfolioSections.map(item => (
                     <li key={item.section}><a href={item.section} onClick={handleMobileLinkClick} className={`${baseLinkStyle} ${inactiveSubLinkStyle}`}>{item.icon}<span>{item.label}</span></a></li>
                 ))}
-                {isMovieSectionActive && movieSections.map(item => (
+                {isMediaSectionActive && mediaSubSections.map(item => (
                      <li key={item.path}><NavLink to={item.path} onClick={handleMobileLinkClick} className={({isActive}) => `${baseLinkStyle} ${isActive ? activeSubLinkStyle : inactiveSubLinkStyle}`}>{item.icon}<span>{item.label}</span></NavLink></li>
                 ))}
             </ul>
@@ -100,12 +146,54 @@ const Navbar = ({ theme, toggleTheme }) => {
   );
 };
 
-export default function App() {
-  const { user } = portfolioData;
-  const location = useLocation();
-  const [theme, setTheme] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('theme')) || 'light');
+const App = () => {
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme ? savedTheme : 'light';
+  });
+
   const [personalRatingsMap, setPersonalRatingsMap] = useState(new Map());
-  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    ReactGA.initialize(GA_MEASUREMENT_ID);
+  }, []);
+
+  useEffect(() => {
+    const fetchPersonalRatings = async () => {
+      if (!READ_ACCESS_TOKEN || !ACCOUNT_ID) return;
+
+      const options = { headers: { accept: 'application/json', Authorization: `Bearer ${READ_ACCESS_TOKEN}` } };
+      const newRatingsMap = new Map();
+
+      try {
+        let page = 1;
+        let totalPages = 1;
+        while (page <= totalPages) {
+          const moviesResponse = await fetch(`https://api.themoviedb.org/3/account/${ACCOUNT_ID}/rated/movies?language=pt-BR&page=${page}&sort_by=created_at.desc`, options);
+          const moviesData = await moviesResponse.json();
+          moviesData.results.forEach(movie => newRatingsMap.set(movie.id, movie.rating));
+          totalPages = moviesData.total_pages;
+          page++;
+        }
+
+        page = 1;
+        totalPages = 1;
+        while (page <= totalPages) {
+          const tvResponse = await fetch(`https://api.themoviedb.org/3/account/${ACCOUNT_ID}/rated/tv?language=pt-BR&page=${page}&sort_by=created_at.desc`, options);
+          const tvData = await tvResponse.json();
+          tvData.results.forEach(tv => newRatingsMap.set(tv.id, tv.rating));
+          totalPages = tvData.total_pages;
+          page++;
+        }
+
+        setPersonalRatingsMap(newRatingsMap);
+      } catch (error) {
+        console.error("Erro ao buscar avaliações pessoais:", error);
+      }
+    };
+
+    fetchPersonalRatings();
+  }, [READ_ACCESS_TOKEN, ACCOUNT_ID]);
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -116,71 +204,19 @@ export default function App() {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  const toggleTheme = useCallback(() => setTheme(prev => (prev === 'light' ? 'dark' : 'light')), []);
-
-  useEffect(() => {
-    const ACCOUNT_ID = import.meta.env.VITE_TMDB_ACCOUNT_ID;
-    const READ_ACCESS_TOKEN = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
-    if (!ACCOUNT_ID || !READ_ACCESS_TOKEN) {
-      console.warn("Credenciais da conta TMDB não configuradas para buscar notas.");
-      return;
-    }
-    const RATED_MOVIES_URL = `https://api.themoviedb.org/3/account/${ACCOUNT_ID}/rated/movies`;
-    const options = { headers: { accept: 'application/json', Authorization: `Bearer ${READ_ACCESS_TOKEN}`}};
-    
-    const fetchAllPersonalRatings = async () => {
-      try {
-        let allRatings = new Map();
-        let currentPage = 1;
-        let totalPages = 1;
-        do {
-          const response = await fetch(`${RATED_MOVIES_URL}?sort_by=created_at.desc&page=${currentPage}`, options);
-          if (response.ok) {
-            const data = await response.json();
-            data.results.forEach(movie => allRatings.set(movie.id, movie.rating));
-            totalPages = data.total_pages;
-            currentPage++;
-          } else {
-            throw new Error(`Falha ao buscar página de notas pessoais: ${response.statusText}`);
-          }
-        } while (currentPage <= totalPages);
-        setPersonalRatingsMap(allRatings);
-      } catch (err) {
-        console.error(err);
-        setError('Não foi possível carregar suas avaliações de filmes do TMDB. Alguns recursos podem não funcionar como esperado.');
-      }
-    };
-    
-    fetchAllPersonalRatings();
-  }, []);
-
-  useEffect(() => {
-    if (GA_MEASUREMENT_ID) {
-      ReactGA.initialize(GA_MEASUREMENT_ID);
-      ReactGA.send({ hitType: "pageview", page: location.pathname + location.search });
-    }
-  }, [location]);
-
-  const trackEvent = useCallback((category, action, label) => {
-    if (GA_MEASUREMENT_ID) ReactGA.event({ category, action, label });
+  const toggleTheme = useCallback(() => {
+    setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
   }, []);
 
   return (
-    <div className="bg-white dark:bg-gray-950 flex flex-col min-h-screen font-sans relative isolate">
-      
+    <div className={`bg-gray-100 dark:bg-gray-900 min-h-screen font-sans transition-colors duration-300`}>
       <Navbar theme={theme} toggleTheme={toggleTheme} />
-      <main className="pt-[76px] flex-grow flex flex-col z-10">
-        {error && (
-          <div className="container mx-auto my-4">
-            <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md" role="alert">
-              <p className="font-bold">Ocorreu um Erro</p>
-              <p>{error}</p>
-            </div>
-          </div>
-        )}
-        <Outlet context={{ trackEvent, personalRatingsMap }} />
+      <main className="pt-24 md:pt-32 container mx-auto px-4">
+        <Outlet context={{ trackEvent: (category, action, label) => ReactGA.event({ category, action, label }), personalRatingsMap }} />
       </main>
-      <Footer user={user} />
+      <Footer {...portfolioData.user} />
     </div>
   );
-}
+};
+
+export default App;

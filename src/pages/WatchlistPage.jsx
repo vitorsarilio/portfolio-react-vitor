@@ -1,25 +1,27 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useFetchAllPages } from '../hooks/useFetchAllPages';
-import { useMovieFilters } from '../hooks/useMovieFilters';
+import { useMediaFilters } from '../hooks/useMediaFilters';
 import { MovieGridPage } from '../components/MovieGridPage';
 import { FilterControls } from '../components/FilterControls';
 
 const ACCOUNT_ID = import.meta.env.VITE_TMDB_ACCOUNT_ID;
 
-export default function WatchlistPage() {
-  const [apiSortBy, setApiSortBy] = useState('created_at.asc');
-  const WATCHLIST_URL = useMemo(() => 
-    `https://api.themoviedb.org/3/account/${ACCOUNT_ID}/watchlist/movies?sort_by=${apiSortBy}`
-  , [apiSortBy]);
-
-  const { data: allMovies, loading, error } = useFetchAllPages(WATCHLIST_URL);
+export default function WatchlistPage({ mediaType }) {
   const { personalRatingsMap } = useOutletContext();
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const [clientSortBy, setClientSortBy] = useState('none'); // For client-side sorting (title, release_date)
+  const [apiSortBy, setApiSortBy] = useState('created_at.asc');
+  
+  const watchlistUrl = useMemo(() => 
+    `https://api.themoviedb.org/3/account/${ACCOUNT_ID}/watchlist/${mediaType === 'movie' ? 'movies' : 'tv'}?sort_by=${apiSortBy}`
+  , [mediaType, apiSortBy]);
 
-  const movies = useMovieFilters(allMovies, searchTerm, clientSortBy);
+  const { data: allMedia, loading, error } = useFetchAllPages(watchlistUrl);
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [clientSortBy, setClientSortBy] = useState('none');
+
+  const media = useMediaFilters(allMedia, mediaType, searchTerm, clientSortBy);
 
   const memoizedSortOptions = useMemo(() => [
     { value: 'created_at.asc', label: 'Adicionado (mais antigo)' },
@@ -38,16 +40,21 @@ export default function WatchlistPage() {
     const selectedSort = e.target.value;
     if (selectedSort.startsWith('created_at')) {
       setApiSortBy(selectedSort);
-      setClientSortBy('none'); // Reset client sort if API handles it
+      setClientSortBy('none');
     } else {
       setClientSortBy(selectedSort);
-      setApiSortBy('created_at.asc'); // Default API sort if client handles it
+      setApiSortBy('created_at.asc');
     }
   }, []);
 
+  const pageTitle = `Minha Watchlist de ${mediaType === 'movie' ? 'Filmes' : 'Séries'}`;
+  const emptyMessage = `Nenhum(a) ${mediaType === 'movie' ? 'filme' : 'série'} encontrado(a) com os filtros atuais.`;
+
   return (
     <div className="container mx-auto p-4 sm:p-6 lg:p-8 animate-fade-in-up">
-      <h1 className="text-4xl font-bold text-left mb-6 text-gray-900 dark:text-gray-100">Minha Watchlist</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">{pageTitle}</h1>
+      </div>
       <FilterControls 
         initialSearchTerm={searchTerm}
         onDebouncedSearchChange={handleDebouncedSearchChange}
@@ -56,9 +63,10 @@ export default function WatchlistPage() {
         sortOptions={memoizedSortOptions}
       />
       <MovieGridPage
-        emptyMessage="Nenhum filme encontrado com os filtros atuais."
+        mediaType={mediaType}
+        emptyMessage={emptyMessage}
         personalRatingsMap={personalRatingsMap}
-        movies={movies}
+        movies={media}
         loading={loading}
         error={error}
         hasMore={false}
@@ -66,3 +74,4 @@ export default function WatchlistPage() {
     </div>
   );
 }
+

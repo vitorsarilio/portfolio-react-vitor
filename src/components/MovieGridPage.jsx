@@ -9,7 +9,8 @@ export const MovieGridPage = ({
   error,
   lastMovieElementRef,
   emptyMessage,
-  personalRatingsMap
+  personalRatingsMap,
+  mediaType
 }) => {
 
   if (loading && movies.length === 0 && !error) {
@@ -39,6 +40,7 @@ export const MovieGridPage = ({
             <MovieCard 
               movie={movie} 
               personalRating={personalRatingsMap?.get(movie.id)}
+              mediaType={mediaType}
             />
           </div>
         ))}
