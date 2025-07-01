@@ -3,7 +3,7 @@ import { Outlet, useLocation, NavLink } from 'react-router-dom';
 import ReactGA from 'react-ga4';
 import { portfolioData } from './data/portfolioData';
 import { Footer } from './components/Footer';
-import DataMatrixBackground from './components/DataMatrixBackground';
+
 import { User, Code, Briefcase, LayoutDashboard, Sun, Moon, Film, TrendingUp, ListVideo, Star, Heart, Menu, X } from 'lucide-react';
 
 const GA_MEASUREMENT_ID = 'G-Z1643DT14D';
@@ -167,7 +167,7 @@ export default function App() {
 
   return (
     <div className="bg-white dark:bg-gray-950 flex flex-col min-h-screen font-sans relative isolate">
-      <DataMatrixBackground theme={theme} />
+      
       <Navbar theme={theme} toggleTheme={toggleTheme} />
       <main className="pt-[76px] flex-grow flex flex-col z-10">
         {error && (
