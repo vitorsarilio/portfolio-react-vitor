@@ -7,7 +7,7 @@ describe('useMovieFetching', () => {
 
   let IntersectionObserverMock;
   let IntersectionObserverCallback;
-  let observerInstance; // To store the created instance
+  let observerInstance; 
 
   beforeAll(() => {
     global.fetch = vi.fn();
@@ -15,10 +15,9 @@ describe('useMovieFetching', () => {
 
   beforeEach(() => {
     vi.stubEnv('VITE_TMDB_READ_ACCESS_TOKEN', mockToken);
-    // Mock IntersectionObserver and capture its callback
     IntersectionObserverMock = vi.fn((callback) => {
       IntersectionObserverCallback = callback;
-      observerInstance = { // Store the instance
+      observerInstance = { 
         observe: vi.fn(),
         unobserve: vi.fn(),
         disconnect: vi.fn(),
@@ -31,7 +30,7 @@ describe('useMovieFetching', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.unstubAllEnvs();
-    vi.resetModules(); // Reset modules after each test
+    vi.resetModules(); 
   });
 
   afterAll(() => {
@@ -137,12 +136,10 @@ describe('useMovieFetching', () => {
     expect(result.current.movies).toEqual([{ id: 1, title: 'Movie 1' }]);
     expect(result.current.hasMore).toBe(true);
 
-    // Trigger IntersectionObserver
     act(() => {
       result.current.lastMovieElementRef(document.createElement('div'));
     });
 
-    // Simulate intersection
     act(() => {
       IntersectionObserverCallback([{ isIntersecting: true }]);
     });
@@ -170,7 +167,7 @@ describe('useMovieFetching', () => {
 
   test('should handle missing access token', async () => {
     vi.stubEnv('VITE_TMDB_READ_ACCESS_TOKEN', '');
-    const { useMovieFetching } = await import('../useMovieFetching'); // Re-import after stubbing
+    const { useMovieFetching } = await import('../useMovieFetching'); 
 
     const { result } = renderHook(() => useMovieFetching(mockBaseApiUrl));
 
@@ -205,12 +202,10 @@ describe('useMovieFetching', () => {
 
     await waitFor(() => expect(result.current.loading).toBe(false));
 
-    // Trigger IntersectionObserver
     act(() => {
       result.current.lastMovieElementRef(document.createElement('div'));
     });
 
-    // Simulate intersection
     act(() => {
       IntersectionObserverCallback([{ isIntersecting: true }]);
     });
@@ -239,17 +234,14 @@ describe('useMovieFetching', () => {
 
     await waitFor(() => expect(result.current.loading).toBe(false));
     expect(result.current.movies).toEqual([{ id: 1, title: 'Movie 1' }]);
-    expect(result.current.hasMore).toBe(false); // Should be false due to limitToFirstPage
+    expect(result.current.hasMore).toBe(false); 
 
-    // Trigger lastMovieElementRef to set up the observer
     act(() => {
       result.current.lastMovieElementRef(document.createElement('div'));
     });
 
-    // Expect IntersectionObserver constructor not to have been called
     expect(IntersectionObserverMock).not.toHaveBeenCalled();
 
-    // Ensure no new fetch is triggered
     expect(fetch).toHaveBeenCalledTimes(1);
   });
 });

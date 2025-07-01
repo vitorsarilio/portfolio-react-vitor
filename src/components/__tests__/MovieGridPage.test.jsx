@@ -3,7 +3,6 @@ import { describe, it, expect, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { MovieGridPage } from '../MovieGridPage';
 
-// Mock child components to isolate the MovieGridPage component
 vi.mock('../MovieCard', () => ({
   MovieCard: ({ movie }) => (
     <div data-testid="movie-card">

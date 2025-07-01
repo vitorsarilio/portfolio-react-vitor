@@ -5,7 +5,6 @@ describe('useFetchAllPages', () => {
   const mockApiUrl = 'https://api.example.com/data';
   const mockToken = 'mock_token';
 
-  // Mock the global fetch function
   beforeAll(() => {
     global.fetch = vi.fn();
   });
@@ -13,7 +12,7 @@ describe('useFetchAllPages', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.unstubAllEnvs();
-    vi.resetModules(); // Reset modules after each test
+    vi.resetModules(); 
   });
 
   afterAll(() => {
@@ -75,7 +74,7 @@ describe('useFetchAllPages', () => {
       { id: 3, name: 'Item 3' },
     ]);
     expect(result.current.error).toBe(null);
-    expect(fetch).toHaveBeenCalledTimes(2); // Initial call + one for the second page
+    expect(fetch).toHaveBeenCalledTimes(2); 
   });
 
   test('should handle API error', async () => {
@@ -95,8 +94,8 @@ describe('useFetchAllPages', () => {
   });
 
   test('should handle missing access token', async () => {
-    vi.stubEnv('VITE_TMDB_READ_ACCESS_TOKEN', ''); // Simulate missing token
-    const { useFetchAllPages } = await import('../useFetchAllPages'); // Re-import after stubbing
+    vi.stubEnv('VITE_TMDB_READ_ACCESS_TOKEN', ''); 
+    const { useFetchAllPages } = await import('../useFetchAllPages'); 
 
     const { result } = renderHook(() => useFetchAllPages(mockApiUrl));
 

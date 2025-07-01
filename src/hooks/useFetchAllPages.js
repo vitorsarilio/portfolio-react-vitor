@@ -19,11 +19,19 @@ export const useFetchAllPages = (apiUrl) => {
       }
     };
 
+    const getUrlWithParams = (url, page) => {
+        const separator = url.includes('?') ? '&' : '?';
+        let params = `language=pt-BR&page=${page}`;
+        if (!url.includes('/account/')) {
+            params += '&include_adult=false';
+        }
+        return `${url}${separator}${params}`;
+    }
+
     try {
       if (!READ_ACCESS_TOKEN) throw new Error("Token de Acesso não configurado.");
 
-      // First call to get total pages
-      const initialUrl = `${apiUrl}&language=pt-BR&page=1&include_adult=false`;
+      const initialUrl = getUrlWithParams(apiUrl, 1);
       const initialResponse = await fetch(initialUrl, options);
       if (!initialResponse.ok) throw new Error(`Erro na API: ${initialResponse.statusText}`);
       
@@ -31,11 +39,10 @@ export const useFetchAllPages = (apiUrl) => {
       const totalPages = initialData.total_pages;
       let allResults = initialData.results;
 
-      // If there are more pages, fetch them in parallel
       if (totalPages > 1) {
         const pagePromises = [];
         for (let page = 2; page <= totalPages; page++) {
-          const pageUrl = `${apiUrl}&language=pt-BR&page=${page}&include_adult=false`;
+          const pageUrl = getUrlWithParams(apiUrl, page);
           pagePromises.push(fetch(pageUrl, options).then(res => res.json()));
         }
         
@@ -45,7 +52,6 @@ export const useFetchAllPages = (apiUrl) => {
         });
       }
 
-      // Remove duplicates that might come from the API
       const uniqueResults = Array.from(new Map(allResults.map(item => [item.id, item])).values());
       setData(uniqueResults);
 

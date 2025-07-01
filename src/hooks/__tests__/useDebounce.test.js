@@ -19,17 +19,17 @@ describe('useDebounce', () => {
     expect(result.current).toBe('initial');
 
     rerender({ value: 'new value', delay: 500 });
-    expect(result.current).toBe('initial'); // Value should not change immediately
+    expect(result.current).toBe('initial'); 
 
     act(() => {
       vi.advanceTimersByTime(499);
     });
-    expect(result.current).toBe('initial'); // Value should still not change
+    expect(result.current).toBe('initial'); 
 
     act(() => {
       vi.advanceTimersByTime(1);
     });
-    expect(result.current).toBe('new value'); // Value should change after delay
+    expect(result.current).toBe('new value'); 
   });
 
   test('should cancel previous debounce on value change', () => {
@@ -49,12 +49,12 @@ describe('useDebounce', () => {
     act(() => {
       vi.advanceTimersByTime(300);
     });
-    expect(result.current).toBe('initial'); // Still initial because first debounce was cancelled
+    expect(result.current).toBe('initial'); 
 
     act(() => {
       vi.advanceTimersByTime(200);
     });
-    expect(result.current).toBe('second change'); // Only second change should apply
+    expect(result.current).toBe('second change'); 
   });
 
   test('should handle delay change', () => {
@@ -70,11 +70,11 @@ describe('useDebounce', () => {
     act(() => {
       vi.advanceTimersByTime(500);
     });
-    expect(result.current).toBe('initial'); // Should not change yet due to new delay
+    expect(result.current).toBe('initial'); 
 
     act(() => {
       vi.advanceTimersByTime(500);
     });
-    expect(result.current).toBe('new value'); // Should change after new delay
+    expect(result.current).toBe('new value'); 
   });
 });
