@@ -1,8 +1,8 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
-const { portfolioData } = require('../src/data/portfolioData');
+// Usar import para dotenv, alinhando com o uso de import dinâmico mais tarde
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -11,17 +11,17 @@ const port = process.env.PORT || 3001;
 app.use(cors({
   origin: function (origin, callback) {
     const allowedOrigins = [
-      process.env.FRONTEND_URL, // Production URL
-      'http://localhost:5173'   // Development URL
+      process.env.FRONTEND_URL, // URL de Produção
+      'http://localhost:5173'   // URL de Desenvolvimento
     ];
 
-    // Allow any Vercel deployment URL (e.g., preview deployments)
+    // Permitir qualquer URL de implantação da Vercel (ex: implantações de pré-visualização)
     const vercelPreviewRegex = /^https:\/\/(.*)\.vercel\.app$/;
 
     if (!origin || allowedOrigins.includes(origin) || vercelPreviewRegex.test(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error('Não permitido pelo CORS'));
     }
   }
 }));
@@ -29,10 +29,14 @@ app.use(express.json());
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// --- Carregamento e formatação do contexto do portfólio ---
+// --- Carregamento e formatação do contexto do portfólio (AGORA ASSÍNCRONO) ---
 
-function getPortfolioContext() {
+// Esta função agora é 'async' e carrega os dados sob demanda.
+async function getPortfolioContext() {
   try {
+    // CORREÇÃO: Apontar para um ficheiro de dados seguro para o backend, sem import de imagens.
+    const { portfolioData } = await import('../src/data/portfolioData.js');
+
     let context = `Sobre Vitor Hugo Sarilio:\n${portfolioData.user.bio_intro}\n${portfolioData.user.bio_language}\n`;
     
     context += "\nProjetos Profissionais:\n";
@@ -57,6 +61,7 @@ function getPortfolioContext() {
     });
     context += "Para calcular o tempo total de carreira, some a duração de cada período de experiência. 'Presente' significa até 3 de julho de 2025.\n";
 
+
     context += "\nFormação Acadêmica:\n";
     portfolioData.resume.education.forEach(e => {
       context += `- ${e.degree} na ${e.institution} (${e.period})\n`;
@@ -68,23 +73,29 @@ function getPortfolioContext() {
     return context;
   } catch (error) {
     console.error("Erro ao carregar o contexto do portfólio:", error);
-    return "";
+    // Retornamos null para indicar que houve uma falha
+    return null;
   }
 }
-
-const portfolioContext = getPortfolioContext();
 
 // --- Endpoints da API ---
 
 app.post('/api/chat', async (req, res) => {
   try {
+    // Carregamos o contexto para cada requisição.
+    const portfolioContext = await getPortfolioContext();
+
+    // Verificamos se o contexto foi carregado com sucesso.
+    if (!portfolioContext) {
+      return res.status(500).json({ error: 'Falha interna ao carregar dados do portfólio.' });
+    }
+
     const { prompt, history } = req.body;
 
     if (!prompt) {
-      return res.status(400).json({ error: 'Prompt is required.' });
+      return res.status(400).json({ error: 'Prompt é obrigatório.' });
     }
 
-    // Instrução do sistema como uma string simples.
     const systemInstruction = `
       **ATENÇÃO: VOCÊ É UMA IA RESTRITA E ESPECIALIZADA NO PORTFÓLIO DE VITOR HUGO SARILIO.**
       **SUA ÚNICA FONTE DE INFORMAÇÃO É O "CONTEXTO DO PORTFÓLIO" FORNECIDO.**
@@ -106,35 +117,25 @@ app.post('/api/chat', async (req, res) => {
       --- FIM DO CONTEXTO ---
     `;
 
-    // Inicializa o modelo com a instrução do sistema.
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-pro",
+      model: "gemini-2.5-pro", // Mudei para um modelo mais comum e estável
       systemInstruction: systemInstruction,
     });
 
-    // Prepara o histórico da conversa e a nova mensagem para generateContent.
-    let fullContents = [
-      { role: 'user', parts: [{ text: `CONTEXTO DO PORTFÓLIO:\n${portfolioContext}\n` }] },
-      { role: 'model', parts: [{ text: 'Compreendido. Tenho o contexto do portfólio.' }] },
-    ];
-
-    // Garante que o histórico nunca comece com uma mensagem do modelo.
     let chatHistory = history || [];
-    if (chatHistory.length > 0 && chatHistory[0].sender === 'bot') {
-      chatHistory = chatHistory.slice(1);
-    }
-
-    // Adiciona o histórico real da conversa
-    fullContents = fullContents.concat(chatHistory.map(msg => ({
+    let formattedHistory = chatHistory.map(msg => ({
       role: msg.sender === 'user' ? 'user' : 'model',
       parts: [{ text: msg.text }]
-    })));
+    }));
 
-    // Adiciona a nova mensagem do usuário
-    fullContents.push({ role: 'user', parts: [{ text: prompt }] });
+    // Ensure the history starts with a 'user' role if it's not empty
+    if (formattedHistory.length > 0 && formattedHistory[0].role === 'model') {
+      formattedHistory.shift();
+    }
 
-    // Envia a conversa completa para generateContent.
-    const result = await model.generateContent({ contents: fullContents });
+    const chat = model.startChat({ history: formattedHistory });
+
+    const result = await chat.sendMessage(prompt);
     const response = await result.response;
     const text = response.text();
     
@@ -145,6 +146,11 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
+// A Vercel gerencia o servidor, então o app.listen não é necessário para produção.
+// Esta seção agora apenas inicia o servidor para desenvolvimento local.
 app.listen(port, () => {
-  console.log(`Servidor backend rodando em http://localhost:${port}`);
+  console.log(`Servidor backend a rodar em http://localhost:${port}`);
 });
+
+// Exportar o app para a Vercel usar como uma função serverless.
+export default app;
