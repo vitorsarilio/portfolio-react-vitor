@@ -17,7 +17,7 @@ export default function PortfolioPage() {
       <meta property="og:title" content="Vitor Hugo Sarilio | Portfólio de Analista de Dados" />
       <meta property="og:description" content="Projetos e experiência em análise e engenharia de dados. Conheça meu trabalho." />
       <meta property="og:url" content="https://www.vitorsarilio.com/"/>
-      <meta property="og:image" content="https://www.vitorsarilio.com/thumbnail.png" />
+      <meta property="og:image" content="https://www.vitorsarilio.com/thumbnail.svg" />
       <meta property="twitter:card" content="summary_large_image" />
       <AboutSection user={user} trackEvent={trackEvent} />
       <ProjectsSection projects={projects} trackEvent={trackEvent} />

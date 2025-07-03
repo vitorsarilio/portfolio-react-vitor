@@ -3,6 +3,8 @@ import { Outlet, useLocation, NavLink } from 'react-router-dom';
 import ReactGA from 'react-ga4';
 import { portfolioData } from './data/portfolioData';
 import { Footer } from './components/Footer';
+import Chatbot from './components/Chatbot'; // Importe o componente Chatbot
+import { MessageSquare } from 'lucide-react'; // Importe o ícone para o botão do chatbot
 
 import { User, Code, Briefcase, LayoutDashboard, Sun, Moon, Film, TrendingUp, ListVideo, Star, Heart, Menu, X, Tv } from 'lucide-react';
 
@@ -152,6 +154,12 @@ const App = () => {
     return savedTheme ? savedTheme : 'light';
   });
 
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+
+  const toggleChatbot = () => {
+    setIsChatbotOpen(prev => !prev);
+  };
+
   const [personalRatingsMap, setPersonalRatingsMap] = useState(new Map());
 
   useEffect(() => {
@@ -215,6 +223,22 @@ const App = () => {
         <Outlet context={{ trackEvent: (category, action, label) => ReactGA.event({ category, action, label }), personalRatingsMap }} />
       </main>
       <Footer {...portfolioData.user} />
+
+      {/* Chatbot flutuante */}
+      <div className="fixed bottom-4 right-4 z-50">
+        {isChatbotOpen && (
+          <div className="mb-2">
+            <Chatbot />
+          </div>
+        )}
+        <button
+          onClick={toggleChatbot}
+          className="bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          aria-label={isChatbotOpen ? "Fechar Chatbot" : "Abrir Chatbot"}
+        >
+          <MessageSquare size={24} />
+        </button>
+      </div>
     </div>
   );
 };
