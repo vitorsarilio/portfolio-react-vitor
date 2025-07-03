@@ -1,3 +1,5 @@
+import vitorAvatar from '../assets/vitor.jpg';
+
 export const portfolioData = {
   user: {
     name: "Vitor Hugo Sarilio",
@@ -7,7 +9,8 @@ export const portfolioData = {
     email: "vitorsarilio@hotmail.com",
     phone: "5511987191928",
     linkedin: "https://www.linkedin.com/in/vitorsarilio",
-    github: "https://github.com/vitorsarilio"
+    github: "https://github.com/vitorsarilio",
+    avatar: vitorAvatar
   },
   projects: [
     {
