@@ -8,7 +8,7 @@ export const portfolioData = {
     phone: "5511987191928",
     linkedin: "https://www.linkedin.com/in/vitorsarilio",
     github: "https://github.com/vitorsarilio",
-    avatar: '/src/assets/vitor.jpg'
+    avatar: '/vitor.jpg'
   },
   projects: [
     {
