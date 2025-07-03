@@ -2,8 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-const fs = require('fs');
-const path = require('path');
+const { portfolioData } = require('../src/data/portfolioData');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -34,17 +33,6 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 function getPortfolioContext() {
   try {
-    const dataPath = path.join(__dirname, '..', 'src', 'data', 'portfolioData.js');
-    let fileContent = fs.readFileSync(dataPath, 'utf8');
-    
-    const objectString = fileContent.substring(
-      fileContent.indexOf('{'), 
-      fileContent.lastIndexOf('}') + 1
-    );
-
-    const vitorAvatar = ''; 
-    const portfolioData = eval('(' + objectString + ')');
-
     let context = `Sobre Vitor Hugo Sarilio:\n${portfolioData.user.bio_intro}\n${portfolioData.user.bio_language}\n`;
     
     context += "\nProjetos Profissionais:\n";
