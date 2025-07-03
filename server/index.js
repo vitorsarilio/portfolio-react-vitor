@@ -10,7 +10,21 @@ const port = process.env.PORT || 3001;
 
 // Configurar CORS
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173'
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      process.env.FRONTEND_URL, // Production URL
+      'http://localhost:5173'   // Development URL
+    ];
+
+    // Allow any Vercel deployment URL (e.g., preview deployments)
+    const vercelPreviewRegex = /^https:\/\/(.*)\.vercel\.app$/;
+
+    if (!origin || allowedOrigins.includes(origin) || vercelPreviewRegex.test(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
 }));
 app.use(express.json());
 
