@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Github, ExternalLink } from 'lucide-react';
+import { Github, ExternalLink, Lock } from 'lucide-react';
 
 export const ProjectCard = ({ project, trackEvent }) => {
   const isInternalLink = project.liveUrl && project.liveUrl.startsWith('/');
@@ -33,16 +33,24 @@ export const ProjectCard = ({ project, trackEvent }) => {
               Ver Projeto <ExternalLink size={16} className="ml-1" />
             </LiveLink>
           )}
-          {project.repoUrl && project.repoUrl !== "#" && (
-            <a 
-              href={project.repoUrl} 
-              target="_blank" 
-              rel="noopener noreferrer" 
+          {project.isPrivateRepo ? (
+            <span
+              title="Repositório privado — solicite acesso via LinkedIn"
+              className="text-gray-400 dark:text-gray-500 inline-flex items-center text-sm cursor-not-allowed select-none"
+            >
+              <Lock size={14} className="mr-1" /> Privado
+            </span>
+          ) : project.repoUrl && project.repoUrl !== "#" ? (
+            <a
+              href={project.repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => trackEvent('Projeto', 'Clique Repositório', project.title)}
-              className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 inline-flex items-center text-sm">
+              className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 inline-flex items-center text-sm"
+            >
               Repositório <Github size={16} className="ml-1" />
             </a>
-          )}
+          ) : null}
         </div>
       </div>
     </div>

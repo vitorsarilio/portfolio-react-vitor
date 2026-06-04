@@ -8,7 +8,7 @@ describe('Footer', () => {
     const { user } = portfolioData;
     const currentYear = new Date().getFullYear();
 
-    render(<Footer user={user} />);
+    render(<Footer {...user} />);
 
     const footerText = screen.getByText(`© ${currentYear} ${user.name}. Todos os direitos reservados.`);
     expect(footerText).toBeInTheDocument();
