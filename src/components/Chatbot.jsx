@@ -35,10 +35,7 @@ const Chatbot = () => {
     setLoading(true);
 
     try {
-      // A URL da API pode ser uma variável de ambiente para facilitar a implantação
-      const apiUrl = import.meta.env.PROD ? '/api/chat' : 'http://localhost:3001/api/chat';
-
-      const response = await fetch(apiUrl, {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
