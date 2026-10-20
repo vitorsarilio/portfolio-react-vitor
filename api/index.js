@@ -133,7 +133,9 @@ async function getPortfolioContext() {
     }
 
     context += "\nHabilidades:\n";
-    context += portfolioData.resume.skills.join(', ') + ".\n";
+    portfolioData.resume.skillGroups.forEach(g => {
+      context += `- ${g.name}: ${g.items.map(i => i.name).join(', ')}.\n`;
+    });
 
     return context;
   } catch (error) {

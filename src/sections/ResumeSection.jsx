@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronUp, Award, Building, School, Users, Eye, EyeOff } from 'lucide-react';
 
+import { SkillGroups } from '../components/SkillGroups';
+
 import sauterLogo from '../assets/logos/sauter.webp';
 import uelloLogo from '../assets/logos/uello.png';
 import sinapticsLogo from '../assets/logos/sinaptics.png';
@@ -53,7 +55,7 @@ const PartnerLogo = ({ logoSrc, partnerName }) => {
   }
   return (
     <div className="p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md shadow-sm hover:shadow-lg transition-shadow">
-      <img src={logoSrc} alt={`[Logo de ${partnerName}]`} title={partnerName} className="h-10 md:h-12 object-contain" />
+      <img src={logoSrc} alt={partnerName} title={partnerName} width={112} height={48} loading="lazy" decoding="async" className="h-10 md:h-12 w-24 md:w-28 object-contain" />
     </div>
   );
 };
@@ -75,7 +77,8 @@ const ResumeItem = ({ item, trackEvent }) => {
       <button className="flex justify-between items-start w-full text-left" onClick={handleToggleOpen}>
         <div className="flex items-start space-x-4 flex-grow">
           {item.logo ? (
-            <img src={item.logo} alt={`[Logo de ${item.company || item.institution}]`} className="w-16 h-16 object-contain rounded-md mt-1 flex-shrink-0 bg-white p-1" />
+            // Decorative: the company/institution name is shown right next to it
+            <img src={item.logo} alt="" width={64} height={64} loading="lazy" decoding="async" className="w-16 h-16 object-contain rounded-md mt-1 flex-shrink-0 bg-white p-1" />
           ) : (
             <div className="w-16 h-16 flex-shrink-0 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-md mt-1">
               {isExperience ? <Building size={24} className="text-gray-500 dark:text-gray-400" /> : <School size={24} className="text-gray-500 dark:text-gray-400" />}
@@ -189,15 +192,9 @@ export const ResumeSection = ({ resume, trackEvent }) => {
           </div>
         )}
         
-        <div>
-          <h3 className="text-3xl font-semibold mb-8 text-gray-800 dark:text-gray-200 pb-2 border-b-2 border-gray-300 dark:border-gray-700">Habilidades</h3>
-          <div className="flex flex-wrap gap-3 justify-center">
-            {resume.skills.map(skill => (
-              <span key={skill} className="bg-purple-600 dark:bg-purple-700 text-white px-4 py-2 text-sm rounded-full shadow-md">
-                {skill}
-              </span>
-            ))}
-          </div>
+        <div id="skills">
+          <h3 className="text-3xl font-semibold mb-8 text-gray-800 dark:text-gray-200 pb-2 border-b-2 border-gray-300 dark:border-gray-700">Habilidades e ferramentas</h3>
+          <SkillGroups groups={resume.skillGroups} />
         </div>
       </div>
     </section>
