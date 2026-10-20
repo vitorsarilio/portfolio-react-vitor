@@ -98,6 +98,7 @@ const Chatbot = () => {
           className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-900 dark:text-gray-100"
           placeholder="Pergunte sobre o portfólio..."
           value={input}
+          maxLength={500}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={handleKeyPress}
           disabled={loading}
