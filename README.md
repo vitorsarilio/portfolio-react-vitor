@@ -1,6 +1,6 @@
 # Vitor Sarilio — Personal Portfolio
 
-A modern personal portfolio built with React and Vite, featuring an AI-powered chatbot (C137) connected to Google's Gemini API. Deployed as a full-stack application on Vercel, with the frontend served as a static site and the chatbot backend running as a serverless function.
+A modern personal portfolio built with React and Vite, featuring an AI-powered chatbot (C137) connected to Anthropic's Claude API. Deployed as a full-stack application on Vercel, with the frontend served as a static site and the chatbot backend running as a serverless function.
 
 ---
 
@@ -9,7 +9,7 @@ A modern personal portfolio built with React and Vite, featuring an AI-powered c
 - Responsive portfolio with sections for About, Projects, Personal Projects, and Resume
 - Interactive 3D elements via Three.js / React Three Fiber
 - Dark/light theme with localStorage persistence
-- Floating AI chatbot (C137) restricted to portfolio context, powered by Gemini
+- Floating AI chatbot (C137) restricted to portfolio context, powered by Claude
 - Google Analytics 4 integration
 - Fully deployed on Vercel (frontend + serverless API)
 
@@ -32,8 +32,8 @@ A modern personal portfolio built with React and Vite, featuring an AI-powered c
 | Technology | Purpose |
 |---|---|
 | Node.js + Express 5 | Serverless API handler |
-| `@google/genai` | Google Gen AI SDK (new unified SDK) |
-| Gemini 3.5 Flash | AI model powering the chatbot |
+| `@anthropic-ai/sdk` | Anthropic SDK |
+| Claude Haiku 5.5 | AI model powering the chatbot (fixed in code) |
 | dotenv | Local environment variable loading |
 | cors | Cross-origin request control |
 
@@ -82,9 +82,9 @@ All secrets live exclusively in the backend (`/api`). The frontend has no custom
 ### `api/.env` (local development)
 
 ```env
-# Google Gemini API key
-# Get yours at: https://aistudio.google.com/app/apikey
-GEMINI_API_KEY=your_google_ai_api_key_here
+# LLM provider API key (Anthropic)
+# Get yours at: https://console.anthropic.com/settings/keys
+LLM_API_KEY=your_llm_api_key_here
 
 # Frontend origin allowed by CORS (for local dev, this is the Vite dev server)
 FRONTEND_URL=http://localhost:5173
@@ -101,7 +101,7 @@ In the Vercel dashboard under **Settings → Environment Variables**, add:
 
 | Variable | Description |
 |---|---|
-| `GEMINI_API_KEY` | Your Google AI API key |
+| `LLM_API_KEY` | API key of the LLM provider (Anthropic) |
 | `FRONTEND_URL` | Your production Vercel URL (e.g. `https://portfolio-vitor.vercel.app`) |
 
 `PORT` is not required on Vercel — the function is serverless.
@@ -166,6 +166,6 @@ vercel --prod
 
 ## Chatbot — C137
 
-The chatbot is intentionally restricted to answering questions about Vitor's portfolio only. It is powered by the `gemini-3.5-flash` model and uses a system instruction that limits its scope to the content in `src/data/portfolioData.js`. Questions outside that scope receive a standard redirect response.
+The chatbot is intentionally restricted to answering questions about Vitor's portfolio only. It is powered by `claude-haiku-5-5` and uses a system instruction that limits its scope to the content in `src/data/portfolioData.js`. Questions outside that scope receive a standard redirect response.
 
-The chat session maintains full conversation history, formatted as alternating `user` / `model` turns per the Gemini API requirement.
+The chat session maintains full conversation history, sent as `user` / `assistant` turns; every message first goes through a scope-filter call that only lets portfolio-related questions through; the prompt is capped at 500 characters, the history at 6 messages, and requests are rate-limited per IP.
