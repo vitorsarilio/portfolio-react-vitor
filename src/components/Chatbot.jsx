@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 
+const REQUEST_TIMEOUT_MS = 20_000;
+
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -34,9 +36,14 @@ const Chatbot = () => {
     setInput('');
     setLoading(true);
 
+    // Give up after 20 s so the user is never stuck on "Digitando..."
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
+        signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -56,11 +63,12 @@ const Chatbot = () => {
       setMessages((prevMessages) => [...prevMessages, botMessage]);
     } catch (error) {
       console.error('Erro ao enviar mensagem:', error);
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { sender: 'bot', text: 'Desculpe, houve um erro ao processar sua solicitação.' },
-      ]);
+      const text = error.name === 'AbortError'
+        ? 'A resposta está demorando mais que o normal. Tente novamente em instantes ou fale direto com o Vitor pelo LinkedIn ou e-mail.'
+        : 'Desculpe, houve um erro ao processar sua solicitação.';
+      setMessages((prevMessages) => [...prevMessages, { sender: 'bot', text }]);
     } finally {
+      clearTimeout(timeoutId);
       setLoading(false);
     }
   };
