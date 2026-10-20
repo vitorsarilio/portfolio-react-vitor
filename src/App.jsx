@@ -147,11 +147,10 @@ const App = () => {
       <Footer {...portfolioData.user} />
 
       <div className="fixed bottom-4 right-4 z-50">
-        {isChatbotOpen && (
-          <div className="mb-2">
-            <Chatbot />
-          </div>
-        )}
+        {/* Kept mounted while closed so the conversation survives closing the widget */}
+        <div className={isChatbotOpen ? 'mb-2' : 'hidden'}>
+          <Chatbot />
+        </div>
         <button
           onClick={toggleChatbot}
           className="bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500"

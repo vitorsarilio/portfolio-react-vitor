@@ -23,7 +23,8 @@ app.use(cors({
 }));
 app.use(express.json());
 
-const llm = new Anthropic({ apiKey: process.env.LLM_API_KEY });
+// Fail fast: a visitor should not wait minutes on a slow upstream (SDK default is 10 min, 2 retries)
+const llm = new Anthropic({ apiKey: process.env.LLM_API_KEY, timeout: 15_000, maxRetries: 1 });
 
 // The chatbot is locked to a single model; it is intentionally not configurable.
 const MODEL = 'claude-haiku-5-5';
@@ -80,6 +81,10 @@ async function isInScope(prompt, history) {
   return /^\s*SIM\b/i.test(verdict);
 }
 
+// The model has no clock; without this it guesses the date and miscounts "Presente" periods
+const currentMonthYear = () =>
+  new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric', timeZone: 'America/Sao_Paulo' });
+
 async function getPortfolioContext() {
   try {
     const { portfolioData } = await import('../src/data/portfolioData.js');
@@ -102,9 +107,15 @@ async function getPortfolioContext() {
     context += `- LinkedIn: ${portfolioData.user.linkedin}\n`;
     context += `- GitHub: ${portfolioData.user.github}\n`;
 
-    context += "\nExperiência Profissional Detalhada (para cálculo de tempo de carreira):\n";
+    context += "\nExperiência Profissional Detalhada (também usada para cálculo de tempo de carreira):\n";
     portfolioData.resume.experience.forEach(e => {
       context += `- ${e.title} na ${e.company}. Período: ${e.period}.\n`;
+      if (e.description) {
+        context += `  Atividades: ${e.description.replace(/\s*\n\s*/g, ' ')}\n`;
+      }
+      if (e.partners?.length) {
+        context += `  Principais clientes/empresas atendidas: ${e.partners.map(p => p.name).join(', ')}.\n`;
+      }
     });
     context += "Para calcular o tempo total de carreira, some a duração de cada período de experiência. 'Presente' significa até a data atual.\n";
 
@@ -112,6 +123,14 @@ async function getPortfolioContext() {
     portfolioData.resume.education.forEach(e => {
       context += `- ${e.degree} na ${e.institution} (${e.period})\n`;
     });
+
+    if (portfolioData.resume.certifications?.length) {
+      context += "\nCertificações:\n";
+      portfolioData.resume.certifications.forEach(c => {
+        const date = c.date && c.date !== 'Não especificado' ? ` (${c.date})` : '';
+        context += `- ${c.name}, emitida por ${c.issuer}${date}\n`;
+      });
+    }
 
     context += "\nHabilidades:\n";
     context += portfolioData.resume.skills.join(', ') + ".\n";
@@ -187,7 +206,11 @@ app.post('/api/chat', async (req, res) => {
       model: MODEL,
       max_tokens: MAX_ANSWER_TOKENS,
       output_config: { effort: 'low' },
-      system: systemInstruction,
+      // The date lives in its own block after the stable instructions, so it can't invalidate a future prompt cache
+      system: [
+        { type: 'text', text: systemInstruction },
+        { type: 'text', text: `Data atual: ${currentMonthYear()}.` },
+      ],
       messages,
     });
 
