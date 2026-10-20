@@ -68,7 +68,7 @@ export const AboutSection = ({ user, trackEvent }) => {
             </div>
           </div>
           
-          <p className="text-md sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed text-left md:text-center">{user.bio_languages}</p>
+          <p className="text-md sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed text-left md:text-center">{user.bio_language}</p>
 
           <div className="mt-12 flex justify-center items-center space-x-1 sm:space-x-2">
             {user.phone && (<ExpandingContactLink href={`https://wa.me/${formatPhoneNumberForWhatsApp(user.phone)}`} eventCategory="Contato" eventAction="Clique WhatsApp" eventLabel="Seção Sobre Mim" icon={MessageCircle} textToShow={displayPhoneNumber(user.phone)} trackEvent={trackEvent} />)}

@@ -7,7 +7,6 @@ A modern personal portfolio built with React and Vite, featuring an AI-powered c
 ## Features
 
 - Responsive portfolio with sections for About, Projects, Personal Projects, and Resume
-- Interactive 3D elements via Three.js / React Three Fiber
 - Dark/light theme with localStorage persistence
 - Floating AI chatbot (C137) restricted to portfolio context, powered by Claude
 - Google Analytics 4 integration
@@ -24,7 +23,6 @@ A modern personal portfolio built with React and Vite, featuring an AI-powered c
 | Vite 6 | Build tool and dev server |
 | Tailwind CSS 4 | Utility-first styling |
 | React Router DOM 7 | Client-side routing |
-| Three.js + React Three Fiber | 3D scene rendering |
 | Lucide React | Icon library |
 | React GA4 | Google Analytics 4 |
 
