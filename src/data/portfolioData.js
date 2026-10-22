@@ -139,14 +139,61 @@ export const portfolioData = {
         period: "2014 - 2016"
       }
     ],
-    skills: [
-      "SQL", "Python", "Pandas", "NumPy", "Power BI", "DAX", "Data Modeling",
-      "Business Intelligence (BI)", "Dashboards", "Relational Databases",
-      "ETL Pipelines", "Apache Airflow", "Google BigQuery", "Microsoft Graph API",
-      "Oracle PL/SQL", "JIRA", "Google Cloud Platform (GCP)", "Looker (Google Data Studio)",
-      "Excel (Power Query, VBA)", "Advanced Joins", "CTEs", "Selenium",
-      "SQL Server", "MySQL", "OracleDB", "Pentaho Data Integration (PDI)",
-      "T-SQL", "C#", ".NET", "HTML", "CSS", "Data Automation"
+    // Single source for skills: rendered on the page and sent to the chatbot.
+    // `logo` is a file name in src/assets/logos (optional).
+    skillGroups: [
+      {
+        name: "SQL e modelagem",
+        items: [
+          { name: "SQL", logo: "04-SQL.svg" }, { name: "T-SQL" }, { name: "Oracle PL/SQL" },
+          { name: "CTEs" }, { name: "Advanced Joins" }, { name: "Data Modeling" }, { name: "Relational Databases" }
+        ]
+      },
+      {
+        name: "BI e visualização",
+        items: [
+          { name: "Power BI", logo: "03-power-bi.svg" }, { name: "DAX" }, { name: "Business Intelligence (BI)" },
+          { name: "Dashboards" }, { name: "Looker (Google Data Studio)" }, { name: "Excel (Power Query, VBA)" },
+          { name: "Streamlit", logo: "19-Streamlit.svg" }
+        ]
+      },
+      {
+        name: "Engenharia de dados e nuvem",
+        items: [
+          { name: "Apache Airflow", logo: "02-Apache-Airflow.svg" }, { name: "ETL Pipelines" },
+          { name: "Pentaho Data Integration (PDI)" }, { name: "Google BigQuery", logo: "10-Google-BigQuery.svg" },
+          { name: "Google Cloud Platform (GCP)", logo: "11-Google-Cloud.svg" }, { name: "Docker", logo: "91-Docker.svg" }
+        ]
+      },
+      {
+        name: "Python e automação",
+        items: [
+          { name: "Python", logo: "01-python.svg" }, { name: "Pandas" }, { name: "NumPy" },
+          { name: "Selenium", logo: "101-Selenium.svg" }, { name: "Microsoft Graph API" }, { name: "Data Automation" }
+        ]
+      },
+      {
+        name: "Bancos de dados",
+        items: [
+          { name: "SQL Server" }, { name: "OracleDB" }, { name: "MySQL", logo: "200-mysql.svg" },
+          { name: "PostgreSQL", logo: "201-postgresql.svg" }, { name: "SQLite", logo: "202-sqlite.svg" }
+        ]
+      },
+      {
+        name: "Desenvolvimento",
+        items: [
+          { name: "C#", logo: "100-c-sharp.svg" }, { name: ".NET" }, { name: "JavaScript", logo: "32-javascript.svg" },
+          { name: "HTML", logo: "30-html.svg" }, { name: "CSS", logo: "31-css.svg" }, { name: "Tailwind", logo: "33-tailwind.svg" },
+          { name: "Git", logo: "20-git.svg" }, { name: "GitHub", logo: "21-github.svg" }
+        ]
+      },
+      {
+        name: "Ferramentas do dia a dia",
+        items: [
+          { name: "Jira", logo: "130-Jira.svg" }, { name: "Slack", logo: "131-Slack.svg" }, { name: "DBeaver", logo: "150-DBeaver.svg" },
+          { name: "VS Code", logo: "90-vscode.svg" }, { name: "Visual Studio", logo: "89-Visual Studio.svg" }, { name: "PyCharm", logo: "98-PyCharm.svg" }
+        ]
+      }
     ],
     certifications: [
         {

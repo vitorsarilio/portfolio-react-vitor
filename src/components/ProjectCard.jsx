@@ -8,7 +8,7 @@ export const ProjectCard = ({ project, trackEvent }) => {
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition-transform duration-300 flex flex-col">
-      <img src={project.imageUrl} alt={`[Imagem de ${project.title}]`} className="w-full h-48 object-cover" onError={(e) => e.target.src='https://placehold.co/600x400/DDD/333?text=Imagem+Indisponivel'} />
+      <img src={project.imageUrl} alt={`Imagem do projeto ${project.title}`} width={600} height={400} loading="lazy" decoding="async" className="w-full h-48 object-cover" onError={(e) => e.target.src='https://placehold.co/600x400/DDD/333?text=Imagem+Indisponivel'} />
       <div className="p-6 flex flex-col flex-grow">
         <h3 className="text-2xl font-semibold mb-2 text-purple-700 dark:text-purple-400">{project.title}</h3>
         <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm leading-relaxed flex-grow">{project.description}</p>
