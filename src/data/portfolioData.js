@@ -50,6 +50,15 @@ export const portfolioData = {
   ],
   personalProjects: [
     {
+      id: 102,
+      title: "Geração Solar Distribuída no Brasil",
+      description: "Pipeline de dados de ponta a ponta com dados abertos da ANEEL (4,7 milhões de sistemas solares): ingestão em Python, modelagem em dbt + DuckDB com 131 testes e dashboard no Evidence. Roda sozinho toda semana no GitHub Actions e publica no GitHub Pages, com custo zero.",
+      technologies: ["Python", "dbt", "DuckDB", "SQL", "Evidence.dev", "GitHub Actions", "Parquet"],
+      imageUrl: "/projects/geracao-solar-brasil.webp",
+      liveUrl: "https://vitorsarilio.github.io/geracao-solar-brasil/",
+      repoUrl: "https://github.com/vitorsarilio/geracao-solar-brasil"
+    },
+    {
       id: 101,
       title: "Assistindo.com.br",
       description: "Uma aplicação web de produção construída com React e Vite para explorar, rastrear e gerenciar informações sobre filmes e séries de TV, com scroll infinito, busca avançada e modais dinâmicos de detalhes.",
