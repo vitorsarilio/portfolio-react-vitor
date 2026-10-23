@@ -1,29 +1,33 @@
-import { portfolioData } from '../data/portfolioData';
-import { ProjectCard } from '../components/ProjectCard';
+import { SectionTitle } from '../components/SectionTitle';
 
-export const PersonalProjectsSection = ({ trackEvent }) => {
-  const { personalProjects } = portfolioData;
+const dominio = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
 
-  return (
-    <section id="personal-projects" className="px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-      <div className="container mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-16 text-gray-900 dark:text-gray-100">
-          Meus Projetos Pessoais
-        </h2>
-        {personalProjects && personalProjects.length > 0 ? (
-          <div className="grid md:grid-cols-2 gap-10 max-w-4xl mx-auto">
-            {personalProjects.map(project => (
-              <ProjectCard 
-                key={project.id} 
-                project={project} 
-                trackEvent={trackEvent} 
-              />
-            ))}
-          </div>
-        ) : (
-          <p className="text-center text-gray-500">Nenhum projeto pessoal para exibir no momento.</p>
-        )}      
+// Each project shows a capture of the live site that scrolls by itself inside a browser frame.
+export const PersonalProjectsSection = ({ projects, trackEvent }) => (
+  <section className="pessoais" id="projetos-pessoais" aria-labelledby="pessoais-titulo">
+    <div className="wrap">
+      <SectionTitle fundo="PESSOAIS" id="pessoais-titulo">Projetos pessoais no ar</SectionTitle>
+      <div className="previas">
+        {projects.map((p) => (
+          <a
+            key={p.id}
+            className="previa revela"
+            href={p.liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackEvent('Projeto', 'Clique Ver Projeto', p.title)}
+          >
+            <div className="janela">
+              <div className="janela-topo" aria-hidden="true"><b /><b /><b /><span>{dominio(p.liveUrl)}</span></div>
+              <div className="tela"><img src={p.previewUrl} alt={p.previewAlt} width={800} loading="lazy" decoding="async" /></div>
+            </div>
+            <h3>{p.shortTitle ?? p.title}</h3>
+            <p>{p.summary ?? p.description}</p>
+            <span className="tec">{(p.highlights ?? p.technologies).join(' · ')}</span>
+            <span className="abrir">{p.linkLabel ?? 'Abrir o site'}</span>
+          </a>
+        ))}
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);

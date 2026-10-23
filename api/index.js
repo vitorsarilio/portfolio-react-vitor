@@ -119,6 +119,10 @@ async function getPortfolioContext() {
     });
     context += "Para calcular o tempo total de carreira, some a duração de cada período de experiência. 'Presente' significa até a data atual.\n";
 
+    if (portfolioData.resume.companies?.length) {
+      context += `\nEmpresas para as quais já prestou serviço (como empregado ou atendendo o cliente): ${portfolioData.resume.companies.map(c => c.name).join(', ')}.\n`;
+    }
+
     context += "\nFormação Acadêmica:\n";
     portfolioData.resume.education.forEach(e => {
       context += `- ${e.degree} na ${e.institution} (${e.period})\n`;

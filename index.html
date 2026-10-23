@@ -4,25 +4,31 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/tech-color.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vitor Hugo Sarilio | Portfólio de Analista de Dados</title>
+    <title>Vitor Hugo Sarilio | Dados, engenharia e automações</title>
     <!-- Static social tags: LinkedIn/WhatsApp crawlers don't run JavaScript -->
-    <meta name="description" content="Analista de dados especialista em Business Intelligence (BI), SQL, Python, Power BI e automação de pipelines com Apache Airflow.">
+    <meta name="description" content="Analista de dados: pipelines no Airflow e no BigQuery, modelagem com SQL e dbt, dashboards em Power BI e automações com n8n.">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="pt_BR">
     <meta property="og:url" content="https://www.vitorsarilio.com/">
     <meta property="og:title" content="Vitor Hugo Sarilio | Portfólio de Analista de Dados">
-    <meta property="og:description" content="Projetos e experiência em análise e engenharia de dados. Conheça meu trabalho.">
+    <meta property="og:description" content="Projetos em análise e engenharia de dados e automações. Conheça meu trabalho.">
     <meta property="og:image" content="https://www.vitorsarilio.com/thumbnail.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Vitor Hugo Sarilio | Portfólio de Analista de Dados">
-    <meta name="twitter:description" content="Projetos e experiência em análise e engenharia de dados. Conheça meu trabalho.">
+    <meta name="twitter:description" content="Projetos em análise e engenharia de dados e automações. Conheça meu trabalho.">
     <meta name="twitter:image" content="https://www.vitorsarilio.com/thumbnail.png">
+    <meta name="theme-color" content="#0A0B0B">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Decide antes do primeiro desenho: escolha salva no botão do menu > preferência do sistema -->
     <script>
-      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark')
-      } else {
-        document.documentElement.classList.remove('dark')
-      }
+      (function () {
+        var salvo = null;
+        try { salvo = localStorage.getItem('animacoes'); } catch (e) {}
+        var sistemaPedeMenos = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (salvo ? salvo === 'desligadas' : sistemaPedeMenos) document.documentElement.classList.add('sem-animacao');
+      })();
     </script>
   </head>
   <body>

@@ -2,13 +2,22 @@ export const portfolioData = {
   user: {
     name: "Vitor Hugo Sarilio",
     title: "Data Analyst | BI | SQL | Python | Power BI Specialist | BigQuery | Data Automation | Apache Airflow",
-    bio_intro: "Sou um profissional orientado a dados com experiência em Business Intelligence, análise de dados, automação e ETL. Minha especialidade inclui SQL para consulta de dados, Python para processamento de dados e Power BI para visualização. Atualmente, trabalho na construção de pipelines de dados escaláveis com Apache Airflow e na análise de grandes conjuntos de dados no Google BigQuery.",
+    bio_intro: "Sou um profissional orientado a dados com experiência em Business Intelligence, análise de dados, automação e ETL. Minha especialidade inclui SQL para consulta de dados, Python para processamento de dados e Power BI para visualização. Atualmente, trabalho na construção de pipelines de dados escaláveis com Apache Airflow e na análise de grandes conjuntos de dados no Google BigQuery. Também trabalho com automações: integrações, alertas e fluxos com n8n, Python e monday.com, e aplicações rápidas com Lovable.",
     bio_language: "Idiomas: Português (Nativo), Inglês (B2 Upper Intermediate), Espanhol (Básico).",
     email: "vitorsarilio@hotmail.com",
     phone: "5511987191928",
     linkedin: "https://www.linkedin.com/in/vitorsarilio",
     github: "https://github.com/vitorsarilio",
-    avatar: '/vitor.jpg'
+    avatar: '/vitor.jpg',
+    location: "São Paulo, SP",
+    // Ano em que começou a trabalhar com dados (Grupo JCA); os "anos com dados" saem daqui
+    dataSince: 2017,
+    whatsappMessage: "Olá Vitor, vi seu portfólio",
+    languages: [
+      { name: "Português", level: "nativo" },
+      { name: "Inglês", level: "B2" },
+      { name: "Espanhol", level: "básico" }
+    ]
   },
   projects: [
     {
@@ -16,36 +25,36 @@ export const portfolioData = {
       title: "Pipeline de Monitoramento do Microsoft Admin Center",
       description: "Desenvolvimento de um pipeline automatizado para monitorar o Microsoft Admin Center, ingerindo dados da API Microsoft Graph para rastreamento. Incluiu ingestão de dados com Python (Requests, Pandas), orquestração com Apache Airflow DAGs e visualização em Power BI com DAX customizado.",
       technologies: ["Python", "Pandas", "Requests", "Apache Airflow", "Power BI", "DAX", "Microsoft Graph API"],
-      imageUrl: "https://placehold.co/600x400/A78BFA/FFFFFF?text=Pipeline+Monitoramento",
-      liveUrl: "#",
-      repoUrl: "#"
+      shortTitle: "Monitoramento do Microsoft Admin Center",
+      summary: "Ingestão da API Microsoft Graph com Python, orquestrada em DAGs do Airflow, com indicadores em Power BI.",
+      highlights: ["Python", "Airflow", "Power BI", "DAX"]
     },
     {
       id: 2,
       title: "Refatoração e Otimização de Dashboards (UX/UI)",
       description: "Atualização de dashboards legados em Power BI com foco na melhoria da experiência do utilizador (UX/UI), permitindo uma tomada de decisão mais rápida para os stakeholders.",
       technologies: ["Power BI", "UX/UI Design", "DAX"],
-      imageUrl: "https://placehold.co/600x400/8B5CF6/FFFFFF?text=Refatoracao+Dashboards",
-      liveUrl: "#",
-      repoUrl: "#"
+      shortTitle: "Refatoração de dashboards legados",
+      summary: "Revisão de UX e UI de dashboards antigos para que as áreas encontrem a resposta mais rápido e decidam com mais confiança.",
+      highlights: ["Power BI", "DAX", "UX/UI"]
     },
     {
       id: 3,
       title: "Migração de Dados Cloud e Otimização de Consultas",
       description: "Migração de bases de dados Oracle para Google BigQuery, otimizando a performance de consultas e desenvolvimento de dashboards em Power BI para equipas operacionais.",
       technologies: ["Power BI", "BigQuery", "Oracle PL/SQL", "ETL"],
-      imageUrl: "https://placehold.co/600x400/6D28D9/FFFFFF?text=Migracao+Cloud",
-      liveUrl: "#",
-      repoUrl: "#"
+      shortTitle: "Migração Oracle → BigQuery",
+      summary: "Migração das bases operacionais para o Google BigQuery, com consultas otimizadas e novos dashboards para as equipes.",
+      highlights: ["BigQuery", "PL/SQL", "ETL", "Power BI"]
     },
     {
       id: 4,
       title: "Desenvolvimento de Dashboards Executivos e Operacionais",
       description: "Criação e manutenção de dashboards em Power BI para equipes operacionais e executivas, rastreando KPIs alinhados aos OKRs da organização. Automação de relatórios mensais de KPIs.",
       technologies: ["Power BI", "DAX", "Data Modeling", "SQL", "Excel (Power Query)"],
-      imageUrl: "https://placehold.co/600x400/4c1d95/FFFFFF?text=Dashboards+KPIs",
-      liveUrl: "#",
-      repoUrl: "#"
+      shortTitle: "Dashboards executivos e operacionais",
+      summary: "Dashboards em Power BI que acompanham os KPIs ligados aos OKRs da empresa, com relatórios mensais automatizados.",
+      highlights: ["Power BI", "DAX", "SQL", "Power Query"]
     }
   ],
   personalProjects: [
@@ -54,7 +63,12 @@ export const portfolioData = {
       title: "Geração Solar Distribuída no Brasil",
       description: "Pipeline de dados de ponta a ponta com dados abertos da ANEEL (4,7 milhões de sistemas solares): ingestão em Python, modelagem em dbt + DuckDB com 131 testes e dashboard no Evidence. Roda sozinho toda semana no GitHub Actions e publica no GitHub Pages, com custo zero.",
       technologies: ["Python", "dbt", "DuckDB", "SQL", "Evidence.dev", "GitHub Actions", "Parquet"],
-      imageUrl: "/projects/geracao-solar-brasil.webp",
+      shortTitle: "Geração solar no Brasil",
+      summary: "Pipeline com os dados abertos da ANEEL que roda sozinho toda semana e publica um dashboard de crescimento, ranking per capita e aceleração por estado.",
+      highlights: ["Python", "dbt", "DuckDB", "Evidence", "GitHub Actions"],
+      previewUrl: "/projects/site-solar.webp",
+      previewAlt: "Dashboard de geração solar distribuída no Brasil",
+      linkLabel: "Abrir o dashboard",
       liveUrl: "https://vitorsarilio.github.io/geracao-solar-brasil/",
       repoUrl: "https://github.com/vitorsarilio/geracao-solar-brasil"
     },
@@ -63,7 +77,12 @@ export const portfolioData = {
       title: "Assistindo.com.br",
       description: "Uma aplicação web de produção construída com React e Vite para explorar, rastrear e gerenciar informações sobre filmes e séries de TV, com scroll infinito, busca avançada e modais dinâmicos de detalhes.",
       technologies: ["React", "Vite", "TailwindCSS", "React Router"],
-      imageUrl: "https://placehold.co/600x400/8B5CF6/FFFFFF?text=Assistindo.com.br",
+      shortTitle: "Assistindo.com.br",
+      summary: "Aplicação web em produção para explorar, acompanhar e organizar filmes e séries, com scroll infinito, busca avançada e histórico do que você assistiu.",
+      highlights: ["React", "Vite", "Tailwind CSS", "React Router"],
+      previewUrl: "/projects/site-assistindo.webp",
+      previewAlt: "Página inicial do Assistindo.com.br",
+      linkLabel: "Abrir o site",
       liveUrl: "https://www.assistindo.com.br/",
       repoUrl: null,
       isPrivateRepo: true
@@ -139,13 +158,19 @@ export const portfolioData = {
         id: 1,
         degree: "Pós-graduação Lato Sensu, Data Analytics",
         institution: "FIAP",
-        period: "Agosto 2023 - Agosto 2024"
+        period: "Agosto 2023 - Agosto 2024",
+        shortDegree: "Pós-graduação em Data Analytics",
+        shortPeriod: "ago/2023 – ago/2024",
+        logo: "fiap.png"
       },
       {
         id: 2,
         degree: "Tecnólogo, Análise e Desenvolvimento de Sistemas",
         institution: "Universidade Paulista",
-        period: "2014 - 2016"
+        period: "2014 - 2016",
+        shortDegree: "Tecnólogo em Análise e Desenvolvimento de Sistemas",
+        shortPeriod: "2014 – 2016",
+        logo: "unip.png"
       }
     ],
     // Single source for skills: rendered on the page and sent to the chatbot.
@@ -182,6 +207,12 @@ export const portfolioData = {
         ]
       },
       {
+        name: "Automações",
+        items: [
+          { name: "n8n", logo: "n8n.png" }, { name: "Lovable", logo: "lovable.png" }, { name: "monday.com", logo: "monday.png" }
+        ]
+      },
+      {
         name: "Bancos de dados",
         items: [
           { name: "SQL Server" }, { name: "OracleDB" }, { name: "MySQL", logo: "200-mysql.svg" },
@@ -204,13 +235,39 @@ export const portfolioData = {
         ]
       }
     ],
+    // Empresas para as quais já prestou serviço, como empregado ou atendendo o cliente.
+    // `logo` é um arquivo em src/assets/logos. O contador da página é o tamanho desta lista.
+    companies: [
+      { name: "SAUTER", logo: "sauter.webp" },
+      { name: "CIMED", logo: "cimed.webp" },
+      { name: "Uello", logo: "uello.png" },
+      { name: "Sinaptics", logo: "sinaptics.png" },
+      { name: "Autopass", logo: "autopass.png" },
+      { name: "Tmov", logo: "tmov.png" },
+      { name: "Sotran", logo: "sotran.png" },
+      { name: "Grupo JCA", logo: "jca.jpg" },
+      { name: "Cometa", logo: "cometa.png" },
+      { name: "Auto Viação 1001", logo: "1001.png" },
+      { name: "Catarinense", logo: "catarinense.png" },
+      { name: "Expresso do Sul", logo: "expresso-do-sul.png" },
+      { name: "Rápido Ribeirão", logo: "rapido-ribeirao.png" },
+      { name: "Leega", logo: "leega.svg" },
+      { name: "RD Saúde", logo: "rd.png" },
+      { name: "Mercantil", logo: "mercantil.svg" },
+      { name: "FATEC-SP", logo: "fatec-sp.png" },
+      { name: "Jaco's", logo: "jacos.jpeg" }
+    ],
     certifications: [
         {
             id: 1,
             name: "EF SET English Certificate 54/100 (B2 Upper Intermediate)",
             issuer: "EF Standard English Test",
             date: "Não especificado",
-            pdfUrl: "/EF_SET_Certificate.pdf"
+            pdfUrl: "/EF_SET_Certificate.pdf",
+            shortName: "Inglês B2, intermediário avançado",
+            shortIssuer: "EF SET English Certificate",
+            score: "nota 54/100",
+            logo: "efset.png"
         }
     ]
   }
