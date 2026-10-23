@@ -30,4 +30,9 @@ export default [
       ],
     },
   },
+  {
+    // the chatbot API runs on Node (Vercel function)
+    files: ['api/**/*.js'],
+    languageOptions: { globals: globals.node },
+  },
 ]
