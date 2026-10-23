@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { animacoesDesligadas } from '../lib/motion';
 
-export const BackToTop = ({ escondido = false }) => {
+export const BackToTop = () => {
   const [mostrar, setMostrar] = useState(false);
 
   useEffect(() => {
@@ -16,7 +16,6 @@ export const BackToTop = ({ escondido = false }) => {
       type="button"
       className={`topo${mostrar ? ' mostra' : ''}`}
       aria-label="Voltar ao topo"
-      hidden={escondido}
       tabIndex={mostrar ? 0 : -1}
       onClick={() => window.scrollTo({ top: 0, behavior: animacoesDesligadas() ? 'auto' : 'smooth' })}
     >

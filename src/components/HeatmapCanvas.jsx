@@ -33,7 +33,7 @@ export const HeatmapCanvas = () => {
         if (Math.random() < 0.004) c.alvo = Math.random() ** 2;
         c.v += (c.alvo - c.v) * 0.04;
         if (Math.abs(c.alvo - c.v) < 0.01) c.alvo = 0;
-        ctx.fillStyle = c.v > 0.02 ? `rgba(227,6,19,${(c.v * 0.85).toFixed(3)})` : 'rgba(255,255,255,0.035)';
+        ctx.fillStyle = c.v > 0.02 ? `rgba(196,50,58,${(c.v * 0.7).toFixed(3)})` : 'rgba(255,255,255,0.035)';
         ctx.fillRect((i % colunas) * (TAMANHO + ESPACO), Math.floor(i / colunas) * (TAMANHO + ESPACO), TAMANHO, TAMANHO);
       });
       if (!parado) quadro = requestAnimationFrame(desenhar);

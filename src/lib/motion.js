@@ -1,5 +1,5 @@
-// Animations are off when the visitor asked the system for less motion or turned them off
-// in the menu. index.html decides this before the first paint and marks <html>.
+// Animations start on for everyone and only turn off when the visitor picks that in the menu.
+// index.html reads the saved choice before the first paint and marks <html>.
 export const CLASSE_SEM_ANIMACAO = 'sem-animacao';
 export const CHAVE_ANIMACOES = 'animacoes';
 
