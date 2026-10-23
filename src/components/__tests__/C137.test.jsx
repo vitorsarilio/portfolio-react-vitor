@@ -20,7 +20,7 @@ const Pagina = () => (
 describe('C137', () => {
   beforeEach(() => {
     fundoDaVaga = 600;
-    // no flight animation in tests: moves happen at once
+    // no fade in tests: changes happen at once
     document.documentElement.classList.add('sem-animacao');
     vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function medir() {
       const bottom = this.id === 'vaga-c137' ? fundoDaVaga : 0;

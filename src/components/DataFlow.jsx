@@ -84,9 +84,11 @@ export const DataFlow = () => {
         >
           {ROTULOS.map((rotulo, i) => <text key={rotulo} className="col" x={COLUNAS[i]} y="12">{rotulo}</text>)}
           {LIGACOES.map((ligacao, i) => <path key={ligacao.join('-')} id={`fluxo-lig-${i}`} className="lig" d={caminho(ligacao)} />)}
+          {/* Negative begin: every packet is already mid-way when the panel appears.
+              With a positive delay it would wait at (0,0), and they piled up as a red glow in the corner. */}
           {!parado && LIGACOES.flatMap((ligacao, i) => [0, 1.3].map((atraso) => (
             <circle key={`${i}-${atraso}`} className="pacote" r="3.2">
-              <animateMotion dur="2.6s" begin={`${(i * 0.37 + atraso).toFixed(2)}s`} repeatCount="indefinite">
+              <animateMotion dur="2.6s" begin={`-${(i * 0.37 + atraso).toFixed(2)}s`} repeatCount="indefinite">
                 <mpath href={`#fluxo-lig-${i}`} />
               </animateMotion>
             </circle>
