@@ -6,21 +6,22 @@ export const SAUDACAO = 'Olá! Eu sou a C137, a assistente virtual do Vitor. Pod
 const SUGESTOES = ['Quais projetos ele já entregou?', 'Ele trabalha com automações?', 'Como falar com ele?'];
 const TEMPO_LIMITE_MS = 20_000;
 const ID_VAGA = 'vaga-c137';
-// Enquanto a vaga do topo ainda aparece abaixo do menu, a C137 fica encaixada nela
-const LIMITE_TOPO_PX = 160;
-const DURACAO_VOO_MS = 520;
 
 // Lugar reservado no topo da página. Tem altura fixa, então nada pula quando a C137 sai.
 export const C137Vaga = () => <div className="vaga-c137" id={ID_VAGA} />;
+
+// Altura do menu fixo (muda no celular): a troca de lugar acontece escondida atrás dele
+const alturaDoMenu = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--altura-nav')) || 88;
 
 /*
   A C137 é um único painel. Ele é renderizado num portal cujo nó (a "casca") é movido
   entre a vaga do topo e o <body>; o React nunca desmonta o painel, então mensagens,
   texto digitado e histórico continuam os mesmos em qualquer lugar da página.
 
-  - topo:  encaixada abaixo do fluxo de dados, sempre aberta.
-  - canto: ao rolar, voa para o canto e minimiza no botão. Reaberta, fica flutuante
-           até a pessoa voltar ao topo, quando volta para a vaga.
+  - topo:  encaixada abaixo do fluxo de dados, sempre aberta. Rola junto com a página.
+  - canto: quando a vaga some atrás do menu, o painel passa para o canto minimizado e o
+           botão aparece. Reaberta, fica flutuante até a pessoa voltar ao topo.
+  Nada atravessa a tela: a troca acontece fora da vista, sem atrapalhar quem está rolando.
 */
 export const C137 = ({ onAbertoChange, trackEvent }) => {
   const [mensagens, setMensagens] = useState([{ sender: 'bot', text: SAUDACAO }]);
@@ -34,9 +35,9 @@ export const C137 = ({ onAbertoChange, trackEvent }) => {
   const botao = useRef(null);
   const lista = useRef(null);
   const campo = useRef(null);
-  const origem = useRef(null);
   const lugarAtual = useRef('topo');
   const abertoAtual = useRef(false);
+  const voltouAberta = useRef(false);
   const foco = useRef(null); // 'campo' ou 'botao': para onde levar o foco depois da troca
 
   const flutuante = lugar === 'canto';
@@ -46,56 +47,39 @@ export const C137 = ({ onAbertoChange, trackEvent }) => {
     onAbertoChange?.(flutuante && aberto);
   }, [aberto, flutuante, onAbertoChange]);
 
-  // Move a casca para o lugar da vez e faz o painel deslizar de onde estava (FLIP)
+  // Move a casca para o lugar da vez
   useLayoutEffect(() => {
     const destino = lugar === 'topo' ? document.getElementById(ID_VAGA) : document.body;
     if (destino && casca.parentNode !== destino) destino.appendChild(casca);
-    const antes = origem.current;
-    origem.current = null;
-    const el = painel.current;
-    if (!antes || !el?.animate || animacoesDesligadas()) return;
-    const depois = el.getBoundingClientRect();
-    if (!antes.width || !depois.width) return;
-    el.animate([
-      { transformOrigin: 'top left', opacity: 1, transform: `translate(${antes.left - depois.left}px, ${antes.top - depois.top}px) scale(${antes.width / depois.width}, ${antes.height / depois.height})` },
-      { transformOrigin: 'top left', opacity: 1, transform: 'none' },
-    ], { duration: DURACAO_VOO_MS, easing: 'cubic-bezier(.2,.8,.2,1)' });
+    // Se estava aberta no canto e a pessoa voltou ao topo, aparece na vaga com um leve fade
+    if (lugar === 'topo' && voltouAberta.current && !animacoesDesligadas()) {
+      painel.current?.animate?.([{ opacity: 0 }, { opacity: 1 }], { duration: 250, easing: 'ease-out' });
+    }
+    voltouAberta.current = false;
   }, [lugar, casca]);
 
   useEffect(() => () => casca.remove(), [casca]);
 
   // Decide o lugar pela posição da vaga
   useEffect(() => {
-    let minimizar = 0;
-    let primeira = true;
     const conferir = () => {
       const vaga = document.getElementById(ID_VAGA);
-      const noTopo = Boolean(vaga) && vaga.getBoundingClientRect().bottom > LIMITE_TOPO_PX;
-      const animar = !primeira;
-      primeira = false;
+      const noTopo = Boolean(vaga) && vaga.getBoundingClientRect().bottom > alturaDoMenu();
       if (noTopo && lugarAtual.current !== 'topo') {
-        const de = abertoAtual.current ? painel.current : botao.current;
-        origem.current = animar ? de?.getBoundingClientRect() ?? null : null;
         lugarAtual.current = 'topo';
-        clearTimeout(minimizar);
+        voltouAberta.current = abertoAtual.current;
         setAberto(false);
         setLugar('topo');
       } else if (!noTopo && lugarAtual.current !== 'canto') {
-        origem.current = animar ? painel.current?.getBoundingClientRect() ?? null : null;
         if (painel.current?.contains(document.activeElement)) document.activeElement.blur();
         lugarAtual.current = 'canto';
         setLugar('canto');
-        if (!animar || animacoesDesligadas()) return;
-        // aberta só durante o voo; ao chegar no canto, minimiza no botão
-        setAberto(true);
-        minimizar = setTimeout(() => { if (lugarAtual.current === 'canto') setAberto(false); }, DURACAO_VOO_MS - 40);
       }
     };
     conferir();
     window.addEventListener('scroll', conferir, { passive: true });
     window.addEventListener('resize', conferir);
     return () => {
-      clearTimeout(minimizar);
       window.removeEventListener('scroll', conferir);
       window.removeEventListener('resize', conferir);
     };
@@ -170,8 +154,8 @@ export const C137 = ({ onAbertoChange, trackEvent }) => {
   return (
     <>
       {flutuante && !aberto && (
-        <button ref={botao} type="button" className="c137-botao" aria-controls="c137" aria-expanded="false" onClick={abrir}>
-          <span className="pulso" aria-hidden="true" />Pergunte à C137
+        <button ref={botao} type="button" className="c137-botao" aria-label="Pergunte à C137" aria-controls="c137" aria-expanded="false" onClick={abrir}>
+          <span className="pulso" aria-hidden="true" /><span className="so-desktop">Pergunte à&nbsp;</span>C137
         </button>
       )}
       {createPortal(

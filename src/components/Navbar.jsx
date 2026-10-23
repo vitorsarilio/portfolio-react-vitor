@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import { animacoesDesligadas, salvarPreferencia } from '../lib/motion';
+import { useTema } from '../lib/tema';
+
+const NOME_TEMA = { sistema: 'Tema do sistema', claro: 'Tema claro', escuro: 'Tema escuro' };
 
 const LINKS = [
   { href: '#projetos', label: 'Projetos' },
@@ -12,6 +15,7 @@ export const Navbar = () => {
   const [rolou, setRolou] = useState(false);
   const [menuAberto, setMenuAberto] = useState(false);
   const [desligadas] = useState(animacoesDesligadas);
+  const { preferencia, tema, proximo } = useTema();
 
   useEffect(() => {
     const aoRolar = () => setRolou(window.scrollY > 30);
@@ -42,6 +46,17 @@ export const Navbar = () => {
           {LINKS.map((link) => (
             <li key={link.href}><a href={link.href} onClick={() => setMenuAberto(false)}>{link.label}</a></li>
           ))}
+          <li>
+            <button
+              type="button"
+              className="alterna"
+              onClick={proximo}
+              title={preferencia === 'sistema' ? `Seguindo o sistema (${tema}). Clique para escolher.` : 'Clique para trocar o tema'}
+            >
+              <i className="tema-icone" aria-hidden="true" />
+              <span>{NOME_TEMA[preferencia]}</span>
+            </button>
+          </li>
           <li>
             <button type="button" className="alterna" aria-pressed={!desligadas} onClick={alternarAnimacoes}>
               <i aria-hidden="true" />

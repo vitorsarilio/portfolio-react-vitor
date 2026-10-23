@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import ReactGA from 'react-ga4';
 
@@ -13,10 +13,6 @@ const GA_MEASUREMENT_ID = 'G-Z1643DT14D';
 const trackEvent = (category, action, label) => ReactGA.event({ category, action, label });
 
 const App = () => {
-  // The floating chat sits where the back-to-top button would be, so hide it while open
-  const [chatAberto, setChatAberto] = useState(false);
-  const aoMudarChat = useCallback((aberto) => setChatAberto(aberto), []);
-
   useEffect(() => {
     ReactGA.initialize(GA_MEASUREMENT_ID);
   }, []);
@@ -27,8 +23,8 @@ const App = () => {
       <Navbar />
       <Outlet context={{ trackEvent }} />
       <Footer {...portfolioData.user} />
-      <BackToTop escondido={chatAberto} />
-      <C137 onAbertoChange={aoMudarChat} trackEvent={trackEvent} />
+      <BackToTop />
+      <C137 trackEvent={trackEvent} />
     </>
   );
 };
