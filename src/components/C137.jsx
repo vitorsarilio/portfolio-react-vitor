@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { animacoesDesligadas } from '../lib/motion';
+import { EVENTOS, registrar } from '../lib/analytics';
 
 export const SAUDACAO = 'Olá! Eu sou a C137, a assistente virtual do Vitor. Pode perguntar sobre a carreira, os projetos ou as habilidades dele.';
 const SUGESTOES = ['Quais projetos ele já entregou?', 'Ele trabalha com automações?', 'Como falar com ele?'];
@@ -23,7 +24,7 @@ const alturaDoMenu = () => parseFloat(getComputedStyle(document.documentElement)
            botão aparece. Reaberta, fica flutuante até a pessoa voltar ao topo.
   Nada atravessa a tela: a troca acontece fora da vista, sem atrapalhar quem está rolando.
 */
-export const C137 = ({ onAbertoChange, trackEvent }) => {
+export const C137 = ({ onAbertoChange }) => {
   const [mensagens, setMensagens] = useState([{ sender: 'bot', text: SAUDACAO }]);
   const [texto, setTexto] = useState('');
   const [carregando, setCarregando] = useState(false);
@@ -109,14 +110,14 @@ export const C137 = ({ onAbertoChange, trackEvent }) => {
   const abrir = () => {
     foco.current = 'campo';
     setAberto(true);
-    trackEvent?.('C137', 'Abrir chat flutuante');
+    registrar(EVENTOS.c137AbrirChat, { local: 'canto' });
   };
   const fechar = () => {
     foco.current = 'botao';
     setAberto(false);
   };
 
-  const enviar = async (pergunta) => {
+  const enviar = async (pergunta, origem = 'digitada') => {
     const limpa = pergunta.trim();
     if (!limpa || carregando) return;
     // Mesmo contrato de antes: o histórico enviado é a conversa antes da nova pergunta
@@ -124,7 +125,8 @@ export const C137 = ({ onAbertoChange, trackEvent }) => {
     setMensagens((anteriores) => [...anteriores, { sender: 'user', text: limpa }]);
     setTexto('');
     setCarregando(true);
-    trackEvent?.('C137', 'Enviar pergunta', lugarAtual.current === 'topo' ? 'topo' : 'flutuante');
+    // só o local e a origem; o texto da pergunta nunca vai para o Analytics
+    registrar(EVENTOS.c137EnviarPergunta, { local: lugarAtual.current, origem });
 
     const controle = new AbortController();
     const limite = setTimeout(() => controle.abort(), TEMPO_LIMITE_MS);
@@ -143,6 +145,7 @@ export const C137 = ({ onAbertoChange, trackEvent }) => {
         ? 'A resposta está demorando mais que o normal. Tente novamente em instantes ou fale direto com o Vitor pelo WhatsApp, LinkedIn ou e-mail.'
         : 'Desculpe, houve um erro ao processar sua pergunta. Tente novamente em instantes.';
       setMensagens((anteriores) => [...anteriores, { sender: 'bot', text }]);
+      registrar(EVENTOS.c137RespostaErro, { motivo: erro.name === 'AbortError' ? 'demora' : 'falha' });
     } finally {
       clearTimeout(limite);
       setCarregando(false);
@@ -178,8 +181,14 @@ export const C137 = ({ onAbertoChange, trackEvent }) => {
             )}
           </div>
           {mensagens.length === 1 && !carregando && (
+            <p className="c137-aviso">
+              Não envie dados pessoais: as mensagens vão para a Anthropic só para gerar a resposta.{' '}
+              <a href="/privacidade">Privacidade</a>
+            </p>
+          )}
+          {mensagens.length === 1 && !carregando && (
             <div className="sugestoes">
-              {SUGESTOES.map((s) => <button key={s} type="button" onClick={() => enviar(s)}>{s}</button>)}
+              {SUGESTOES.map((s) => <button key={s} type="button" onClick={() => enviar(s, 'sugestao')}>{s}</button>)}
             </div>
           )}
           <form className="c137-form" onSubmit={(e) => { e.preventDefault(); enviar(texto); }}>

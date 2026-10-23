@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { EVENTOS, registrar } from './analytics';
 
 // Theme: follows the system (and changes with it) until the visitor picks one in the menu.
 // The button cycles sistema → claro → escuro → sistema. index.html applies it before the first paint.
@@ -52,12 +53,11 @@ export function useTema() {
   useEffect(() => { aplicarTema(tema); }, [tema]);
 
   const proximo = useCallback(() => {
-    setPreferencia((atual) => {
-      const seguinte = PREFERENCIAS[(PREFERENCIAS.indexOf(atual) + 1) % PREFERENCIAS.length];
-      salvarPreferencia(seguinte);
-      return seguinte;
-    });
-  }, []);
+    const seguinte = PREFERENCIAS[(PREFERENCIAS.indexOf(preferencia) + 1) % PREFERENCIAS.length];
+    salvarPreferencia(seguinte);
+    setPreferencia(seguinte);
+    registrar(EVENTOS.trocarTema, { tema: seguinte });
+  }, [preferencia]);
 
   return { preferencia, tema, proximo };
 }

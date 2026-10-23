@@ -1,5 +1,6 @@
 import { SectionTitle } from '../components/SectionTitle';
 import { logo } from '../lib/logos';
+import { EVENTOS, registrar } from '../lib/analytics';
 
 const Cartao = ({ arquivoLogo, nomeLogo, titulo, instituicao, periodo, children }) => (
   <li className="cartao revela">
@@ -11,7 +12,7 @@ const Cartao = ({ arquivoLogo, nomeLogo, titulo, instituicao, periodo, children 
   </li>
 );
 
-export const EducationSection = ({ education, certifications, trackEvent }) => (
+export const EducationSection = ({ education, certifications }) => (
   <section className="formacao" id="formacao" aria-labelledby="formacao-titulo">
     <div className="wrap">
       <SectionTitle fundo="FORMAÇÃO" id="formacao-titulo">Onde estudei</SectionTitle>
@@ -22,7 +23,7 @@ export const EducationSection = ({ education, certifications, trackEvent }) => (
         {certifications.map((c) => (
           <Cartao key={`cert-${c.id}`} arquivoLogo={c.logo} nomeLogo={c.issuer} titulo={c.shortName ?? c.name} instituicao={c.shortIssuer ?? c.issuer} periodo={c.score}>
             {c.pdfUrl && (
-              <a className="ver" href={c.pdfUrl} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('Interação Certificado', 'Abrir PDF Certificado', c.name)}>
+              <a className="ver" href={c.pdfUrl} target="_blank" rel="noopener noreferrer" onClick={() => registrar(EVENTOS.abrirCertificado, { certificado: c.shortIssuer ?? c.issuer })}>
                 Ver certificado
               </a>
             )}

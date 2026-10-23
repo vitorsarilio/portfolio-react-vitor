@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { animacoesDesligadas, salvarPreferencia } from '../lib/motion';
 import { useTema } from '../lib/tema';
+import { EVENTOS, registrar } from '../lib/analytics';
 
 const NOME_TEMA = { sistema: 'Tema do sistema', claro: 'Tema claro', escuro: 'Tema escuro' };
 
 const LINKS = [
-  { href: '#projetos', label: 'Projetos' },
-  { href: '#stack', label: 'Stack' },
-  { href: '#experiencia', label: 'Experiência' },
+  { href: '/#projetos', label: 'Projetos' },
+  { href: '/#stack', label: 'Stack' },
+  { href: '/#experiencia', label: 'Experiência' },
   { href: '#contato', label: 'Contato' },
 ];
 
@@ -25,6 +26,7 @@ export const Navbar = () => {
   }, []);
 
   const alternarAnimacoes = () => {
+    registrar(EVENTOS.trocarAnimacoes, { animacoes: desligadas ? 'ligadas' : 'desligadas' });
     salvarPreferencia(desligadas);
     window.location.reload();
   };
@@ -32,7 +34,7 @@ export const Navbar = () => {
   return (
     <nav className={`nav${rolou || menuAberto ? ' rolou' : ''}`} aria-label="Principal">
       <div className="wrap">
-        <a href="#inicio" className="marca" aria-label="Vitor Sarilio, voltar ao início">vitor<span>.</span>sarilio</a>
+        <a href="/#inicio" className="marca" aria-label="Vitor Sarilio, voltar ao início">vitor<span>.</span>sarilio</a>
         <button
           type="button"
           className="menu-botao"
@@ -44,7 +46,7 @@ export const Navbar = () => {
         </button>
         <ul id="nav-links" className={`nav-links${menuAberto ? ' aberto' : ''}`}>
           {LINKS.map((link) => (
-            <li key={link.href}><a href={link.href} onClick={() => setMenuAberto(false)}>{link.label}</a></li>
+            <li key={link.href}><a href={link.href} onClick={() => { setMenuAberto(false); registrar(EVENTOS.cliqueMenu, { secao: link.label }); }}>{link.label}</a></li>
           ))}
           <li>
             <button
