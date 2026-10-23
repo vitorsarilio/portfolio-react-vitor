@@ -1,9 +1,10 @@
 import { SectionTitle } from '../components/SectionTitle';
+import { EVENTOS, registrar } from '../lib/analytics';
 
 const dominio = (url) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
 
 // Each project shows a capture of the live site that scrolls by itself inside a browser frame.
-export const PersonalProjectsSection = ({ projects, trackEvent }) => (
+export const PersonalProjectsSection = ({ projects }) => (
   <section className="pessoais" id="projetos-pessoais" aria-labelledby="pessoais-titulo">
     <div className="wrap">
       <SectionTitle fundo="PESSOAIS" id="pessoais-titulo">Projetos pessoais no ar</SectionTitle>
@@ -15,7 +16,7 @@ export const PersonalProjectsSection = ({ projects, trackEvent }) => (
             href={p.liveUrl}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => trackEvent('Projeto', 'Clique Ver Projeto', p.title)}
+            onClick={() => registrar(EVENTOS.abrirProjetoPessoal, { projeto: p.shortTitle ?? p.title })}
           >
             <div className="janela">
               <div className="janela-topo" aria-hidden="true"><b /><b /><b /><span>{dominio(p.liveUrl)}</span></div>

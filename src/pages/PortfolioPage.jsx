@@ -1,4 +1,4 @@
-import { useOutletContext } from 'react-router-dom';
+import { useEffect } from 'react';
 
 import { HeroSection } from '../sections/HeroSection';
 import { StatsSection } from '../sections/StatsSection';
@@ -13,21 +13,24 @@ import { portfolioData } from '../data/portfolioData';
 import { useRevela } from '../lib/useRevela';
 
 export default function PortfolioPage() {
+  useEffect(() => {
+    if (!window.location.hash) return;
+    document.getElementById(window.location.hash.slice(1))?.scrollIntoView();
+  }, []);
   const { user, projects, personalProjects, resume } = portfolioData;
-  const { trackEvent } = useOutletContext();
   useRevela();
 
   return (
     <>
       <title>Vitor Hugo Sarilio | Dados, engenharia e automações</title>
       <meta name="description" content="Analista de dados: pipelines no Airflow e no BigQuery, modelagem com SQL e dbt, dashboards em Power BI e automações com n8n." />
-      <HeroSection user={user} trackEvent={trackEvent} />
+      <HeroSection user={user} />
       <main id="conteudo">
         <StatsSection dados={portfolioData} />
         <AboutSection user={user} />
         <ProjectsSection projects={projects} />
-        <PersonalProjectsSection projects={personalProjects} trackEvent={trackEvent} />
-        <EducationSection education={resume.education} certifications={resume.certifications} trackEvent={trackEvent} />
+        <PersonalProjectsSection projects={personalProjects} />
+        <EducationSection education={resume.education} certifications={resume.certifications} />
         <CareerSection companies={resume.companies} />
         <StackSection skillGroups={resume.skillGroups} />
       </main>
