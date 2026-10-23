@@ -1,20 +1,23 @@
-import { ProjectCard } from '../components/ProjectCard';
+import { SectionTitle } from '../components/SectionTitle';
 
-export const ProjectsSection = ({ projects, trackEvent }) => {
-    return (
-        <section 
-            id="projects" 
-            className="px-4 sm:px-6 lg:px-8 py-16 sm:py-20"
-        >
-            <div className="container mx-auto">
-              <h2 className="text-4xl font-bold text-center mb-16 text-gray-900 dark:text-gray-100">Meus Projetos Profissionais</h2>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-                {projects.map(project => (
-                  <ProjectCard key={project.id} project={project} trackEvent={trackEvent} />
-                ))}
+export const ProjectsSection = ({ projects }) => (
+  <>
+    <div className="rasgo" aria-hidden="true" />
+    <section className="vermelha" id="projetos" aria-labelledby="projetos-titulo">
+      <div className="wrap">
+        <SectionTitle fundo="PROJETOS" id="projetos-titulo">Projetos profissionais</SectionTitle>
+        <ul className="linhas">
+          {projects.map((p) => (
+            <li key={p.id} className="linha-projeto revela">
+              <h3>{p.shortTitle ?? p.title}</h3>
+              <div>
+                <p>{p.summary ?? p.description}</p>
+                <small>{(p.highlights ?? p.technologies).join(' · ')}</small>
               </div>
-               {projects.length === 0 && <p className="text-center text-gray-600 dark:text-gray-400">Nenhum projeto profissional para exibir no momento.</p>}
-            </div>
-        </section>
-    );
-};
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  </>
+);

@@ -7,3 +7,5 @@ expect.extend(matchers);
 afterEach(() => {
   cleanup();
 });
+// jsdom has no canvas: the hero heatmap just skips drawing
+HTMLCanvasElement.prototype.getContext = () => null;
