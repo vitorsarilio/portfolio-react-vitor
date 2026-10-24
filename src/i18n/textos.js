@@ -4,8 +4,8 @@ export const IDIOMAS = ['pt-BR', 'en-US'];
 
 const ptBR = {
   meta: {
-    titulo: 'Vitor Hugo Sarilio | Dados, engenharia e automações',
-    descricao: 'Analista de dados: pipelines no Airflow e no BigQuery, modelagem com SQL e dbt, dashboards em Power BI e automações com n8n.',
+    titulo: 'Vitor Sarilio | Analista de Dados, BI e Automações',
+    descricao: 'Analista de dados em São Paulo, trabalhando com dados desde 2017: BI, engenharia de dados e automações com Power BI, SQL, Python, Airflow, BigQuery e n8n.',
   },
   pularConteudo: 'Pular para o conteúdo',
   menu: {
@@ -116,8 +116,8 @@ const ptBR = {
 
 const enUS = {
   meta: {
-    titulo: 'Vitor Hugo Sarilio | Data, engineering and automation',
-    descricao: 'Data analyst: pipelines on Airflow and BigQuery, modeling with SQL and dbt, Power BI dashboards and automation with n8n.',
+    titulo: 'Vitor Sarilio | Data Analyst, BI and Automation',
+    descricao: 'Data analyst in São Paulo, Brazil, working with data since 2017: BI, data engineering and automation with Power BI, SQL, Python, Airflow, BigQuery and n8n.',
   },
   pularConteudo: 'Skip to content',
   menu: {
