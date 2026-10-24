@@ -117,6 +117,53 @@
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Aviso para quando o site não carrega (rede instável, bloqueador de conteúdo, JavaScript desligado).
+         Fica fora do #root e tem estilo próprio, porque nesse caso nem o JS nem o CSS do site chegaram. -->
+    <div id="sem-carregar" hidden>
+      <div class="sc-caixa">
+        <p class="sc-marca">vitor<span>.</span>sarilio</p>
+        <h1 data-pt="Não consegui carregar o portfólio" data-en="I couldn't load the portfolio">Não consegui carregar o portfólio</h1>
+        <p data-pt="A conexão pode estar instável ou algum bloqueador está impedindo o site. Tente recarregar; se continuar, fale comigo pelo LinkedIn."
+           data-en="Your connection may be unstable or a blocker is stopping the site. Try reloading; if it keeps happening, reach me on LinkedIn.">A conexão pode estar instável ou algum bloqueador está impedindo o site. Tente recarregar; se continuar, fale comigo pelo LinkedIn.</p>
+        <p class="sc-acoes">
+          <a class="sc-botao" href="" data-pt="Recarregar" data-en="Reload">Recarregar</a>
+          <a class="sc-link" href="https://www.linkedin.com/in/vitorsarilio" rel="noopener noreferrer">LinkedIn</a>
+        </p>
+      </div>
+    </div>
+    <noscript>
+      <style>#sem-carregar { display: flex !important; }</style>
+    </noscript>
+    <style>
+      #sem-carregar { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 24px; background: #0A0B0B; color: #B2B2B2; font: 16px/1.6 system-ui, sans-serif; }
+      #sem-carregar[hidden] { display: none; }
+      [data-tema="claro"] #sem-carregar { background: #F7F7F6; color: #4A4F4F; }
+      #sem-carregar .sc-caixa { max-width: 520px; }
+      #sem-carregar .sc-marca { font: 700 22px ui-monospace, monospace; color: #fff; }
+      [data-tema="claro"] #sem-carregar .sc-marca, [data-tema="claro"] #sem-carregar h1 { color: #121414; }
+      #sem-carregar .sc-marca span { color: #E2595F; }
+      #sem-carregar h1 { margin: 28px 0 0; font: 700 28px/1.2 ui-monospace, monospace; color: #fff; }
+      #sem-carregar p { margin: 14px 0 0; }
+      #sem-carregar .sc-acoes { display: flex; gap: 16px; align-items: center; margin-top: 24px; }
+      #sem-carregar .sc-botao { background: #C4323A; color: #fff; padding: 12px 20px; font: 700 14px ui-monospace, monospace; text-decoration: none; }
+      #sem-carregar .sc-link { color: inherit; }
+    </style>
+    <script>
+      (function () {
+        var aviso = document.getElementById('sem-carregar');
+        function mostrar() {
+          if (window.__siteCarregou || !aviso.hidden) return;
+          var ingles = document.documentElement.lang === 'en-US';
+          aviso.querySelectorAll('[data-pt]').forEach(function (el) { el.textContent = el.getAttribute(ingles ? 'data-en' : 'data-pt'); });
+          aviso.hidden = false;
+        }
+        // o arquivo principal do site falhou ao baixar
+        window.addEventListener('error', function (e) { if (e.target && e.target.tagName === 'SCRIPT') mostrar(); }, true);
+        // ou baixou mas o site não montou em 12 segundos
+        setTimeout(mostrar, 12000);
+      })();
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
