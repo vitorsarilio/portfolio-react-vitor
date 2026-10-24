@@ -104,6 +104,21 @@ const ptBR = {
     erroDemora: 'A resposta está demorando mais que o normal. Tente novamente em instantes ou fale direto com o Vitor pelo WhatsApp, LinkedIn ou e-mail.',
     erroFalha: 'Desculpe, houve um erro ao processar sua pergunta. Tente novamente em instantes.',
   },
+  naoEncontrada: {
+    titulo: 'Esta página não existe',
+    texto: 'O endereço pode ter mudado ou ter sido digitado errado. O portfólio continua no mesmo lugar.',
+    status: '404 · página não encontrada',
+    inicio: 'Voltar ao início',
+    projetos: 'Ver projetos',
+    metaTitulo: 'Página não encontrada | Vitor Sarilio',
+  },
+  erro: {
+    titulo: 'Algo deu errado',
+    texto: 'Tive um problema para mostrar esta página. Tente recarregar; se continuar, volte ao início.',
+    status: 'erro inesperado',
+    recarregar: 'Recarregar a página',
+    inicio: 'Voltar ao início',
+  },
   cookies: {
     titulo: 'Cookies e privacidade',
     texto: 'Quero usar o Google Analytics para saber quais partes do portfólio são mais vistas. Ele só é ativado se você permitir. Tema, idioma e animações ficam salvos apenas no seu navegador.',
@@ -214,6 +229,21 @@ const enUS = {
     aviso: "Don't share personal data: messages go to Anthropic only to generate the answer.",
     erroDemora: 'The answer is taking longer than usual. Try again in a moment or reach Vitor directly on WhatsApp, LinkedIn or e-mail.',
     erroFalha: 'Sorry, something went wrong with your question. Please try again in a moment.',
+  },
+  naoEncontrada: {
+    titulo: "This page doesn't exist",
+    texto: 'The address may have changed or been mistyped. The portfolio is still right where it was.',
+    status: '404 · page not found',
+    inicio: 'Back to the start',
+    projetos: 'See projects',
+    metaTitulo: 'Page not found | Vitor Sarilio',
+  },
+  erro: {
+    titulo: 'Something went wrong',
+    texto: "I couldn't show this page. Try reloading; if it keeps happening, go back to the start.",
+    status: 'unexpected error',
+    recarregar: 'Reload the page',
+    inicio: 'Back to the start',
   },
   cookies: {
     titulo: 'Cookies and privacy',

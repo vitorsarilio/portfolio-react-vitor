@@ -27,6 +27,7 @@ export const EVENTOS = {
   trocarTema: 'trocar_tema',               // tema: sistema | claro | escuro
   trocarAnimacoes: 'trocar_animacoes',     // animacoes: ligadas | desligadas
   trocarIdioma: 'trocar_idioma',           // idioma: pt-BR | en-US
+  paginaNaoEncontrada: 'pagina_nao_encontrada', // caminho: endereço que não existe
 };
 
 let iniciado = false;
