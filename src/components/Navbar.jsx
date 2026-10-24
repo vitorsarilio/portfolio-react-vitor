@@ -2,21 +2,25 @@ import { useEffect, useState } from 'react';
 import { animacoesDesligadas, salvarPreferencia } from '../lib/motion';
 import { useTema } from '../lib/tema';
 import { EVENTOS, registrar } from '../lib/analytics';
-
-const NOME_TEMA = { sistema: 'Tema do sistema', claro: 'Tema claro', escuro: 'Tema escuro' };
+import { useIdioma } from '../i18n/idioma';
+import { IDIOMAS } from '../i18n/textos';
 
 const LINKS = [
-  { href: '/#projetos', label: 'Projetos' },
-  { href: '/#stack', label: 'Stack' },
-  { href: '/#experiencia', label: 'Experiência' },
-  { href: '#contato', label: 'Contato' },
+  { href: '/#projetos', chave: 'projetos' },
+  { href: '/#stack', chave: 'stack' },
+  { href: '/#experiencia', chave: 'experiencia' },
+  { href: '#contato', chave: 'contato' },
 ];
+
+const SIGLA = { 'pt-BR': 'PT', 'en-US': 'EN' };
 
 export const Navbar = () => {
   const [rolou, setRolou] = useState(false);
   const [menuAberto, setMenuAberto] = useState(false);
   const [desligadas] = useState(animacoesDesligadas);
   const { preferencia, tema, proximo } = useTema();
+  const { idioma, t, trocarIdioma } = useIdioma();
+  const m = t.menu;
 
   useEffect(() => {
     const aoRolar = () => setRolou(window.scrollY > 30);
@@ -31,10 +35,12 @@ export const Navbar = () => {
     window.location.reload();
   };
 
+  const nomeTema = m.tema[preferencia];
+
   return (
-    <nav className={`nav${rolou || menuAberto ? ' rolou' : ''}`} aria-label="Principal">
+    <nav className={`nav${rolou || menuAberto ? ' rolou' : ''}`} aria-label={m.principal}>
       <div className="wrap">
-        <a href="/#inicio" className="marca" aria-label="Vitor Sarilio, voltar ao início">vitor<span>.</span>sarilio</a>
+        <a href="/#inicio" className="marca" aria-label={m.marca}>vitor<span>.</span>sarilio</a>
         <button
           type="button"
           className="menu-botao"
@@ -42,27 +48,44 @@ export const Navbar = () => {
           aria-controls="nav-links"
           onClick={() => setMenuAberto((aberto) => !aberto)}
         >
-          {menuAberto ? 'Fechar' : 'Menu'}
+          {menuAberto ? m.fechar : m.abrir}
         </button>
         <ul id="nav-links" className={`nav-links${menuAberto ? ' aberto' : ''}`}>
           {LINKS.map((link) => (
-            <li key={link.href}><a href={link.href} onClick={() => { setMenuAberto(false); registrar(EVENTOS.cliqueMenu, { secao: link.label }); }}>{link.label}</a></li>
+            <li key={link.href}>
+              <a href={link.href} onClick={() => { setMenuAberto(false); registrar(EVENTOS.cliqueMenu, { secao: link.chave }); }}>
+                {m.links[link.chave]}
+              </a>
+            </li>
           ))}
-          <li>
+          <li className="nav-preferencias">
+            <div className="idioma" role="group" aria-label={m.idioma}>
+              {IDIOMAS.map((opcao) => (
+                <button
+                  key={opcao}
+                  type="button"
+                  lang={opcao}
+                  aria-pressed={idioma === opcao}
+                  aria-label={m.idiomaNome[opcao]}
+                  onClick={() => trocarIdioma(opcao)}
+                >
+                  {SIGLA[opcao]}
+                </button>
+              ))}
+            </div>
             <button
               type="button"
               className="alterna"
               onClick={proximo}
-              title={preferencia === 'sistema' ? `Seguindo o sistema (${tema}). Clique para escolher.` : 'Clique para trocar o tema'}
+              aria-label={m.temaRotulo(nomeTema)}
+              title={preferencia === 'sistema' ? m.temaSistema(m.tema[tema]) : m.temaRotulo(nomeTema)}
             >
               <i className="tema-icone" aria-hidden="true" />
-              <span>{NOME_TEMA[preferencia]}</span>
+              <span>{nomeTema}</span>
             </button>
-          </li>
-          <li>
             <button type="button" className="alterna" aria-pressed={!desligadas} onClick={alternarAnimacoes}>
               <i aria-hidden="true" />
-              <span>{desligadas ? 'Animações desligadas' : 'Animações ligadas'}</span>
+              <span>{desligadas ? m.animacoesDesligadas : m.animacoesLigadas}</span>
             </button>
           </li>
         </ul>
