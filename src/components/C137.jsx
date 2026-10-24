@@ -142,6 +142,12 @@ export const C137 = ({ onAbertoChange }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: limpa, history: historico, language: idioma }),
       });
+      // 429: o servidor limita as perguntas por minuto; vale uma mensagem própria, não um "erro"
+      if (resposta.status === 429) {
+        setMensagens((anteriores) => [...anteriores, { sender: 'bot', chave: 'erroLimite' }]);
+        registrar(EVENTOS.c137RespostaErro, { motivo: 'limite' });
+        return;
+      }
       if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
       const dados = await resposta.json();
       setMensagens((anteriores) => [...anteriores, { sender: 'bot', text: dados.response }]);
