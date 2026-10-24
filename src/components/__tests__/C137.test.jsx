@@ -99,6 +99,15 @@ describe('C137', () => {
     await waitFor(() => expect(screen.getByRole('button', { name: /Pergunte à C137/ })).toHaveFocus());
   });
 
+  it('explains the question limit instead of showing a generic error', async () => {
+    fetch.mockImplementationOnce(async () => ({ ok: false, status: 429 }));
+    const user = userEvent.setup();
+    render(<Pagina />);
+    await user.click(screen.getByRole('button', { name: 'Como falar com ele?' }));
+    expect(await screen.findByText('Você fez muitas perguntas seguidas. Espere um minuto e tente de novo.')).toBeInTheDocument();
+    expect(screen.queryByText(/houve um erro/)).not.toBeInTheDocument();
+  });
+
   it('shows a clear message when the answer takes too long or fails', async () => {
     fetch.mockImplementationOnce(async () => ({ ok: false, status: 500 }));
     const user = userEvent.setup();

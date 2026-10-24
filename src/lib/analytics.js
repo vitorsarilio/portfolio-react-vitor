@@ -23,7 +23,7 @@ export const EVENTOS = {
   abrirCertificado: 'abrir_certificado',   // certificado: nome do certificado
   c137AbrirChat: 'c137_abrir_chat',        // local: canto
   c137EnviarPergunta: 'c137_enviar_pergunta', // local: topo | canto; origem: sugestao | digitada
-  c137RespostaErro: 'c137_resposta_erro',  // motivo: demora | falha
+  c137RespostaErro: 'c137_resposta_erro',  // motivo: demora | falha | limite
   trocarTema: 'trocar_tema',               // tema: sistema | claro | escuro
   trocarAnimacoes: 'trocar_animacoes',     // animacoes: ligadas | desligadas
   trocarIdioma: 'trocar_idioma',           // idioma: pt-BR | en-US

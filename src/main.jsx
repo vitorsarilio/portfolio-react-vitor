@@ -15,6 +15,10 @@ import './index.css';
 
 const router = createBrowserRouter(rotas);
 
+// o site carregou: o aviso de "não consegui carregar" do index.html não deve mais aparecer
+window.__siteCarregou = true;
+document.getElementById('sem-carregar')?.remove();
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <RouterProvider router={router} />

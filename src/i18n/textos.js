@@ -103,6 +103,7 @@ const ptBR = {
     aviso: 'Não envie dados pessoais: as mensagens vão para a Anthropic só para gerar a resposta.',
     erroDemora: 'A resposta está demorando mais que o normal. Tente novamente em instantes ou fale direto com o Vitor pelo WhatsApp, LinkedIn ou e-mail.',
     erroFalha: 'Desculpe, houve um erro ao processar sua pergunta. Tente novamente em instantes.',
+    erroLimite: 'Você fez muitas perguntas seguidas. Espere um minuto e tente de novo.',
   },
   naoEncontrada: {
     titulo: 'Esta página não existe',
@@ -229,6 +230,7 @@ const enUS = {
     aviso: "Don't share personal data: messages go to Anthropic only to generate the answer.",
     erroDemora: 'The answer is taking longer than usual. Try again in a moment or reach Vitor directly on WhatsApp, LinkedIn or e-mail.',
     erroFalha: 'Sorry, something went wrong with your question. Please try again in a moment.',
+    erroLimite: "You've asked a lot of questions in a row. Wait a minute and try again.",
   },
   naoEncontrada: {
     titulo: "This page doesn't exist",
