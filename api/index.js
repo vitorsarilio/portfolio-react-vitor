@@ -32,7 +32,16 @@ const MAX_PROMPT_CHARS = 500;
 const MAX_HISTORY_MESSAGES = 6;
 const MAX_ANSWER_TOKENS = 2048;
 
-const REFUSAL_MESSAGE = 'Minha função é exclusivamente responder perguntas sobre o portfólio do Vitor. Não tenho informações sobre outros assuntos. Posso ajudar com algo relacionado à carreira dele? 🤔';
+const REFUSAL_MESSAGES = {
+  'pt-BR': 'Minha função é exclusivamente responder perguntas sobre o portfólio do Vitor. Não tenho informações sobre outros assuntos. Posso ajudar com algo relacionado à carreira dele? 🤔',
+  'en-US': "My role is only to answer questions about Vitor's portfolio. I don't have information on other topics. Can I help with something about his career? 🤔",
+};
+
+// The site sends the language the visitor chose; anything else falls back to Portuguese
+const LANGUAGE_INSTRUCTIONS = {
+  'pt-BR': 'Idioma da resposta: português do Brasil.',
+  'en-US': 'Idioma da resposta: inglês dos Estados Unidos (en-US). Responda sempre em inglês, mesmo que o contexto esteja em português. Se precisar recusar, use exatamente esta frase: "' + "My role is only to answer questions about Vitor's portfolio. I don't have information on other topics. Can I help with something about his career? 🤔" + '"',
+};
 
 // Best-effort per-IP rate limit (in-memory: each serverless instance keeps its own counter)
 const RATE_LIMIT = 10;
@@ -161,6 +170,8 @@ app.post('/api/chat', async (req, res) => {
     }
 
     const { prompt, history } = req.body;
+    const language = Object.hasOwn(LANGUAGE_INSTRUCTIONS, req.body.language) ? req.body.language : 'pt-BR';
+    const REFUSAL_MESSAGE = REFUSAL_MESSAGES[language];
 
     if (!prompt) {
       return res.status(400).json({ error: 'Prompt é obrigatório.' });
@@ -215,7 +226,7 @@ app.post('/api/chat', async (req, res) => {
       // The date lives in its own block after the stable instructions, so it can't invalidate a future prompt cache
       system: [
         { type: 'text', text: systemInstruction },
-        { type: 'text', text: `Data atual: ${currentMonthYear()}.` },
+        { type: 'text', text: `Data atual: ${currentMonthYear()}. ${LANGUAGE_INSTRUCTIONS[language]}` },
       ],
       messages,
     });

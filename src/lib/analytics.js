@@ -18,7 +18,7 @@ export const EVENTOS = {
   cliqueEmail: 'clique_email',             // local: rodape
   downloadCv: 'download_cv',               // local: topo
   cliqueVerProjetos: 'clique_ver_projetos', // local: topo
-  cliqueMenu: 'clique_menu',               // secao: Projetos | Stack | Experiência | Contato
+  cliqueMenu: 'clique_menu',               // secao: projetos | stack | experiencia | contato
   abrirProjetoPessoal: 'abrir_projeto_pessoal', // projeto: nome do projeto
   abrirCertificado: 'abrir_certificado',   // certificado: nome do certificado
   c137AbrirChat: 'c137_abrir_chat',        // local: canto
@@ -26,6 +26,7 @@ export const EVENTOS = {
   c137RespostaErro: 'c137_resposta_erro',  // motivo: demora | falha
   trocarTema: 'trocar_tema',               // tema: sistema | claro | escuro
   trocarAnimacoes: 'trocar_animacoes',     // animacoes: ligadas | desligadas
+  trocarIdioma: 'trocar_idioma',           // idioma: pt-BR | en-US
 };
 
 let iniciado = false;

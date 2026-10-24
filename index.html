@@ -2,28 +2,110 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/tech-color.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vitor Hugo Sarilio | Dados, engenharia e automações</title>
-    <!-- Static social tags: LinkedIn/WhatsApp crawlers don't run JavaScript -->
-    <meta name="description" content="Analista de dados: pipelines no Airflow e no BigQuery, modelagem com SQL e dbt, dashboards em Power BI e automações com n8n.">
-    <meta property="og:type" content="website">
+    <title>Vitor Sarilio | Analista de Dados, BI e Automações</title>
+    <!-- Tags estáticas: Google, LinkedIn e WhatsApp leem o HTML sem rodar JavaScript -->
+    <meta name="description" content="Analista de dados em São Paulo, trabalhando com dados desde 2017: BI, engenharia de dados e automações com Power BI, SQL, Python, Airflow, BigQuery e n8n.">
+    <link rel="canonical" href="https://www.vitorsarilio.com/">
+    <meta name="author" content="Vitor Hugo Sarilio">
+    <meta property="og:type" content="profile">
+    <meta property="og:site_name" content="Vitor Sarilio">
     <meta property="og:locale" content="pt_BR">
+    <meta property="og:locale:alternate" content="en_US">
     <meta property="og:url" content="https://www.vitorsarilio.com/">
-    <meta property="og:title" content="Vitor Hugo Sarilio | Portfólio de Analista de Dados">
-    <meta property="og:description" content="Projetos em análise e engenharia de dados e automações. Conheça meu trabalho.">
-    <meta property="og:image" content="https://www.vitorsarilio.com/thumbnail.png">
+    <meta property="og:title" content="Vitor Sarilio | Analista de Dados, BI e Automações">
+    <meta property="og:description" content="Transformo dados brutos em decisões que rodam sozinhas: dashboards, pipelines e automações para a sua operação.">
+    <meta property="og:image" content="https://www.vitorsarilio.com/og-image.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Vitor Hugo Sarilio, analista de dados: transformo dados brutos em decisões que rodam sozinhas.">
+    <meta property="profile:first_name" content="Vitor">
+    <meta property="profile:last_name" content="Sarilio">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Vitor Hugo Sarilio | Portfólio de Analista de Dados">
-    <meta name="twitter:description" content="Projetos em análise e engenharia de dados e automações. Conheça meu trabalho.">
-    <meta name="twitter:image" content="https://www.vitorsarilio.com/thumbnail.png">
+    <meta name="twitter:title" content="Vitor Sarilio | Analista de Dados, BI e Automações">
+    <meta name="twitter:description" content="Transformo dados brutos em decisões que rodam sozinhas: dashboards, pipelines e automações para a sua operação.">
+    <meta name="twitter:image" content="https://www.vitorsarilio.com/og-image.jpg">
+    <meta name="twitter:image:alt" content="Vitor Hugo Sarilio, analista de dados: transformo dados brutos em decisões que rodam sozinhas.">
+    <!-- Dados estruturados: ajudam o Google a entender quem é a pessoa e quais perfis são dela -->
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://www.vitorsarilio.com/#vitor",
+      "name": "Vitor Hugo Sarilio",
+      "jobTitle": "Analista de Dados",
+      "url": "https://www.vitorsarilio.com/",
+      "image": "https://www.vitorsarilio.com/vitor.jpg",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "São Paulo",
+        "addressRegion": "SP",
+        "addressCountry": "BR"
+      },
+      "alumniOf": [
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "FIAP"
+        },
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "Universidade Paulista"
+        }
+      ],
+      "knowsAbout": [
+        "Análise de dados",
+        "Business Intelligence",
+        "Engenharia de dados",
+        "Automação",
+        "Power BI",
+        "SQL",
+        "Python",
+        "Apache Airflow",
+        "Google BigQuery",
+        "dbt",
+        "n8n"
+      ],
+      "knowsLanguage": [
+        "pt-BR",
+        "en"
+      ],
+      "sameAs": [
+        "https://www.linkedin.com/in/vitorsarilio",
+        "https://github.com/vitorsarilio"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.vitorsarilio.com/#site",
+      "url": "https://www.vitorsarilio.com/",
+      "name": "Vitor Sarilio",
+      "inLanguage": [
+        "pt-BR",
+        "en-US"
+      ],
+      "author": {
+        "@id": "https://www.vitorsarilio.com/#vitor"
+      }
+    }
+  ]
+}
+    </script>
     <meta name="theme-color" content="#0A0B0B">
     <!-- Antes do primeiro desenho: tema (escolha salva ou o do sistema) e animações
          (sempre ligadas, a não ser que a pessoa desligue no botão do menu) -->
     <script>
       (function () {
-        var tema = null, animacoes = null;
-        try { tema = localStorage.getItem('tema'); animacoes = localStorage.getItem('animacoes'); } catch (e) {}
+        var tema = null, animacoes = null, idioma = null;
+        try { tema = localStorage.getItem('tema'); animacoes = localStorage.getItem('animacoes'); idioma = localStorage.getItem('idioma'); } catch (e) {}
+        if (idioma !== 'pt-BR' && idioma !== 'en-US') idioma = /^pt/i.test(navigator.language || '') ? 'pt-BR' : 'en-US';
+        document.documentElement.setAttribute('lang', idioma);
         if (tema !== 'claro' && tema !== 'escuro') {
           tema = window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches ? 'claro' : 'escuro';
         }

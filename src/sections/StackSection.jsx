@@ -1,6 +1,7 @@
 import { SectionTitle } from '../components/SectionTitle';
 import { Marquee } from '../components/Marquee';
 import { logo } from '../lib/logos';
+import { useIdioma } from '../i18n/idioma';
 
 const Habilidade = ({ item }) => {
   const imagem = logo(item.logo);
@@ -14,14 +15,15 @@ const Habilidade = ({ item }) => {
 
 // Two rows moving in opposite directions, never pausing.
 export const StackSection = ({ skillGroups }) => {
-  const todas = skillGroups.flatMap((g) => g.items.map((item) => ({ ...item, grupo: g.name })));
+  const { t, local } = useIdioma();
+  const todas = skillGroups.flatMap((g) => g.items.map((item) => ({ ...item, grupo: local(g).name })));
   const metade = Math.ceil(todas.length / 2);
   const fileiras = [todas.slice(0, metade), todas.slice(metade)];
 
   return (
     <section className="stack" id="stack" aria-labelledby="stack-titulo">
       <div className="wrap">
-        <SectionTitle fundo="STACK" id="stack-titulo">Ferramentas do dia a dia</SectionTitle>
+        <SectionTitle fundo={t.stack.fundo} id="stack-titulo">{t.stack.titulo}</SectionTitle>
       </div>
       {fileiras.map((fileira, i) => (
         <Marquee
@@ -31,7 +33,7 @@ export const StackSection = ({ skillGroups }) => {
           className="cartoes-hab"
           reverso={i === 1}
           duracao={i === 0 ? 90 : 100}
-          rotulo={i === 0 ? 'Habilidades e ferramentas' : undefined}
+          rotulo={i === 0 ? t.stack.lista : undefined}
           renderizar={(item) => <Habilidade item={item} />}
         />
       ))}

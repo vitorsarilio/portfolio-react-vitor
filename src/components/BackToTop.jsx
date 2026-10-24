@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { animacoesDesligadas } from '../lib/motion';
+import { useIdioma } from '../i18n/idioma';
 
 export const BackToTop = () => {
   const [mostrar, setMostrar] = useState(false);
+  const { t } = useIdioma();
 
   useEffect(() => {
     const aoRolar = () => setMostrar(window.scrollY > 600);
@@ -15,7 +17,7 @@ export const BackToTop = () => {
     <button
       type="button"
       className={`topo${mostrar ? ' mostra' : ''}`}
-      aria-label="Voltar ao topo"
+      aria-label={t.voltarAoTopo}
       tabIndex={mostrar ? 0 : -1}
       onClick={() => window.scrollTo({ top: 0, behavior: animacoesDesligadas() ? 'auto' : 'smooth' })}
     >

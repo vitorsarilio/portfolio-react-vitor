@@ -4,10 +4,10 @@ import { DataFlow } from '../components/DataFlow';
 import { C137Vaga } from '../components/C137';
 import { anosDesde, linkWhatsApp } from '../lib/contato';
 import { EVENTOS, registrar } from '../lib/analytics';
-
-const TITULO = [['Transformo ', false], ['dados brutos', true], [' em decisões que ', false], ['rodam sozinhas', true], ['.', false]];
+import { useIdioma } from '../i18n/idioma';
 
 export const HeroSection = ({ user }) => {
+  const { idioma, t } = useIdioma();
   const anos = anosDesde(user.dataSince);
   const registrarNoTopo = (evento) => () => registrar(evento, { local: 'topo' });
 
@@ -19,20 +19,24 @@ export const HeroSection = ({ user }) => {
           <p className="quem">
             <img src={user.avatar} alt="" width={30} height={30} />
             <i aria-hidden="true" />
-            Vitor Sarilio · dados, engenharia e automações
+            {t.topo.quem}
           </p>
-          <TypedTitle partes={TITULO} />
-          <p className="sub">
-            Análise e engenharia de dados, e automações que tiram o trabalho manual do caminho: pipelines no Airflow e no BigQuery,
-            modelagem com SQL e dbt, dashboards em Power BI e fluxos no n8n. Há {anos} anos levando dados da operação até quem decide.
-          </p>
+          {/* key: trocar de idioma digita o título de novo */}
+          <TypedTitle key={idioma} partes={t.topo.titulo} />
+          <p className="sub">{t.topo.sub(anos)}</p>
           <div className="acoes">
-            <a className="btn btn-vermelho" href={linkWhatsApp(user)} target="_blank" rel="noopener noreferrer" onClick={registrarNoTopo(EVENTOS.cliqueWhatsapp)}>
-              Falar no WhatsApp
+            <a
+              className="btn btn-vermelho"
+              href={linkWhatsApp(user, t.topo.mensagemWhatsapp)}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={registrarNoTopo(EVENTOS.cliqueWhatsapp)}
+            >
+              {t.topo.whatsapp}
             </a>
-            <a className="btn btn-contorno" href="#projetos" onClick={registrarNoTopo(EVENTOS.cliqueVerProjetos)}>Ver projetos</a>
+            <a className="btn btn-contorno" href="#projetos" onClick={registrarNoTopo(EVENTOS.cliqueVerProjetos)}>{t.topo.verProjetos}</a>
             {user.resumeUrl && (
-              <a className="btn btn-contorno" href={user.resumeUrl} download onClick={registrarNoTopo(EVENTOS.downloadCv)}>Baixar CV</a>
+              <a className="btn btn-contorno" href={user.resumeUrl} download onClick={registrarNoTopo(EVENTOS.downloadCv)}>{t.topo.baixarCv}</a>
             )}
           </div>
         </div>

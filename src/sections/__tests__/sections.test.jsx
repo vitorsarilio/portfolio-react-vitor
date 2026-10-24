@@ -31,7 +31,7 @@ describe('portfolio data', () => {
 describe('StatsSection', () => {
   it('counts the companies from the same list the career strip shows', () => {
     const numeros = contarNumeros(portfolioData);
-    expect(numeros[1]).toMatchObject({ valor: resume.companies.length, rotulo: 'empresas para as quais já prestei serviço' });
+    expect(numeros[1]).toMatchObject({ chave: 'empresas', valor: resume.companies.length });
   });
 
   it('shows the final numbers when animations are off', () => {

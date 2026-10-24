@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { animacoesDesligadas } from '../lib/motion';
 
 // Counts from 0 to `valor` the first time the number appears on screen.
-export const CountUp = ({ valor, duracao = 1400 }) => {
+export const CountUp = ({ valor, duracao = 1400, idioma = 'pt-BR' }) => {
   const ref = useRef(null);
   const [semContagem] = useState(() => animacoesDesligadas() || typeof IntersectionObserver === 'undefined');
   const [atual, setAtual] = useState(semContagem ? valor : 0);
@@ -26,5 +26,5 @@ export const CountUp = ({ valor, duracao = 1400 }) => {
     return () => { observador.disconnect(); cancelAnimationFrame(quadro); };
   }, [valor, duracao, semContagem]);
 
-  return <span ref={ref}>{(semContagem ? valor : atual).toLocaleString('pt-BR')}</span>;
+  return <span ref={ref}>{(semContagem ? valor : atual).toLocaleString(idioma)}</span>;
 };
