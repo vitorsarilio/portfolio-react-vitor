@@ -1,22 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
 import { animacoesDesligadas } from '../lib/motion';
+import { useIdioma } from '../i18n/idioma';
 
 // Illustration of the work: sources → orchestration → warehouse → delivery,
 // with red packets travelling along the links and a log of the current step.
+// Labels come from the language texts (t.fluxo); positions live here.
 const LARGURA = 99;
 const ALTURA = 46;
 const COLUNAS = [0, 127, 254, 381];
-const ROTULOS = ['fontes', 'orquestração', 'armazém', 'entrega'];
 
-const NOS = {
-  graph: { coluna: 0, y: 30, nome: 'API Graph', papel: 'extração' },
-  oracle: { coluna: 0, y: 122, nome: 'Oracle', papel: 'extração' },
-  planilha: { coluna: 0, y: 214, nome: 'Planilhas', papel: 'extração' },
-  airflow: { coluna: 1, y: 70, nome: 'Airflow', papel: 'orquestração' },
-  n8n: { coluna: 1, y: 176, nome: 'n8n', papel: 'automação' },
-  bq: { coluna: 2, y: 122, nome: 'BigQuery', papel: 'modelagem' },
-  pbi: { coluna: 3, y: 70, nome: 'Power BI', papel: 'dashboard' },
-  alerta: { coluna: 3, y: 176, nome: 'Alertas', papel: 'aviso automático' },
+const POSICOES = {
+  graph: { coluna: 0, y: 30 },
+  oracle: { coluna: 0, y: 122 },
+  planilha: { coluna: 0, y: 214 },
+  airflow: { coluna: 1, y: 70 },
+  n8n: { coluna: 1, y: 176 },
+  bq: { coluna: 2, y: 122 },
+  pbi: { coluna: 3, y: 70 },
+  alerta: { coluna: 3, y: 176 },
 };
 
 const LIGACOES = [
@@ -24,20 +25,11 @@ const LIGACOES = [
   ['n8n', 'bq'], ['n8n', 'alerta'], ['bq', 'pbi'], ['bq', 'alerta'],
 ];
 
-const ETAPAS = [
-  ['graph', 'extraindo dados da API Microsoft Graph'],
-  ['oracle', 'lendo as bases operacionais no Oracle'],
-  ['airflow', 'DAG diária iniciada no Airflow'],
-  ['planilha', 'planilha nova recebida'],
-  ['n8n', 'n8n tratou e enviou para o armazém'],
-  ['bq', 'modelos SQL atualizados no BigQuery'],
-  ['pbi', 'dashboard do Power BI atualizado'],
-  ['alerta', 'alerta enviado para a equipe'],
-];
+const ORDEM = ['graph', 'oracle', 'airflow', 'planilha', 'n8n', 'bq', 'pbi', 'alerta'];
 
 const caminho = ([de, para]) => {
-  const a = NOS[de];
-  const b = NOS[para];
+  const a = POSICOES[de];
+  const b = POSICOES[para];
   const x1 = COLUNAS[a.coluna] + LARGURA;
   const y1 = a.y + ALTURA / 2;
   const x2 = COLUNAS[b.coluna];
@@ -45,14 +37,13 @@ const caminho = ([de, para]) => {
   return `M${x1},${y1} C${x1 + 16},${y1} ${x2 - 16},${y2} ${x2},${y2}`;
 };
 
-const hora = () => new Date().toLocaleTimeString('pt-BR');
-const registro = (indice) => {
-  const [no, texto] = ETAPAS[indice % ETAPAS.length];
-  return { id: indice, no, texto, hora: hora() };
-};
+// the log keeps the step and the moment; the text is written in the current language when shown
+const registro = (indice) => ({ id: indice, no: ORDEM[indice % ORDEM.length], quando: new Date() });
 
 export const DataFlow = () => {
   const svg = useRef(null);
+  const { idioma, t } = useIdioma();
+  const f = t.fluxo;
   const parado = animacoesDesligadas();
   const [log, setLog] = useState(() => (parado ? [registro(6), registro(5)] : [registro(0)]));
 
@@ -73,16 +64,10 @@ export const DataFlow = () => {
 
   return (
     <div className="terminal fluxo">
-      <div className="terminal-topo"><span>fluxo de dados</span><b>● rodando</b></div>
+      <div className="terminal-topo"><span>{f.titulo}</span><b>{f.status}</b></div>
       <div className="terminal-corpo">
-        <svg
-          ref={svg}
-          className="fluxo-svg"
-          viewBox="0 0 480 280"
-          role="img"
-          aria-label="Fluxo de dados: fontes passam por Airflow e n8n, são modeladas no BigQuery e viram dashboards no Power BI e alertas automáticos"
-        >
-          {ROTULOS.map((rotulo, i) => <text key={rotulo} className="col" x={COLUNAS[i]} y="12">{rotulo}</text>)}
+        <svg ref={svg} className="fluxo-svg" viewBox="0 0 480 280" role="img" aria-label={f.descricao}>
+          {f.colunas.map((rotulo, i) => <text key={i} className="col" x={COLUNAS[i]} y="12">{rotulo}</text>)}
           {LIGACOES.map((ligacao, i) => <path key={ligacao.join('-')} id={`fluxo-lig-${i}`} className="lig" d={caminho(ligacao)} />)}
           {/* Negative begin: every packet is already mid-way when the panel appears.
               With a positive delay it would wait at (0,0), and they piled up as a red glow in the corner. */}
@@ -93,19 +78,22 @@ export const DataFlow = () => {
               </animateMotion>
             </circle>
           )))}
-          {Object.entries(NOS).map(([chave, no]) => {
-            const x = COLUNAS[no.coluna];
+          {Object.entries(POSICOES).map(([chave, posicao]) => {
+            const x = COLUNAS[posicao.coluna];
+            const [nome, papel] = f.nos[chave];
             return (
               <g key={chave} className={`no${ativo === chave ? ' ativo' : ''}`}>
-                <rect x={x} y={no.y} width={LARGURA} height={ALTURA} />
-                <text className="nome" x={x + 12} y={no.y + 20}>{no.nome}</text>
-                <text className="papel" x={x + 12} y={no.y + 36}>{no.papel}</text>
+                <rect x={x} y={posicao.y} width={LARGURA} height={ALTURA} />
+                <text className="nome" x={x + 12} y={posicao.y + 20}>{nome}</text>
+                <text className="papel" x={x + 12} y={posicao.y + 36}>{papel}</text>
               </g>
             );
           })}
         </svg>
         <ul className="log" aria-hidden="true">
-          {log.map((linha) => <li key={linha.id}><b>✓</b> {linha.hora} {linha.texto}</li>)}
+          {log.map((linha) => (
+            <li key={linha.id}><b>✓</b> {linha.quando.toLocaleTimeString(idioma)} {f.etapas[linha.no]}</li>
+          ))}
         </ul>
       </div>
     </div>

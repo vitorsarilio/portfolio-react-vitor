@@ -8,6 +8,13 @@ import { BackToTop } from './components/BackToTop';
 import { C137 } from './components/C137';
 import { AvisoCookies } from './components/AvisoCookies';
 import { iniciarSeConsentido } from './lib/analytics';
+import { IdiomaProvider } from './i18n/IdiomaProvider';
+import { useIdioma } from './i18n/idioma';
+
+const PularConteudo = () => {
+  const { t } = useIdioma();
+  return <a className="pular" href="#conteudo">{t.pularConteudo}</a>;
+};
 
 const App = () => {
   useEffect(() => {
@@ -15,15 +22,15 @@ const App = () => {
   }, []);
 
   return (
-    <>
-      <a className="pular" href="#conteudo">Pular para o conteúdo</a>
+    <IdiomaProvider>
+      <PularConteudo />
       <Navbar />
       <Outlet />
       <Footer {...portfolioData.user} />
       <BackToTop />
       <C137 />
       <AvisoCookies />
-    </>
+    </IdiomaProvider>
   );
 };
 

@@ -22,8 +22,10 @@
          (sempre ligadas, a não ser que a pessoa desligue no botão do menu) -->
     <script>
       (function () {
-        var tema = null, animacoes = null;
-        try { tema = localStorage.getItem('tema'); animacoes = localStorage.getItem('animacoes'); } catch (e) {}
+        var tema = null, animacoes = null, idioma = null;
+        try { tema = localStorage.getItem('tema'); animacoes = localStorage.getItem('animacoes'); idioma = localStorage.getItem('idioma'); } catch (e) {}
+        if (idioma !== 'pt-BR' && idioma !== 'en-US') idioma = /^pt/i.test(navigator.language || '') ? 'pt-BR' : 'en-US';
+        document.documentElement.setAttribute('lang', idioma);
         if (tema !== 'claro' && tema !== 'escuro') {
           tema = window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches ? 'claro' : 'escuro';
         }

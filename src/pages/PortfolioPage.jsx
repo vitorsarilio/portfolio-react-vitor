@@ -11,6 +11,7 @@ import { StackSection } from '../sections/StackSection';
 
 import { portfolioData } from '../data/portfolioData';
 import { useRevela } from '../lib/useRevela';
+import { useIdioma } from '../i18n/idioma';
 
 export default function PortfolioPage() {
   useEffect(() => {
@@ -18,12 +19,13 @@ export default function PortfolioPage() {
     document.getElementById(window.location.hash.slice(1))?.scrollIntoView();
   }, []);
   const { user, projects, personalProjects, resume } = portfolioData;
+  const { t } = useIdioma();
   useRevela();
 
   return (
     <>
-      <title>Vitor Hugo Sarilio | Dados, engenharia e automações</title>
-      <meta name="description" content="Analista de dados: pipelines no Airflow e no BigQuery, modelagem com SQL e dbt, dashboards em Power BI e automações com n8n." />
+      <title>{t.meta.titulo}</title>
+      <meta name="description" content={t.meta.descricao} />
       <HeroSection user={user} />
       <main id="conteudo">
         <StatsSection dados={portfolioData} />

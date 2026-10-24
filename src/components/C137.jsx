@@ -2,9 +2,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { animacoesDesligadas } from '../lib/motion';
 import { EVENTOS, registrar } from '../lib/analytics';
+import { useIdioma } from '../i18n/idioma';
 
-export const SAUDACAO = 'Olá! Eu sou a C137, a assistente virtual do Vitor. Pode perguntar sobre a carreira, os projetos ou as habilidades dele.';
-const SUGESTOES = ['Quais projetos ele já entregou?', 'Ele trabalha com automações?', 'Como falar com ele?'];
 const TEMPO_LIMITE_MS = 20_000;
 const ID_VAGA = 'vaga-c137';
 
@@ -24,8 +23,14 @@ const alturaDoMenu = () => parseFloat(getComputedStyle(document.documentElement)
            botão aparece. Reaberta, fica flutuante até a pessoa voltar ao topo.
   Nada atravessa a tela: a troca acontece fora da vista, sem atrapalhar quem está rolando.
 */
+// Fixed bot messages (greeting, errors) keep only a key, so they follow a language switch.
+// What the visitor typed and what the server answered stay exactly as they were.
+const textoDa = (m, c) => (m.chave ? c[m.chave] : m.text);
+
 export const C137 = ({ onAbertoChange }) => {
-  const [mensagens, setMensagens] = useState([{ sender: 'bot', text: SAUDACAO }]);
+  const { idioma, t } = useIdioma();
+  const c = t.c137;
+  const [mensagens, setMensagens] = useState([{ sender: 'bot', chave: 'saudacao' }]);
   const [texto, setTexto] = useState('');
   const [carregando, setCarregando] = useState(false);
   const [lugar, setLugar] = useState('topo');
@@ -121,7 +126,7 @@ export const C137 = ({ onAbertoChange }) => {
     const limpa = pergunta.trim();
     if (!limpa || carregando) return;
     // Mesmo contrato de antes: o histórico enviado é a conversa antes da nova pergunta
-    const historico = mensagens;
+    const historico = mensagens.map((m) => ({ sender: m.sender, text: textoDa(m, c) }));
     setMensagens((anteriores) => [...anteriores, { sender: 'user', text: limpa }]);
     setTexto('');
     setCarregando(true);
@@ -135,16 +140,14 @@ export const C137 = ({ onAbertoChange }) => {
         method: 'POST',
         signal: controle.signal,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: limpa, history: historico }),
+        body: JSON.stringify({ prompt: limpa, history: historico, language: idioma }),
       });
       if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
       const dados = await resposta.json();
       setMensagens((anteriores) => [...anteriores, { sender: 'bot', text: dados.response }]);
     } catch (erro) {
-      const text = erro.name === 'AbortError'
-        ? 'A resposta está demorando mais que o normal. Tente novamente em instantes ou fale direto com o Vitor pelo WhatsApp, LinkedIn ou e-mail.'
-        : 'Desculpe, houve um erro ao processar sua pergunta. Tente novamente em instantes.';
-      setMensagens((anteriores) => [...anteriores, { sender: 'bot', text }]);
+      const chave = erro.name === 'AbortError' ? 'erroDemora' : 'erroFalha';
+      setMensagens((anteriores) => [...anteriores, { sender: 'bot', chave }]);
       registrar(EVENTOS.c137RespostaErro, { motivo: erro.name === 'AbortError' ? 'demora' : 'falha' });
     } finally {
       clearTimeout(limite);
@@ -154,11 +157,13 @@ export const C137 = ({ onAbertoChange }) => {
 
   const classes = `c137 ${flutuante ? 'flutuante' : 'ancorado'}${aberto ? ' aberto' : ''}`;
 
+  const inicio = mensagens.length === 1 && !carregando;
+
   return (
     <>
       {flutuante && !aberto && (
-        <button ref={botao} type="button" className="c137-botao" aria-label="Pergunte à C137" aria-controls="c137" aria-expanded="false" onClick={abrir}>
-          <span className="pulso" aria-hidden="true" /><span className="so-desktop">Pergunte à&nbsp;</span>C137
+        <button ref={botao} type="button" className="c137-botao" aria-label={c.abrir} aria-controls="c137" aria-expanded="false" onClick={abrir}>
+          <span className="pulso" aria-hidden="true" /><span className="so-desktop">{c.abrirCurto}&nbsp;</span>C137
         </button>
       )}
       {createPortal(
@@ -166,29 +171,23 @@ export const C137 = ({ onAbertoChange }) => {
           <header className="c137-topo">
             <div>
               <strong id="c137-titulo">C137</strong>
-              <small>assistente virtual do Vitor · pergunte o que quiser</small>
+              <small>{c.subtitulo}</small>
             </div>
             {flutuante && (
-              <button type="button" className="c137-fechar" aria-label="Minimizar chat" onClick={fechar}>×</button>
+              <button type="button" className="c137-fechar" aria-label={c.minimizar} onClick={fechar}>×</button>
             )}
           </header>
           <div ref={lista} className="c137-msgs" role="log" aria-live="polite">
             {mensagens.map((m, i) => (
-              <p key={i} className={`msg ${m.sender === 'user' ? 'eu' : 'bot'}`}>{m.text}</p>
+              <p key={i} className={`msg ${m.sender === 'user' ? 'eu' : 'bot'}`}>{textoDa(m, c)}</p>
             ))}
             {carregando && (
-              <p className="msg bot" aria-label="C137 está digitando"><span className="digitando"><i /><i /><i /></span></p>
+              <p className="msg bot" aria-label={c.digitando}><span className="digitando"><i /><i /><i /></span></p>
             )}
           </div>
-          {mensagens.length === 1 && !carregando && (
-            <p className="c137-aviso">
-              Não envie dados pessoais: as mensagens vão para a Anthropic só para gerar a resposta.{' '}
-              <a href="/privacidade">Privacidade</a>
-            </p>
-          )}
-          {mensagens.length === 1 && !carregando && (
+          {inicio && (
             <div className="sugestoes">
-              {SUGESTOES.map((s) => <button key={s} type="button" onClick={() => enviar(s, 'sugestao')}>{s}</button>)}
+              {c.sugestoes.map((s) => <button key={s} type="button" onClick={() => enviar(s, 'sugestao')}>{s}</button>)}
             </div>
           )}
           <form className="c137-form" onSubmit={(e) => { e.preventDefault(); enviar(texto); }}>
@@ -198,11 +197,18 @@ export const C137 = ({ onAbertoChange }) => {
               onChange={(e) => setTexto(e.target.value)}
               maxLength={500}
               autoComplete="off"
-              placeholder="Pergunte sobre o portfólio..."
-              aria-label="Sua pergunta para a C137"
+              enterKeyHint="send"
+              placeholder={c.placeholder}
+              aria-label={c.campo}
             />
-            <button type="submit" disabled={carregando || !texto.trim()}>Enviar</button>
+            <button type="submit" disabled={carregando || !texto.trim()}>{c.enviar}</button>
           </form>
+          {inicio && (
+            <p className="c137-aviso">
+              {c.aviso}{' '}
+              <a href="/privacidade">{t.rodape.privacidade}</a>
+            </p>
+          )}
         </section>,
         casca,
       )}

@@ -1,7 +1,10 @@
 import { act, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { C137, C137Vaga, SAUDACAO } from '../C137';
+import { C137, C137Vaga } from '../C137';
+import { TEXTOS } from '../../i18n/textos';
+
+const SAUDACAO = TEXTOS['pt-BR'].c137.saudacao;
 
 // jsdom has no layout: fake where the top-of-page slot is on screen
 let fundoDaVaga = 600;
@@ -52,7 +55,7 @@ describe('C137', () => {
 
     expect(await screen.findByText('Ele entregou quatro projetos.')).toBeInTheDocument();
     const corpo = JSON.parse(fetch.mock.calls[0][1].body);
-    expect(corpo).toEqual({ prompt: 'Quais projetos?', history: [{ sender: 'bot', text: SAUDACAO }] });
+    expect(corpo).toEqual({ prompt: 'Quais projetos?', history: [{ sender: 'bot', text: SAUDACAO }], language: 'pt-BR' });
   });
 
   it('keeps the same conversation when it moves to the corner and back to the top', async () => {

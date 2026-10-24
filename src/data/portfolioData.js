@@ -10,13 +10,14 @@ export const portfolioData = {
     github: "https://github.com/vitorsarilio",
     avatar: '/vitor.jpg',
     location: "São Paulo, SP",
+    en: { location: "São Paulo, Brazil" },
     // Ano em que começou a trabalhar com dados (Grupo JCA); os "anos com dados" saem daqui
     dataSince: 2017,
     whatsappMessage: "Olá Vitor, vi seu portfólio",
     languages: [
-      { name: "Português", level: "nativo" },
-      { name: "Inglês", level: "B2" },
-      { name: "Espanhol", level: "básico" }
+      { name: "Português", level: "nativo", en: { name: "Portuguese", level: "native" } },
+      { name: "Inglês", level: "B2", en: { name: "English", level: "B2" } },
+      { name: "Espanhol", level: "básico", en: { name: "Spanish", level: "basic" } }
     ]
   },
   projects: [
@@ -27,7 +28,11 @@ export const portfolioData = {
       technologies: ["Python", "Pandas", "Requests", "Apache Airflow", "Power BI", "DAX", "Microsoft Graph API"],
       shortTitle: "Monitoramento do Microsoft Admin Center",
       summary: "Ingestão da API Microsoft Graph com Python, orquestrada em DAGs do Airflow, com indicadores em Power BI.",
-      highlights: ["Python", "Airflow", "Power BI", "DAX"]
+      highlights: ["Python", "Airflow", "Power BI", "DAX"],
+      en: {
+        shortTitle: "Microsoft Admin Center monitoring",
+        summary: "Microsoft Graph API ingestion with Python, orchestrated in Airflow DAGs, with metrics in Power BI."
+      }
     },
     {
       id: 2,
@@ -36,7 +41,11 @@ export const portfolioData = {
       technologies: ["Power BI", "UX/UI Design", "DAX"],
       shortTitle: "Refatoração de dashboards legados",
       summary: "Revisão de UX e UI de dashboards antigos para que as áreas encontrem a resposta mais rápido e decidam com mais confiança.",
-      highlights: ["Power BI", "DAX", "UX/UI"]
+      highlights: ["Power BI", "DAX", "UX/UI"],
+      en: {
+        shortTitle: "Legacy dashboard redesign",
+        summary: "UX and UI review of old dashboards so teams find the answer faster and decide with more confidence."
+      }
     },
     {
       id: 3,
@@ -45,7 +54,11 @@ export const portfolioData = {
       technologies: ["Power BI", "BigQuery", "Oracle PL/SQL", "ETL"],
       shortTitle: "Migração Oracle → BigQuery",
       summary: "Migração das bases operacionais para o Google BigQuery, com consultas otimizadas e novos dashboards para as equipes.",
-      highlights: ["BigQuery", "PL/SQL", "ETL", "Power BI"]
+      highlights: ["BigQuery", "PL/SQL", "ETL", "Power BI"],
+      en: {
+        shortTitle: "Oracle → BigQuery migration",
+        summary: "Moved the operational databases to Google BigQuery, with optimized queries and new dashboards for the teams."
+      }
     },
     {
       id: 4,
@@ -54,7 +67,11 @@ export const portfolioData = {
       technologies: ["Power BI", "DAX", "Data Modeling", "SQL", "Excel (Power Query)"],
       shortTitle: "Dashboards executivos e operacionais",
       summary: "Dashboards em Power BI que acompanham os KPIs ligados aos OKRs da empresa, com relatórios mensais automatizados.",
-      highlights: ["Power BI", "DAX", "SQL", "Power Query"]
+      highlights: ["Power BI", "DAX", "SQL", "Power Query"],
+      en: {
+        shortTitle: "Executive and operational dashboards",
+        summary: "Power BI dashboards that track the KPIs tied to the company's OKRs, with automated monthly reports."
+      }
     }
   ],
   personalProjects: [
@@ -69,6 +86,12 @@ export const portfolioData = {
       previewUrl: "/projects/site-solar.webp",
       previewAlt: "Dashboard de geração solar distribuída no Brasil",
       linkLabel: "Abrir o dashboard",
+      en: {
+        shortTitle: "Solar generation in Brazil",
+        summary: "A pipeline on ANEEL open data that runs by itself every week and publishes a dashboard of growth, per capita ranking and acceleration by state.",
+        previewAlt: "Dashboard of distributed solar generation in Brazil",
+        linkLabel: "Open the dashboard"
+      },
       liveUrl: "https://vitorsarilio.github.io/geracao-solar-brasil/",
       repoUrl: "https://github.com/vitorsarilio/geracao-solar-brasil"
     },
@@ -83,6 +106,11 @@ export const portfolioData = {
       previewUrl: "/projects/site-assistindo.webp",
       previewAlt: "Página inicial do Assistindo.com.br",
       linkLabel: "Abrir o site",
+      en: {
+        summary: "A web app in production to explore, track and organize movies and TV shows, with infinite scroll, advanced search and a history of what you watched.",
+        previewAlt: "Assistindo.com.br home page",
+        linkLabel: "Open the site"
+      },
       liveUrl: "https://www.assistindo.com.br/",
       repoUrl: null,
       isPrivateRepo: true
@@ -161,7 +189,8 @@ export const portfolioData = {
         period: "Agosto 2023 - Agosto 2024",
         shortDegree: "Pós-graduação em Data Analytics",
         shortPeriod: "ago/2023 – ago/2024",
-        logo: "fiap.png"
+        logo: "fiap.png",
+        en: { shortDegree: "Postgraduate degree in Data Analytics", shortPeriod: "Aug 2023 – Aug 2024" }
       },
       {
         id: 2,
@@ -170,7 +199,8 @@ export const portfolioData = {
         period: "2014 - 2016",
         shortDegree: "Tecnólogo em Análise e Desenvolvimento de Sistemas",
         shortPeriod: "2014 – 2016",
-        logo: "unip.png"
+        logo: "unip.png",
+        en: { shortDegree: "Associate degree in Systems Analysis and Development", shortPeriod: "2014 – 2016" }
       }
     ],
     // Single source for skills: rendered on the page and sent to the chatbot.
@@ -178,6 +208,7 @@ export const portfolioData = {
     skillGroups: [
       {
         name: "SQL e modelagem",
+        en: { name: "SQL and modeling" },
         items: [
           { name: "SQL", logo: "04-SQL.svg" }, { name: "T-SQL" }, { name: "Oracle PL/SQL" },
           { name: "CTEs" }, { name: "Advanced Joins" }, { name: "Data Modeling" }, { name: "Relational Databases" }
@@ -185,6 +216,7 @@ export const portfolioData = {
       },
       {
         name: "BI e visualização",
+        en: { name: "BI and visualization" },
         items: [
           { name: "Power BI", logo: "03-power-bi.svg" }, { name: "DAX" }, { name: "Business Intelligence (BI)" },
           { name: "Dashboards" }, { name: "Looker (Google Data Studio)" }, { name: "Excel (Power Query, VBA)" },
@@ -193,6 +225,7 @@ export const portfolioData = {
       },
       {
         name: "Engenharia de dados e nuvem",
+        en: { name: "Data engineering and cloud" },
         items: [
           { name: "Apache Airflow", logo: "02-Apache-Airflow.svg" }, { name: "ETL Pipelines" },
           { name: "Pentaho Data Integration (PDI)" }, { name: "Google BigQuery", logo: "10-Google-BigQuery.svg" },
@@ -201,6 +234,7 @@ export const portfolioData = {
       },
       {
         name: "Python e automação",
+        en: { name: "Python and automation" },
         items: [
           { name: "Python", logo: "01-python.svg" }, { name: "Pandas" }, { name: "NumPy" },
           { name: "Selenium", logo: "101-Selenium.svg" }, { name: "Microsoft Graph API" }, { name: "Data Automation" }
@@ -208,12 +242,14 @@ export const portfolioData = {
       },
       {
         name: "Automações",
+        en: { name: "Automation" },
         items: [
           { name: "n8n", logo: "n8n.png" }, { name: "Lovable", logo: "lovable.png" }, { name: "monday.com", logo: "monday.png" }
         ]
       },
       {
         name: "Bancos de dados",
+        en: { name: "Databases" },
         items: [
           { name: "SQL Server" }, { name: "OracleDB" }, { name: "MySQL", logo: "200-mysql.svg" },
           { name: "PostgreSQL", logo: "201-postgresql.svg" }, { name: "SQLite", logo: "202-sqlite.svg" }
@@ -221,6 +257,7 @@ export const portfolioData = {
       },
       {
         name: "Desenvolvimento",
+        en: { name: "Development" },
         items: [
           { name: "C#", logo: "100-c-sharp.svg" }, { name: ".NET" }, { name: "JavaScript", logo: "32-javascript.svg" },
           { name: "HTML", logo: "30-html.svg" }, { name: "CSS", logo: "31-css.svg" }, { name: "Tailwind", logo: "33-tailwind.svg" },
@@ -229,6 +266,7 @@ export const portfolioData = {
       },
       {
         name: "Ferramentas do dia a dia",
+        en: { name: "Everyday tools" },
         items: [
           { name: "Jira", logo: "130-Jira.svg" }, { name: "Slack", logo: "131-Slack.svg" }, { name: "DBeaver", logo: "150-DBeaver.svg" },
           { name: "VS Code", logo: "90-vscode.svg" }, { name: "Visual Studio", logo: "89-Visual Studio.svg" }, { name: "PyCharm", logo: "98-PyCharm.svg" }
@@ -267,7 +305,8 @@ export const portfolioData = {
             shortName: "Inglês B2, intermediário avançado",
             shortIssuer: "EF SET English Certificate",
             score: "nota 54/100",
-            logo: "efset.png"
+            logo: "efset.png",
+            en: { shortName: "English B2, upper intermediate", score: "score 54/100" }
         }
     ]
   }
