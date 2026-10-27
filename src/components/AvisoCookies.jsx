@@ -6,7 +6,7 @@ import { useIdioma } from '../i18n/idioma';
 // Aviso de cookies (LGPD): aparece até a pessoa decidir; "Permitir" e "Recusar" têm o mesmo peso.
 // Pode ser reaberto pelo rodapé ("Preferências de cookies").
 export const AvisoCookies = () => {
-  const { t } = useIdioma();
+  const { t, caminho } = useIdioma();
   const c = t.cookies;
   const [aberto, setAberto] = useState(() => lerConsentimento() === null);
   const [escolha, setEscolha] = useState(lerConsentimento);
@@ -42,7 +42,7 @@ export const AvisoCookies = () => {
       <h2 id="aviso-cookies-titulo">{c.titulo}</h2>
       <p>
         {c.texto}{' '}
-        <Link to="/privacidade" onClick={() => setAberto(false)}>{c.politica}</Link>
+        <Link to={caminho('privacidade')} onClick={() => setAberto(false)}>{c.politica}</Link>
       </p>
       {escolha && (
         <p className="aviso-cookies-atual">{c.atual(escolha === 'aceito')}</p>

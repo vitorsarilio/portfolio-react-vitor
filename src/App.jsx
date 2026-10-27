@@ -7,6 +7,7 @@ import { Footer } from './components/Footer';
 import { BackToTop } from './components/BackToTop';
 import { C137 } from './components/C137';
 import { AvisoCookies } from './components/AvisoCookies';
+import { SugestaoIdioma } from './components/SugestaoIdioma';
 import { iniciarSeConsentido } from './lib/analytics';
 import { IdiomaProvider } from './i18n/IdiomaProvider';
 import { useIdioma } from './i18n/idioma';
@@ -25,6 +26,7 @@ const App = () => {
     <IdiomaProvider>
       <PularConteudo />
       <Navbar />
+      <SugestaoIdioma />
       <Outlet />
       <Footer {...portfolioData.user} />
       <BackToTop />

@@ -6,7 +6,7 @@ import { useIdioma } from '../i18n/idioma';
 const noRodape = (evento) => () => registrar(evento, { local: 'rodape' });
 
 export const Footer = (user) => {
-  const { t } = useIdioma();
+  const { t, caminho } = useIdioma();
   const r = t.rodape;
   return (
     <footer className="rodape" id="contato">
@@ -17,7 +17,7 @@ export const Footer = (user) => {
           <li><a href={user.linkedin} target="_blank" rel="noopener noreferrer" onClick={noRodape(EVENTOS.cliqueLinkedin)}>LinkedIn</a></li>
           <li><a href={user.github} target="_blank" rel="noopener noreferrer" onClick={noRodape(EVENTOS.cliqueGithub)}>GitHub</a></li>
           <li><a href={`mailto:${user.email}`} onClick={noRodape(EVENTOS.cliqueEmail)}>E-mail</a></li>
-          <li><Link to="/privacidade">{r.privacidade}</Link></li>
+          <li><Link to={caminho('privacidade')}>{r.privacidade}</Link></li>
           <li><button type="button" className="link-botao" onClick={abrirPreferenciasDeCookies}>{r.cookies}</button></li>
         </ul>
       </div>
