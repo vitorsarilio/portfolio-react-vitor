@@ -19,6 +19,15 @@ export const rotas = [
         path: 'privacidade',
         element: <PrivacyPage />,
       },
+      // versão em inglês: o idioma vem do endereço (src/i18n/idioma.js)
+      {
+        path: 'en',
+        element: <PortfolioPage />,
+      },
+      {
+        path: 'en/privacy',
+        element: <PrivacyPage />,
+      },
       {
         // qualquer endereço que o site não tem
         path: '*',

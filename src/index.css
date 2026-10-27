@@ -337,6 +337,16 @@ html.sem-animacao .trilho > [aria-hidden="true"] { display: none; }
 .privacidade .btn { cursor: pointer; background: none; }
 .privacidade .atualizada, .privacidade .voltar { font: 13px var(--mono); color: var(--apagado); }
 
+/* ---------- sugestão de idioma (faixa logo abaixo do menu) ---------- */
+.sugestao-idioma { position: fixed; top: var(--altura-nav); left: 0; right: 0; z-index: 39; background: var(--superficie); border-bottom: 1px solid var(--borda); animation: entra .4s var(--ease); }
+.sugestao-idioma .wrap { display: flex; align-items: center; gap: 14px; min-height: 46px; padding-top: 6px; padding-bottom: 6px; }
+.sugestao-idioma p { flex: 1; font-size: 14px; color: var(--texto); }
+.sugestao-ir { flex: none; font: 600 13px var(--mono); color: var(--forte); background: none; border: 1px solid var(--vermelho); padding: 6px 12px; cursor: pointer; transition: background .2s, color .2s; }
+.sugestao-ir:hover { background: var(--vermelho); color: var(--branco); }
+.sugestao-fechar { flex: none; width: 32px; height: 32px; background: none; border: 0; color: var(--apagado); font-size: 20px; cursor: pointer; }
+.sugestao-fechar:hover { color: var(--forte); }
+.com-sugestao-idioma .hero, .com-sugestao-idioma .privacidade { padding-top: calc(var(--altura-nav) + 46px + 32px); }
+
 /* ---------- página não encontrada e erro inesperado ---------- */
 .pagina-erro { position: relative; min-height: 100vh; display: flex; align-items: center; padding: calc(var(--altura-nav) + 40px) 0 80px; overflow: hidden; }
 .pagina-erro::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(var(--fundo-rgb), .94) 0%, rgba(var(--fundo-rgb), .7) 55%, rgba(var(--fundo-rgb), .35) 100%); pointer-events: none; }

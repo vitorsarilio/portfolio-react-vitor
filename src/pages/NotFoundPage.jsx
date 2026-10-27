@@ -7,7 +7,7 @@ import { EVENTOS, registrar } from '../lib/analytics';
 // Shown for any address the site doesn't have (the server always answers with the app,
 // so the router decides). noindex keeps these addresses out of Google.
 export default function NotFoundPage() {
-  const { t } = useIdioma();
+  const { t, caminho } = useIdioma();
   const n = t.naoEncontrada;
   const { pathname } = useLocation();
 
@@ -21,8 +21,8 @@ export default function NotFoundPage() {
       <title>{n.metaTitulo}</title>
       <meta name="robots" content="noindex" />
       <TelaDeErro codigo="404" linha={`GET ${pathname}`} status={n.status} titulo={n.titulo} texto={n.texto}>
-        <Link className="btn btn-vermelho" to="/">{n.inicio}</Link>
-        <a className="btn btn-contorno" href="/#projetos">{n.projetos}</a>
+        <Link className="btn btn-vermelho" to={caminho('inicio')}>{n.inicio}</Link>
+        <a className="btn btn-contorno" href={`${caminho('inicio')}#projetos`}>{n.projetos}</a>
       </TelaDeErro>
     </>
   );
