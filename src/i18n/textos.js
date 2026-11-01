@@ -105,6 +105,11 @@ const ptBR = {
     erroFalha: 'Desculpe, houve um erro ao processar sua pergunta. Tente novamente em instantes.',
     erroLimite: 'Você fez muitas perguntas seguidas. Espere um minuto e tente de novo.',
   },
+  sugestaoIdioma: {
+    texto: 'Este site também está em português.',
+    botao: 'Ver em português',
+    fechar: 'Fechar aviso',
+  },
   naoEncontrada: {
     titulo: 'Esta página não existe',
     texto: 'O endereço pode ter mudado ou ter sido digitado errado. O portfólio continua no mesmo lugar.',
@@ -231,6 +236,11 @@ const enUS = {
     erroDemora: 'The answer is taking longer than usual. Try again in a moment or reach Vitor directly on WhatsApp, LinkedIn or e-mail.',
     erroFalha: 'Sorry, something went wrong with your question. Please try again in a moment.',
     erroLimite: "You've asked a lot of questions in a row. Wait a minute and try again.",
+  },
+  sugestaoIdioma: {
+    texto: 'This site is also available in English.',
+    botao: 'View in English',
+    fechar: 'Dismiss',
   },
   naoEncontrada: {
     titulo: "This page doesn't exist",

@@ -4,9 +4,17 @@
       "source": "/api/(.*)",
       "destination": "/api/index.js"
     },
-    { 
-      "source": "/(.*)", 
-      "destination": "/index.html" 
+    {
+      "source": "/en",
+      "destination": "/en/index.html"
+    },
+    {
+      "source": "/en/(.*)",
+      "destination": "/en/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }

@@ -109,7 +109,7 @@ const ConteudoPt = ({ user }) => (
 
 const ConteudoEn = ({ user }) => (
       <div className="wrap">
-        <p className="voltar"><Link to="/">← Back to the portfolio</Link></p>
+        <p className="voltar"><Link to="/en">← Back to the portfolio</Link></p>
         <h1>Privacy policy</h1>
         <p className="atualizada">Updated on {ATUALIZADA_EM_EN}</p>
 

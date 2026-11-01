@@ -1,5 +1,6 @@
 import { act, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { C137, C137Vaga } from '../C137';
 import { TEXTOS } from '../../i18n/textos';
@@ -14,10 +15,10 @@ const rolarPara = (fundo) => act(() => {
 });
 
 const Pagina = () => (
-  <>
+  <MemoryRouter>
     <C137Vaga />
     <C137 />
-  </>
+  </MemoryRouter>
 );
 
 describe('C137', () => {

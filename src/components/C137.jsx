@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useLocation } from 'react-router-dom';
 import { animacoesDesligadas } from '../lib/motion';
 import { EVENTOS, registrar } from '../lib/analytics';
 import { useIdioma } from '../i18n/idioma';
@@ -28,7 +29,8 @@ const alturaDoMenu = () => parseFloat(getComputedStyle(document.documentElement)
 const textoDa = (m, c) => (m.chave ? c[m.chave] : m.text);
 
 export const C137 = ({ onAbertoChange }) => {
-  const { idioma, t } = useIdioma();
+  const { idioma, t, caminho } = useIdioma();
+  const { pathname } = useLocation();
   const c = t.c137;
   const [mensagens, setMensagens] = useState([{ sender: 'bot', chave: 'saudacao' }]);
   const [texto, setTexto] = useState('');
@@ -53,7 +55,8 @@ export const C137 = ({ onAbertoChange }) => {
     onAbertoChange?.(flutuante && aberto);
   }, [aberto, flutuante, onAbertoChange]);
 
-  // Move a casca para o lugar da vez
+  // Move a casca para o lugar da vez. Também roda quando a página muda (ex.: "/" → "/en"):
+  // a vaga do topo é recriada e a casca precisa ir para a vaga nova, com a mesma conversa.
   useLayoutEffect(() => {
     const destino = lugar === 'topo' ? document.getElementById(ID_VAGA) : document.body;
     if (destino && casca.parentNode !== destino) destino.appendChild(casca);
@@ -62,11 +65,11 @@ export const C137 = ({ onAbertoChange }) => {
       painel.current?.animate?.([{ opacity: 0 }, { opacity: 1 }], { duration: 250, easing: 'ease-out' });
     }
     voltouAberta.current = false;
-  }, [lugar, casca]);
+  }, [lugar, casca, pathname]);
 
   useEffect(() => () => casca.remove(), [casca]);
 
-  // Decide o lugar pela posição da vaga
+  // Decide o lugar pela posição da vaga (de novo a cada página: nem toda página tem vaga)
   useEffect(() => {
     const conferir = () => {
       const vaga = document.getElementById(ID_VAGA);
@@ -89,7 +92,7 @@ export const C137 = ({ onAbertoChange }) => {
       window.removeEventListener('scroll', conferir);
       window.removeEventListener('resize', conferir);
     };
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     if (foco.current === 'campo' && aberto) campo.current?.focus();
@@ -212,7 +215,7 @@ export const C137 = ({ onAbertoChange }) => {
           {inicio && (
             <p className="c137-aviso">
               {c.aviso}{' '}
-              <a href="/privacidade">{t.rodape.privacidade}</a>
+              <a href={caminho('privacidade')}>{t.rodape.privacidade}</a>
             </p>
           )}
         </section>,

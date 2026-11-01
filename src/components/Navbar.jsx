@@ -5,11 +5,12 @@ import { EVENTOS, registrar } from '../lib/analytics';
 import { useIdioma } from '../i18n/idioma';
 import { IDIOMAS } from '../i18n/textos';
 
+// seções da página inicial; "contato" é o rodapé, que existe em todas as páginas
 const LINKS = [
-  { href: '/#projetos', chave: 'projetos' },
-  { href: '/#stack', chave: 'stack' },
-  { href: '/#experiencia', chave: 'experiencia' },
-  { href: '#contato', chave: 'contato' },
+  { secao: '#projetos', chave: 'projetos', noInicio: true },
+  { secao: '#stack', chave: 'stack', noInicio: true },
+  { secao: '#experiencia', chave: 'experiencia', noInicio: true },
+  { secao: '#contato', chave: 'contato', noInicio: false },
 ];
 
 const SIGLA = { 'pt-BR': 'PT', 'en-US': 'EN' };
@@ -19,7 +20,8 @@ export const Navbar = () => {
   const [menuAberto, setMenuAberto] = useState(false);
   const [desligadas] = useState(animacoesDesligadas);
   const { preferencia, tema, proximo } = useTema();
-  const { idioma, t, trocarIdioma } = useIdioma();
+  const { idioma, t, trocarIdioma, caminho } = useIdioma();
+  const inicio = caminho('inicio');
   const m = t.menu;
 
   useEffect(() => {
@@ -40,7 +42,7 @@ export const Navbar = () => {
   return (
     <nav className={`nav${rolou || menuAberto ? ' rolou' : ''}`} aria-label={m.principal}>
       <div className="wrap">
-        <a href="/#inicio" className="marca" aria-label={m.marca}>vitor<span>.</span>sarilio</a>
+        <a href={`${inicio}#inicio`} className="marca" aria-label={m.marca}>vitor<span>.</span>sarilio</a>
         <button
           type="button"
           className="menu-botao"
@@ -52,8 +54,8 @@ export const Navbar = () => {
         </button>
         <ul id="nav-links" className={`nav-links${menuAberto ? ' aberto' : ''}`}>
           {LINKS.map((link) => (
-            <li key={link.href}>
-              <a href={link.href} onClick={() => { setMenuAberto(false); registrar(EVENTOS.cliqueMenu, { secao: link.chave }); }}>
+            <li key={link.chave}>
+              <a href={link.noInicio ? `${inicio}${link.secao}` : link.secao} onClick={() => { setMenuAberto(false); registrar(EVENTOS.cliqueMenu, { secao: link.chave }); }}>
                 {m.links[link.chave]}
               </a>
             </li>

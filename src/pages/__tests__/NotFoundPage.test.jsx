@@ -30,9 +30,8 @@ describe('page not found and unexpected errors', () => {
     expect(screen.queryByText(/Unexpected Application Error/)).not.toBeInTheDocument();
   });
 
-  it('speaks English when the visitor chose English', () => {
-    localStorage.setItem('idioma', 'en-US');
-    abrir('/old-link');
+  it('speaks English under /en', () => {
+    abrir('/en/old-link');
     expect(screen.getByRole('heading', { level: 1, name: "This page doesn't exist" })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Back to the start' })).toBeInTheDocument();
   });

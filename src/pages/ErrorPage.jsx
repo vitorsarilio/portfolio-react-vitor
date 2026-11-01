@@ -8,14 +8,15 @@ import { useIdioma } from '../i18n/idioma';
 // and a plain mark instead of the full menu (which may be what broke).
 const Conteudo = () => {
   const erro = useRouteError();
-  const { t } = useIdioma();
+  const { t, caminho } = useIdioma();
+  const inicio = caminho('inicio');
   const naoEncontrada = isRouteErrorResponse(erro) && erro.status === 404;
   const textos = naoEncontrada ? t.naoEncontrada : t.erro;
 
   return (
     <>
       <header className="erro-topo">
-        <div className="wrap"><a href="/" className="marca">vitor<span>.</span>sarilio</a></div>
+        <div className="wrap"><a href={inicio} className="marca">vitor<span>.</span>sarilio</a></div>
       </header>
       <TelaDeErro
         codigo={naoEncontrada ? '404' : '500'}
@@ -25,11 +26,11 @@ const Conteudo = () => {
         texto={textos.texto}
       >
         {naoEncontrada ? (
-          <a className="btn btn-vermelho" href="/">{textos.inicio}</a>
+          <a className="btn btn-vermelho" href={inicio}>{textos.inicio}</a>
         ) : (
           <>
             <button type="button" className="btn btn-vermelho" onClick={() => window.location.reload()}>{textos.recarregar}</button>
-            <a className="btn btn-contorno" href="/">{textos.inicio}</a>
+            <a className="btn btn-contorno" href={inicio}>{textos.inicio}</a>
           </>
         )}
       </TelaDeErro>
